@@ -105,11 +105,6 @@
         .btn-dark { background: var(--primary-blue); color: #fff; }
         .btn-outline { background: transparent; border: 1px solid var(--border-light); color: var(--text-main); }
 
-        .admin-table-container { width: 100%; overflow-x: auto; background: var(--bg-neutral); border: 1px solid var(--border-light); border-radius: 12px; margin-top: 1.5rem; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
-        th, td { padding: 12px 16px; border-bottom: 1px solid var(--border-light); }
-        th { background: var(--bg-pure); font-weight: 600; color: var(--text-muted); }
-
         .page { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.2s ease, transform 0.2s ease; }
         .page.active { display: block; opacity: 1; transform: translateY(0); }
 
@@ -123,7 +118,7 @@
 <header class="site-header">
     <a href="#home" class="header-logo-container">
         <img src="logo.png" alt="Logo" class="header-logo">
-        <span class="header-title">Siamo Studenti</span>
+        <span class="header-title">UniCampania</span>
     </a>
     <div style="display: flex; align-items: center; gap: 15px;">
         <span id="header-user-status" class="user-badge">Ospite</span>
@@ -147,8 +142,8 @@
 <!-- LE PAGINE DEL SITO -->
 <div class="page active" id="page-home">
     <div class="hero">
-        <h1 class="hero-title">Siamo <br><span>Studenti Ingegneria</span></h1>
-        <p class="hero-subtitle">Portale pensato per gli studenti di Ingegneria UniCampania. Ottieni materiali didattici, aiuto ed entra nei gruppi ufficiali del tuo corso.</p>
+        <h1 class="hero-title">Coordinamento Digitale <br><span>Studenti Ingegneria</span>.</h1>
+        <p class="hero-subtitle">Portale indipendente UniCampania. Richiedi materiali didattici ed entra nei gruppi ufficiali del tuo corso.</p>
         <div style="display: flex; gap: 1rem;">
             <a class="btn btn-dark" href="#appunti">Richiedi Appunti</a>
             <a class="btn btn-outline" href="#avvisi">Consulta Avvisi</a>
@@ -161,7 +156,7 @@
         <h2 class="section-title">Avvisi e Comunicazioni</h2>
         <p class="section-desc">Bacheca interna autogestita dai rappresentanti degli studenti.</p>
         <div class="clean-grid" id="avvisi-container">
-            <div class="clean-card"><h3>Sincronizzazione in corso...</h3><p>Se vedi questo messaggio fisso, assicurati di aver creato le tabelle sul pannello di Supabase.</p></div>
+            <div class="clean-card"><h3>Sincronizzazione in corso...</h3><p>I dati si caricheranno non appena connessi al database.</p></div>
         </div>
     </section>
 </div>
@@ -202,6 +197,8 @@
     <section style="max-width: 550px;">
         <div id="auth-logged-out">
             <h2 class="section-title">Registrazione e Login</h2>
+            
+            <!-- FORM REGISTRAZIONE -->
             <form class="minimal-form" id="form-register" onsubmit="handleSignUp(event)">
                 <h3>Crea Account Studente</h3>
                 <div class="form-row">
@@ -228,30 +225,34 @@
                         <option value="Mag Ing. Aerospaziale">Mag Ing. Aerospaziale</option>
                         <option value="Mag Ing. Informatica">Mag Ing. Informatica</option>
                         <option value="Mag Ing. Biomedica">Mag Ing. Biomedica</option>
-                        <option value="Mag Ing. Energia e Ambiente ">Mag Ing. Energia e Ambiente </option>
+                        <option value="Mag Ing. Energia e Ambiente">Mag Ing. Energia e Ambiente</option>
                         <option value="Mag Ing. Meccanica">Mag Ing. Meccanica</option>
                         <option value="Mag Ing. Elettronica">Mag Ing. Elettronica</option>
                         <option value="Mag Ing. Gestionale">Mag Ing. Gestionale</option>
                         <option value="Mag Ing. Civile">Mag Ing. Civile</option>
-                       
                     </select>
                 </div>
                 <div class="form-group"><label>Password</label><input class="form-input" id="reg-password" required type="password" minlength="6"></div>
                 <button class="btn btn-dark" type="submit">Registrati</button>
             </form>
+            
             <div style="margin: 2rem 0; text-align: center; color: var(--text-muted);">oppure</div>
+            
+            <!-- FORM LOGIN CON MATRICOLA -->
             <form class="minimal-form" id="form-login" onsubmit="handleSignIn(event)">
                 <h3>Accedi</h3>
-                <div class="form-group"><label>Email</label><input class="form-input" id="login-email" required type="email"></div>
+                <div class="form-group"><label>Matricola</label><input class="form-input" id="login-matricola" required type="text"></div>
                 <div class="form-group"><label>Password</label><input class="form-input" id="login-password" required type="password"></div>
                 <button class="btn btn-outline" type="submit">Accedi</button>
             </form>
         </div>
+        
         <div id="auth-logged-in" style="display: none;">
             <h2 class="section-title">Account Attivo</h2>
             <div class="minimal-form">
                 <p><strong>Studente:</strong> <span id="user-display-name">-</span></p>
                 <p><strong>Corso:</strong> <span id="user-display-corso">-</span></p>
+                <p><strong>Matricola:</strong> <span id="user-display-matricola">-</span></p>
                 <button class="btn btn-outline" onclick="handleSignOut()">Disconnetti Account</button>
             </div>
         </div>
@@ -270,15 +271,12 @@
 </div>
 
 <script>
-    // INIZIALIZZAZIONE DIRETTA DELLA LIBRERIA SENZA CONFLITTI DI VARIABILI
     const clientUrl = "https://lthelwkxseqwjyjtrykp.supabase.co";
     const clientKey = "sb_publishable_oOiDIpLxXi2qx_e8tEAjEQ_V7bZyIaL";
     
-    // Connessione all'istanza globale iniettata dalla CDN
     const db = window.supabase ? window.supabase.createClient(clientUrl, clientKey) : null;
     let currentUserProfile = null;
 
-    // GESTORE NAVIGAZIONE (Indipendente dal Database, non può bloccarsi)
     function handleRouting() {
         const hash = window.location.hash.replace('#', '') || 'home';
         const targetPage = document.getElementById(`page-${hash}`);
@@ -297,12 +295,10 @@
 
     window.addEventListener('hashchange', handleRouting);
     window.addEventListener('DOMContentLoaded', () => {
-        handleRouting(); // Avvia la navigazione subito
+        handleRouting();
         if (db) {
             checkUserSession();
             loadAvvisi();
-        } else {
-            console.error("Impossibile caricare la libreria Supabase. Verifica la connessione.");
         }
     });
 
@@ -310,7 +306,7 @@
         try {
             const { data: { session }, error } = await db.auth.getSession();
             if (session && !error) { await loadUserProfile(session.user.id); } 
-        } catch(e) { console.warn("Errore controllo sessione:", e); }
+        } catch(e) { console.warn("Errore sessione:", e); }
     }
 
     async function loadUserProfile(userId) {
@@ -319,11 +315,15 @@
             if (data && !error) {
                 currentUserProfile = data;
                 document.getElementById('header-user-status').textContent = data.nome;
+                document.getElementById('user-display-name').textContent = `${data.nome} ${data.cognome}`;
+                document.getElementById('user-display-corso').textContent = data.corso;
+                document.getElementById('user-display-matricola').textContent = data.matricola;
+                
                 document.getElementById('auth-logged-out').style.display = 'none';
                 document.getElementById('auth-logged-in').style.display = 'block';
                 if (data.is_admin) document.getElementById('nav-admin-li').style.display = 'block';
             }
-        } catch(e) { console.warn("Errore caricamento profilo:", e); }
+        } catch(e) { console.warn("Errore profilo:", e); }
     }
 
     async function loadAvvisi() {
@@ -336,7 +336,75 @@
                     container.innerHTML += `<div class="clean-card"><h3>${avviso.titolo}</h3><p>${avviso.descrizione}</p></div>`;
                 });
             }
-        } catch(e) { console.warn("Errore caricamento avvisi:", e); }
+        } catch(e) { console.warn("Errore avvisi:", e); }
+    }
+
+    // REGISTRAZIONE CON MATRICOLA E PASSWORD
+    async function handleSignUp(e) {
+        e.preventDefault();
+        if (!db) return;
+
+        const nome = document.getElementById('reg-nome').value;
+        const cognome = document.getElementById('reg-cognome').value;
+        const matricola = document.getElementById('reg-matricola').value.trim();
+        const telefono = document.getElementById('reg-telefono').value;
+        const corso = document.getElementById('reg-corso').value;
+        const password = document.getElementById('reg-password').value;
+
+        // Generazione email fittizia basata sulla matricola
+        const fakeEmail = `${matricola}@studenti.unicampania.it`;
+
+        try {
+            const { data: authData, error: authError } = await db.auth.signUp({
+                email: fakeEmail,
+                password: password
+            });
+
+            if (authError) throw authError;
+
+            if (authData.user) {
+                const { error: profileError } = await db.from('profili').insert([{
+                    id: authData.user.id,
+                    nome: nome,
+                    cognome: cognome,
+                    matricola: matricola,
+                    telefono: telefono,
+                    corso: corso,
+                    is_admin: false
+                }]);
+
+                if (profileError) throw profileError;
+
+                alert("Registrazione completata con successo!");
+                window.location.reload();
+            }
+        } catch (err) {
+            alert("Errore durante la registrazione: " + err.message);
+        }
+    }
+
+    // LOGIN CON MATRICOLA E PASSWORD
+    async function handleSignIn(e) {
+        e.preventDefault();
+        if (!db) return;
+
+        const matricola = document.getElementById('login-matricola').value.trim();
+        const password = document.getElementById('login-password').value;
+        const fakeEmail = `${matricola}@studenti.unicampania.it`;
+
+        try {
+            const { data, error } = await db.auth.signInWithPassword({
+                email: fakeEmail,
+                password: password
+            });
+
+            if (error) throw error;
+
+            alert("Accesso effettuato!");
+            window.location.reload();
+        } catch (err) {
+            alert("Errore di accesso: Controlla matricola e password.");
+        }
     }
 
     async function submitAppuntiRequest(e) {
@@ -355,8 +423,21 @@
         } catch(err) { alert("Errore nell'invio dei dati."); }
     }
 
-    async function handleSignUp(e) { e.preventDefault(); alert("Funzionalità di registrazione attiva."); }
-    async function handleSignIn(e) { e.preventDefault(); alert("Funzionalità di login attiva."); }
+    async function saveAvviso(e) {
+        e.preventDefault();
+        if (!db || !currentUserProfile?.is_admin) return;
+        const titolo = document.getElementById('avviso-titolo').value;
+        const descrizione = document.getElementById('avviso-descrizione').value;
+
+        try {
+            const { error } = await db.from('avvisi').insert([{ titolo, descrizione }]);
+            if (error) throw error;
+            alert("Avviso pubblicato!");
+            window.location.hash = "avvisi";
+            loadAvvisi();
+        } catch(err) { alert("Errore nella pubblicazione."); }
+    }
+
     async function handleSignOut() { if(db) await db.auth.signOut(); window.location.reload(); }
     function toggleTheme() { document.body.classList.toggle('dark-theme'); }
 </script>
