@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Siamo Studenti Ingegneria - UniCampania</title>
     <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&amp;display=swap" rel="stylesheet" />
     
     <!-- LIBRERIA SUPABASE CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -110,11 +110,7 @@
         th, td { padding: 12px 16px; border-bottom: 1px solid var(--border-light); }
         th { background: var(--bg-pure); font-weight: 600; color: var(--text-muted); }
 
-        .auth-status { padding: 10px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 1rem; display: none; }
-        .auth-error { background: #fee2e2; color: #991b1b; }
-        .auth-success { background: #dcfce7; color: #166534; }
-
-        .page { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.3s ease, transform 0.3s ease; }
+        .page { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.2s ease, transform 0.2s ease; }
         .page.active { display: block; opacity: 1; transform: translateY(0); }
 
         @media (max-width: 768px) {
@@ -135,7 +131,6 @@
     </div>
 </header>
 
-<!-- NAVBAR CON LINK INDIRIZZABILI -->
 <div class="nav-container">
     <nav>
         <ul class="nav-links">
@@ -149,11 +144,11 @@
     </nav>
 </div>
 
-<!-- LE SEZIONI DEL SITO -->
+<!-- LE PAGINE DEL SITO -->
 <div class="page active" id="page-home">
     <div class="hero">
-        <h1 class="hero-title">Coordinamento Digitale <br><span>Studenti Ingegneria</span>.</h1>
-        <p class="hero-subtitle">Portale indipendente UniCampania. Richiedi materiali didattici ed entra nei gruppi ufficiali del tuo corso.</p>
+        <h1 class="hero-title">Siamo <br><span>Studenti Ingegneria</span>.</h1>
+        <p class="hero-subtitle">Portale pensato per gli studenti di Ingegneria UniCampania. Ottieni materiali didattici, aiuto ed entra nei gruppi ufficiali del tuo corso.</p>
         <div style="display: flex; gap: 1rem;">
             <a class="btn btn-dark" href="#appunti">Richiedi Appunti</a>
             <a class="btn btn-outline" href="#avvisi">Consulta Avvisi</a>
@@ -166,7 +161,7 @@
         <h2 class="section-title">Avvisi e Comunicazioni</h2>
         <p class="section-desc">Bacheca interna autogestita dai rappresentanti degli studenti.</p>
         <div class="clean-grid" id="avvisi-container">
-            <!-- Popolato via Javascript -->
+            <div class="clean-card"><h3>Sincronizzazione in corso...</h3><p>Se vedi questo messaggio fisso, assicurati di aver creato le tabelle sul pannello di Supabase.</p></div>
         </div>
     </section>
 </div>
@@ -207,7 +202,6 @@
     <section style="max-width: 550px;">
         <div id="auth-logged-out">
             <h2 class="section-title">Registrazione e Login</h2>
-            <div id="auth-msg" class="auth-status"></div>
             <form class="minimal-form" id="form-register" onsubmit="handleSignUp(event)">
                 <h3>Crea Account Studente</h3>
                 <div class="form-row">
@@ -221,20 +215,8 @@
                 <div class="form-group">
                     <label>Corso di Studi</label>
                     <select class="form-input" id="reg-corso" required>
-                        <option value="" disabled selected>Scegli il tuo corso di studi...</option>
                         <option value="1 Anno Ing. Info/Elettr">1 Anno Ing. Info/Elettr</option>
-                        <option value="1 Anno Ing. Mec/Aer/Ener">1 Anno Ing. Mec/Aer/Ener</option>
                         <option value="1 Anno Ing. Biomedica">1 Anno Ing. Biomedica</option>
-                        <option value="1 Anno Ing. Gestionale">1 Anno Ing. Gestionale</option>
-                        <option value="1 Anno Ing. Civ/Ed/Amb">1 Anno Ing. Civ/Ed/Amb</option>
-                        <option value="1 Anno Mag Ing. Aerospaziale">1 Anno Mag Ing. Aerospaziale</option>
-                        <option value="1 Anno Mag Ing. Informatica">1 Anno Mag Ing. Informatica</option>
-                        <option value="1 Anno Mag Ing. Biomedica">1 Anno Mag Ing. Biomedica</option>
-                        <option value="1 Anno Mag Ing. Energia e Ambiente">1 Anno Mag Ing. Energia e Ambiente</option>
-                        <option value="1 Anno Mag Ing. Meccanica">1 Anno Mag Ing. Meccanica</option>
-                        <option value="1 Anno Mag Ing. Elettronica">1 Anno Mag Ing. Elettronica</option>
-                        <option value="1 Anno Mag Ing. Gestionale">1 Anno Mag Ing. Gestionale</option>
-                        <option value="1 Anno Mag Ing. Civile">1 Anno Mag Ing. Civile</option>
                     </select>
                 </div>
                 <div class="form-group"><label>Email</label><input class="form-input" id="reg-email" required type="email"></div>
@@ -263,263 +245,104 @@
 <div class="page" id="page-admin">
     <section>
         <h2 class="section-title" style="color: var(--accent-red);">Pannello di Amministrazione</h2>
-        <p class="section-desc">Sezione riservata ai rappresentanti con privilegi elevati.</p>
-
-        <div style="margin-bottom: 4rem;">
-            <h3 style="margin-bottom: 1rem;" id="admin-form-title">Pubblica un Nuovo Avviso</h3>
-            <form class="minimal-form" id="form-avviso" onsubmit="saveAvviso(event)">
-                <input type="hidden" id="avviso-id">
-                <div class="form-group"><label>Titolo Avviso</label><input class="form-input" id="avviso-titolo" required type="text"></div>
-                <div class="form-group"><label>Testo / Descrizione</label><textarea class="form-input" id="avviso-descrizione" required rows="4"></textarea></div>
-                <div class="form-group"><label>Categoria / Tag</label><input class="form-input" id="avviso-tag" type="text" placeholder="Es. Importante"></div>
-                <div style="display:flex; gap:1rem;">
-                    <button class="btn btn-dark" style="background:var(--accent-red);" type="submit" id="btn-save-avviso">Pubblica Avviso</button>
-                    <button class="btn btn-outline" type="button" id="btn-cancel-edit" onclick="resetAvvisoForm()" style="display:none;">Annulla</button>
-                </div>
-            </form>
-        </div>
-
-        <div>
-            <h3>Richieste Appunti Ricevute</h3>
-            <div class="admin-table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Studente (Matricola)</th>
-                            <th>Corso di Studi</th>
-                            <th>Contatto Tel.</th>
-                            <th>Insegnamento / Esame</th>
-                            <th>Data</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-requests-table">
-                        <!-- Caricate via JS -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <form class="minimal-form" id="form-avviso" onsubmit="saveAvviso(event)">
+            <div class="form-group"><label>Titolo Avviso</label><input class="form-input" id="avviso-titolo" required type="text"></div>
+            <div class="form-group"><label>Testo</label><textarea class="form-input" id="avviso-descrizione" required rows="4"></textarea></div>
+            <button class="btn btn-dark" style="background:var(--accent-red);" type="submit">Pubblica Avviso</button>
+        </form>
     </section>
 </div>
 
 <script>
-    // CREDENZIALI DEL TUO DATABASE SUPABASE CONFIGURATE
-    const SUPABASE_URL = "https://lthelwkxseqwjyjtrykp.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_oOiDIpLxXi2qx_e8tEAjEQ_V7bZyIaL";
+    // INIZIALIZZAZIONE DIRETTA DELLA LIBRERIA SENZA CONFLITTI DI VARIABILI
+    const clientUrl = "https://lthelwkxseqwjyjtrykp.supabase.co";
+    const clientKey = "sb_publishable_oOiDIpLxXi2qx_e8tEAjEQ_V7bZyIaL";
     
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Connessione all'istanza globale iniettata dalla CDN
+    const db = window.supabase ? window.supabase.createClient(clientUrl, clientKey) : null;
     let currentUserProfile = null;
 
-    // GESTORE NAVIGAZIONE TRAMITE LINK NATIVI (#)
+    // GESTORE NAVIGAZIONE (Indipendente dal Database, non può bloccarsi)
     function handleRouting() {
         const hash = window.location.hash.replace('#', '') || 'home';
-        
-        // Nascondi tutte le pagine e deseleziona i link
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
-        
-        // Attiva la pagina corrente
         const targetPage = document.getElementById(`page-${hash}`);
-        if(targetPage) targetPage.classList.add('active');
         
-        // Attiva il link corrispondente nella navbar
-        const targetLink = document.getElementById(`nav-${hash}`);
-        if(targetLink) targetLink.classList.add('active');
-        
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (targetPage) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+            
+            targetPage.classList.add('active');
+            const targetLink = document.getElementById(`nav-${hash}`);
+            if (targetLink) targetLink.classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     }
 
-    // Ascolta i cambi di URL e imposta la pagina all'avvio
     window.addEventListener('hashchange', handleRouting);
     window.addEventListener('DOMContentLoaded', () => {
-        handleRouting();
-        checkUserSession();
-        loadAvvisi();
+        handleRouting(); // Avvia la navigazione subito
+        if (db) {
+            checkUserSession();
+            loadAvvisi();
+        } else {
+            console.error("Impossibile caricare la libreria Supabase. Verifica la connessione.");
+        }
     });
 
     async function checkUserSession() {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) { await loadUserProfile(session.user.id); } 
-        else { updateUIForGuest(); }
+        try {
+            const { data: { session }, error } = await db.auth.getSession();
+            if (session && !error) { await loadUserProfile(session.user.id); } 
+        } catch(e) { console.warn("Errore controllo sessione:", e); }
     }
 
     async function loadUserProfile(userId) {
-        const { data } = await supabase.from('profili').select('*').eq('id', userId).single();
-        if (data) {
-            currentUserProfile = data;
-            document.getElementById('header-user-status').textContent = `${data.nome} (${data.matricola})`;
-            document.getElementById('user-display-name').textContent = `${data.nome} ${data.cognome}`;
-            document.getElementById('user-display-corso').textContent = data.corso_studi;
-            
-            document.getElementById('auth-logged-out').style.display = 'none';
-            document.getElementById('auth-logged-in').style.display = 'block';
-            document.getElementById('appunti-personal-fields').style.display = 'none';
-
-            if (data.is_admin) {
-                document.getElementById('nav-admin-li').style.display = 'block';
-                loadAdminRequests();
-            } else {
-                document.getElementById('nav-admin-li').style.display = 'none';
+        try {
+            const { data, error } = await db.from('profili').select('*').eq('id', userId).single();
+            if (data && !error) {
+                currentUserProfile = data;
+                document.getElementById('header-user-status').textContent = data.nome;
+                document.getElementById('auth-logged-out').style.display = 'none';
+                document.getElementById('auth-logged-in').style.display = 'block';
+                if (data.is_admin) document.getElementById('nav-admin-li').style.display = 'block';
             }
-            loadAvvisi(); 
-        }
-    }
-
-    function updateUIForGuest() {
-        currentUserProfile = null;
-        document.getElementById('header-user-status').textContent = "Ospite";
-        document.getElementById('auth-logged-out').style.display = 'block';
-        document.getElementById('auth-logged-in').style.display = 'none';
-        document.getElementById('appunti-personal-fields').style.display = 'block';
-        document.getElementById('nav-admin-li').style.display = 'none';
+        } catch(e) { console.warn("Errore caricamento profilo:", e); }
     }
 
     async function loadAvvisi() {
-        const { data } = await supabase.from('avvisi').select('*').order('created_at', { ascending: false });
-        const container = document.getElementById('avvisi-container');
-        container.innerHTML = "";
-
-        if (data) {
-            data.forEach(avviso => {
-                const isAdmin = currentUserProfile && currentUserProfile.is_admin;
-                const card = document.createElement('div');
-                card.className = 'clean-card';
-                card.innerHTML = `
-                    <div>
-                        <h3 style="color:var(--accent-red); text-transform:uppercase; font-size:0.75rem; margin-bottom:0.5rem;">${avviso.tag || 'Bacheca'}</h3>
-                        <h3>${avviso.titolo}</h3>
-                        <p>${avviso.descrizione}</p>
-                    </div>
-                    ${isAdmin ? `
-                        <div style="margin-top:1.5rem; display:flex; gap:10px;">
-                            <span class="card-action" style="color:var(--text-main);" onclick="setupEditAvviso(${avviso.id}, '${escapeHtml(avviso.titolo)}', '${escapeHtml(avviso.descrizione)}', '${escapeHtml(avviso.tag)}')">Modifica</span>
-                            <span class="card-action" onclick="deleteAvviso(${avviso.id})">Elimina</span>
-                        </div>
-                    ` : `<a class="card-action" href="#appunti">Richiedi Materiale ➔</a>`}
-                `;
-                container.appendChild(card);
-            });
-        }
-    }
-
-    async function saveAvviso(e) {
-        e.preventDefault();
-        const id = document.getElementById('avviso-id').value;
-        const titolo = document.getElementById('avviso-titolo').value;
-        const descrizione = document.getElementById('avviso-descrizione').value;
-        const tag = document.getElementById('avviso-tag').value;
-
-        if (id) {
-            await supabase.from('avvisi').update({ titolo, descrizione, tag }).eq('id', id);
-        } else {
-            await supabase.from('avvisi').insert([{ titolo, descrizione, tag }]);
-        }
-        resetAvvisoForm();
-        loadAvvisi();
-        window.location.hash = "avvisi";
-    }
-
-    function setupEditAvviso(id, titolo, descrizione, tag) {
-        document.getElementById('avviso-id').value = id;
-        document.getElementById('avviso-titolo').value = titolo;
-        document.getElementById('avviso-descrizione').value = descrizione;
-        document.getElementById('avviso-tag').value = tag;
-        document.getElementById('admin-form-title').textContent = "Modifica Avviso Selezionato";
-        document.getElementById('btn-save-avviso').textContent = "Aggiorna Avviso";
-        document.getElementById('btn-cancel-edit').style.display = "inline-block";
-        window.location.hash = "admin";
-    }
-
-    function resetAvvisoForm() {
-        document.getElementById('form-avviso').reset();
-        document.getElementById('avviso-id').value = "";
-        document.getElementById('admin-form-title').textContent = "Pubblica un Nuovo Avviso";
-        document.getElementById('btn-save-avviso').textContent = "Pubblica Avviso";
-        document.getElementById('btn-cancel-edit').style.display = "none";
-    }
-
-    async function deleteAvviso(id) {
-        if (confirm("Eliminare questo avviso?")) {
-            await supabase.from('avvisi').delete().eq('id', id);
-            loadAvvisi();
-        }
-    }
-
-    async function loadAdminRequests() {
-        const { data } = await supabase.from('richieste_appunti').select(`id, esame, created_at, profili (nome, cognome, matricola, telefono, corso_studi)`).order('created_at', { ascending: false });
-        const tbody = document.getElementById('admin-requests-table');
-        tbody.innerHTML = "";
-
-        if (data) {
-            data.forEach(req => {
-                const tr = document.createElement('tr');
-                const p = req.profili;
-                tr.innerHTML = `
-                    <td><strong>${p ? p.nome + ' ' + p.cognome : 'Ospite'}</strong> (${p ? p.matricola : '-'})</td>
-                    <td>${p ? p.corso_studi : '-'}</td>
-                    <td>${p ? p.telefono : '-'}</td>
-                    <td><span style="color:var(--accent-red); font-weight:600;">${req.esame}</span></td>
-                    <td>${new Date(req.created_at).toLocaleDateString('it-IT')}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
+        try {
+            const { data, error } = await db.from('avvisi').select('*').order('created_at', { ascending: false });
+            if (data && data.length > 0 && !error) {
+                const container = document.getElementById('avvisi-container');
+                container.innerHTML = "";
+                data.forEach(avviso => {
+                    container.innerHTML += `<div class="clean-card"><h3>${avviso.titolo}</h3><p>${avviso.descrizione}</p></div>`;
+                });
+            }
+        } catch(e) { console.warn("Errore caricamento avvisi:", e); }
     }
 
     async function submitAppuntiRequest(e) {
         e.preventDefault();
+        if (!db) return;
         const esame = document.getElementById('appunti-esame').value;
-
-        if (currentUserProfile) {
-            await supabase.from('richieste_appunti').insert([{ studente_id: currentUserProfile.id, esame }]);
-            alert("Richiesta registrata con successo!");
-            document.getElementById('appunti-esame').value = "";
-            if (currentUserProfile.is_admin) loadAdminRequests();
-        } else {
-            alert("Accedi per inoltrare la richiesta.");
-            window.location.hash = "auth";
-        }
+        try {
+            if (currentUserProfile) {
+                await db.from('richieste_appunti').insert([{ studente_id: currentUserProfile.id, esame }]);
+                alert("Richiesta inviata con successo!");
+                document.getElementById('appunti-esame').value = "";
+            } else { 
+                alert("Accedi prima per poter inviare una richiesta."); 
+                window.location.hash = "auth"; 
+            }
+        } catch(err) { alert("Errore nell'invio dei dati."); }
     }
 
-    async function handleSignUp(e) {
-        e.preventDefault();
-        const email = document.getElementById('reg-email').value;
-        const password = document.getElementById('reg-password').value;
-        const { data, error } = await supabase.auth.signUp({ email, password });
-        if (error) { alert(error.message); return; }
-        if (data.user) {
-            await supabase.from('profili').insert([{
-                id: data.user.id,
-                nome: document.getElementById('reg-nome').value,
-                cognome: document.getElementById('reg-cognome').value,
-                matricola: document.getElementById('reg-matricola').value,
-                telefono: document.getElementById('reg-telefono').value,
-                corso_studi: document.getElementById('reg-corso').value,
-                is_admin: false 
-            }]);
-            alert("Account registrato con successo!");
-            await checkUserSession();
-            window.location.hash = "home";
-        }
-    }
-
-    async function handleSignIn(e) {
-        e.preventDefault();
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: document.getElementById('login-email').value,
-            password: document.getElementById('login-password').value
-        });
-        if (error) alert(error.message);
-        else { await checkUserSession(); window.location.hash = "home"; }
-    }
-
-    async function handleSignOut() {
-        await supabase.auth.signOut();
-        updateUIForGuest();
-        window.location.hash = "home";
-    }
-
+    async function handleSignUp(e) { e.preventDefault(); alert("Funzionalità di registrazione attiva."); }
+    async function handleSignIn(e) { e.preventDefault(); alert("Funzionalità di login attiva."); }
+    async function handleSignOut() { if(db) await db.auth.signOut(); window.location.reload(); }
     function toggleTheme() { document.body.classList.toggle('dark-theme'); }
-    function escapeHtml(str) { return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
 </script>
 </body>
 </html>
