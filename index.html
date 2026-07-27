@@ -300,7 +300,7 @@
 <header class="site-header">
     <div class="header-logo-container" onclick="navigateTo('home')">
         <img src="logo.png" alt="Logo" class="header-logo">
-        <span class="header-title">UniCampania</span>
+        <span class="header-title">SiamoStudenti Ingegneria</span>
     </div>
     <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">Modalità Scura</button>
 </header>
@@ -324,8 +324,8 @@
 <!-- PAGE: HOME -->
 <div class="page active" id="page-home">
     <div class="hero">
-        <h1 class="hero-title">Spazio di coordinamento per <br><span>studenti ingegneria</span>.</h1>
-        <p class="hero-subtitle">Il portale indipendente per gli studenti del Dipartimento di Ingegneria UniCampania. Risorse, avvisi e supporto diretto.</p>
+        <h1 class="hero-title">Siamo Studenti<br><span>Ingegneria</span>.</h1>
+        <p class="hero-subtitle">Il portale per gli studenti del Dipartimento di Ingegneria UniCampania. Risorse, avvisi e supporto diretto.</p>
         <div style="display: flex; gap: 1rem;"><button class="btn btn-dark" onclick="navigateTo('appunti')">Richiedi Appunti</button><button class="btn btn-outline" onclick="navigateTo('avvisi')">Consulta Avvisi</button></div>
     </div>
     <div class="toolbox-row"><span style="font-size: 0.85rem; font-weight:600; color:var(--text-muted); align-self:center; margin-right:0.5rem;">Link Istituzionali Rapidi:</span> <a class="tool-link" href="https://easyacademy.easystaff.it/agendastudenti/index.php?view=home&amp;_lang=it" rel="noopener" target="_blank">Orari Lezioni (EasyAcademy)</a> <a class="tool-link" href="https://www.ingegneria.unicampania.it/dipartimento/avvisi" rel="noopener" target="_blank">Bacheca Avvisi Dipartimento</a></div>
@@ -439,6 +439,7 @@
         <p class="section-desc">Lascia i tuoi riferimenti e specifica l&#39;esame. Un rappresentante controller&agrave; l&#39;archivio interno e ti ricontatter&agrave;.</p>
         <form class="minimal-form" id="form-appunti" onsubmit="handleAppunti(event)">
             <div class="form-row">
+                 <div class="form-group"><label for="appunti-matricola">Nome</label> <input class="form-input" id="appunti-matricola" placeholder="Es. Z00-0000" required="" type="text" /></div>
                 <div class="form-group"><label for="appunti-nome">Nome</label> <input class="form-input" id="appunti-nome" placeholder="Es. Mario" required="" type="text" /></div>
                 <div class="form-group"><label for="appunti-cognome">Cognome</label> <input class="form-input" id="appunti-cognome" placeholder="Es. Rossi" required="" type="text" /></div>
             </div>
