@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Siamo Studenti Ingegneria</title>
+    <title>Siamo Studenti Ingegneria - UniCampania</title>
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
     
@@ -43,7 +43,7 @@
             color: var(--text-main);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
-            padding-top: 70px;
+            padding-top: 80px;
             padding-bottom: 90px;
             min-height: 100vh;
             transition: background-color 0.3s, color 0.3s;
@@ -57,7 +57,7 @@
             display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
         }
         .dark-theme .site-header { background: rgba(15, 23, 42, 0.8); }
-        .header-logo-container { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .header-logo-container { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; }
         .header-logo { height: 40px; width: auto; }
         .header-title { font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-main); }
         
@@ -69,11 +69,10 @@
         nav::-webkit-scrollbar { display: none; }
         .nav-links { display: flex; width: 100%; list-style: none; }
         .nav-links li { flex: 1; min-width: 105px; }
-        .nav-links a { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; font-size: 0.78rem; font-weight: 500; color: var(--text-muted); transition: var(--transition-smooth); cursor: pointer; padding: 0.9rem 0.5rem; text-align: center; white-space: nowrap; border-bottom: 3px solid transparent; }
+        .nav-links a { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; font-size: 0.78rem; font-weight: 500; color: var(--text-muted); transition: var(--transition-smooth); padding: 0.9rem 0.5rem; text-align: center; white-space: nowrap; border-bottom: 3px solid transparent; }
         .nav-links a:hover { color: var(--text-main); }
         .nav-links a.active { color: var(--text-main); border-bottom: 3px solid var(--text-main); font-weight: 600; }
         
-        /* Voce Admin nascosta di default, mostrata solo ai ruoli admin */
         #nav-admin-li { display: none; }
         .nav-links a.nav-admin-link { color: var(--accent-red); font-weight: 600; }
         .nav-links a.nav-admin-link.active { border-bottom-color: var(--accent-red); }
@@ -82,10 +81,6 @@
         .hero-title { font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800; letter-spacing: -1.5px; line-height: 1.2; margin-bottom: 1.2rem; color: var(--text-main); }
         .hero-title span { color: var(--accent-red); }
         .hero-subtitle { font-size: 1.05rem; color: var(--text-muted); max-width: 600px; margin-bottom: 2rem; line-height: 1.6; }
-
-        .toolbox-row { display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: center; align-items: center; width: 100%; padding: 0 5%; max-width: 1100px; margin: 0 auto 3rem; }
-        .tool-link { text-decoration: none; font-size: 0.8rem; font-weight: 500; color: var(--text-main); background: var(--bg-neutral); padding: 8px 18px; border-radius: 50px; border: 1px solid var(--border-light); transition: var(--transition-smooth); }
-        .tool-link:hover { border-color: var(--text-main); }
 
         section { padding: 40px 5%; max-width: 1100px; margin: 0 auto; }
         .section-title { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 0.5rem; color: var(--text-main); }
@@ -106,12 +101,10 @@
         .form-input { width: 100%; padding: 10px 14px; background: var(--bg-pure); border: 1px solid var(--border-light); border-radius: 8px; font-family: var(--font-sans); font-size: 0.9rem; color: var(--text-main); transition: var(--transition-smooth); }
         .form-input:focus { outline: none; border-color: var(--text-main); background: var(--bg-neutral); }
 
-        .btn { align-self: flex-start; padding: 12px 28px; font-family: var(--font-sans); font-size: 0.88rem; font-weight: 600; border-radius: 6px; border: none; cursor: pointer; transition: var(--transition-smooth); display: inline-block; text-decoration: none; }
+        .btn { align-self: flex-start; padding: 12px 28px; font-family: var(--font-sans); font-size: 0.88rem; font-weight: 600; border-radius: 6px; border: none; cursor: pointer; transition: var(--transition-smooth); display: inline-block; text-decoration: none; text-align: center; }
         .btn-dark { background: var(--primary-blue); color: #fff; }
         .btn-outline { background: transparent; border: 1px solid var(--border-light); color: var(--text-main); }
-        .btn-danger { background: var(--accent-red); color: #fff; }
 
-        /* Tabelle Admin */
         .admin-table-container { width: 100%; overflow-x: auto; background: var(--bg-neutral); border: 1px solid var(--border-light); border-radius: 12px; margin-top: 1.5rem; }
         table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
         th, td { padding: 12px 16px; border-bottom: 1px solid var(--border-light); }
@@ -121,9 +114,8 @@
         .auth-error { background: #fee2e2; color: #991b1b; }
         .auth-success { background: #dcfce7; color: #166534; }
 
-        .page { display: none; animation: fadeIn 0.3s ease-in-out forwards; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .page { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.3s ease, transform 0.3s ease; }
+        .page.active { display: block; opacity: 1; transform: translateY(0); }
 
         @media (max-width: 768px) {
             .form-row { grid-template-columns: 1fr; gap: 1.2rem; }
@@ -133,50 +125,52 @@
 <body>
 
 <header class="site-header">
-    <div class="header-logo-container" onclick="navigateTo('home')">
+    <a href="#home" class="header-logo-container">
         <img src="logo.png" alt="Logo" class="header-logo">
         <span class="header-title">UniCampania</span>
-    </div>
+    </a>
     <div style="display: flex; align-items: center; gap: 15px;">
         <span id="header-user-status" class="user-badge">Ospite</span>
         <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">Modalità Scura</button>
     </div>
 </header>
 
+<!-- NAVBAR CON LINK INDIRIZZABILI -->
 <div class="nav-container">
     <nav>
         <ul class="nav-links">
-            <li><a class="active" id="nav-home" onclick="navigateTo('home')">Home</a></li>
-            <li><a id="nav-avvisi" onclick="navigateTo('avvisi')">Avvisi</a></li>
-            <li><a id="nav-gruppi" onclick="navigateTo('gruppi')">Gruppi</a></li>
-            <li><a id="nav-appunti" onclick="navigateTo('appunti')">Richiedi Appunti</a></li>
-            <li><a id="nav-auth" onclick="navigateTo('auth')">Area Utente</a></li>
-            <li id="nav-admin-li"><a class="nav-admin-link" id="nav-admin" onclick="navigateTo('admin')">Pannello Admin</a></li>
+            <li><a class="active" id="nav-home" href="#home">Home</a></li>
+            <li><a id="nav-avvisi" href="#avvisi">Avvisi</a></li>
+            <li><a id="nav-gruppi" href="#gruppi">Gruppi</a></li>
+            <li><a id="nav-appunti" href="#appunti">Richiedi Appunti</a></li>
+            <li><a id="nav-auth" href="#auth">Area Utente</a></li>
+            <li id="nav-admin-li"><a class="nav-admin-link" id="nav-admin" href="#admin">Pannello Admin</a></li>
         </ul>
     </nav>
 </div>
 
-<!-- PAGE: HOME -->
+<!-- LE SEZIONI DEL SITO -->
 <div class="page active" id="page-home">
     <div class="hero">
         <h1 class="hero-title">Coordinamento Digitale <br><span>Studenti Ingegneria</span>.</h1>
         <p class="hero-subtitle">Portale indipendente UniCampania. Richiedi materiali didattici ed entra nei gruppi ufficiali del tuo corso.</p>
-        <div style="display: flex; gap: 1rem;"><button class="btn btn-dark" onclick="navigateTo('appunti')">Richiedi Appunti</button><button class="btn btn-outline" onclick="navigateTo('avvisi')">Consulta Avvisi</button></div>
+        <div style="display: flex; gap: 1rem;">
+            <a class="btn btn-dark" href="#appunti">Richiedi Appunti</a>
+            <a class="btn btn-outline" href="#avvisi">Consulta Avvisi</a>
+        </div>
     </div>
 </div>
 
-<!-- PAGE: AVVISI (Caricati Dinamicamente) -->
 <div class="page" id="page-avvisi">
     <section>
         <h2 class="section-title">Avvisi e Comunicazioni</h2>
         <p class="section-desc">Bacheca interna autogestita dai rappresentanti degli studenti.</p>
         <div class="clean-grid" id="avvisi-container">
-            <!-- Gli avvisi verranno iniettati qui da JavaScript -->
+            <!-- Popolato via Javascript -->
         </div>
     </section>
 </div>
 
-<!-- PAGE: GRUPPI WHATSAPP -->
 <div class="page" id="page-gruppi">
     <section>
         <h2 class="section-title">Gruppi WhatsApp 1&deg; Anno</h2>
@@ -184,11 +178,13 @@
         <div class="clean-grid">
             <div class="clean-card"><h3>Ingegneria Informatica / Elettronica</h3><a class="card-action" href="#">Entra ↗</a></div>
             <div class="clean-card"><h3>Ingegneria Meccanica / Aerospaziale</h3><a class="card-action" href="#">Entra ↗</a></div>
+            <div class="clean-card"><h3>Ingegneria Biomedica</h3><a class="card-action" href="#">Entra ↗</a></div>
+            <div class="clean-card"><h3>Ingegneria Gestionale</h3><a class="card-action" href="#">Entra ↗</a></div>
+            <div class="clean-card"><h3>Ingegneria Civile / Edile / Ambientale</h3><a class="card-action" href="#">Entra ↗</a></div>
         </div>
     </section>
 </div>
 
-<!-- PAGE: APPUNTI -->
 <div class="page" id="page-appunti">
     <section style="max-width: 650px;">
         <h2 class="section-title">Richiesta materiali e appunti</h2>
@@ -207,7 +203,6 @@
     </section>
 </div>
 
-<!-- PAGE: AUTH -->
 <div class="page" id="page-auth">
     <section style="max-width: 550px;">
         <div id="auth-logged-out">
@@ -226,18 +221,27 @@
                 <div class="form-group">
                     <label>Corso di Studi</label>
                     <select class="form-input" id="reg-corso" required>
+                        <option value="" disabled selected>Scegli il tuo corso di studi...</option>
                         <option value="1 Anno Ing. Info/Elettr">1 Anno Ing. Info/Elettr</option>
                         <option value="1 Anno Ing. Mec/Aer/Ener">1 Anno Ing. Mec/Aer/Ener</option>
                         <option value="1 Anno Ing. Biomedica">1 Anno Ing. Biomedica</option>
+                        <option value="1 Anno Ing. Gestionale">1 Anno Ing. Gestionale</option>
+                        <option value="1 Anno Ing. Civ/Ed/Amb">1 Anno Ing. Civ/Ed/Amb</option>
+                        <option value="1 Anno Mag Ing. Aerospaziale">1 Anno Mag Ing. Aerospaziale</option>
                         <option value="1 Anno Mag Ing. Informatica">1 Anno Mag Ing. Informatica</option>
-                        <!-- Aggiungi qui le altre opzioni all'occorrenza -->
+                        <option value="1 Anno Mag Ing. Biomedica">1 Anno Mag Ing. Biomedica</option>
+                        <option value="1 Anno Mag Ing. Energia e Ambiente">1 Anno Mag Ing. Energia e Ambiente</option>
+                        <option value="1 Anno Mag Ing. Meccanica">1 Anno Mag Ing. Meccanica</option>
+                        <option value="1 Anno Mag Ing. Elettronica">1 Anno Mag Ing. Elettronica</option>
+                        <option value="1 Anno Mag Ing. Gestionale">1 Anno Mag Ing. Gestionale</option>
+                        <option value="1 Anno Mag Ing. Civile">1 Anno Mag Ing. Civile</option>
                     </select>
                 </div>
                 <div class="form-group"><label>Email</label><input class="form-input" id="reg-email" required type="email"></div>
                 <div class="form-group"><label>Password</label><input class="form-input" id="reg-password" required type="password" minlength="6"></div>
                 <button class="btn btn-dark" type="submit">Registrati</button>
             </form>
-            <div style="margin: 2rem 0; text-align: center;">oppure</div>
+            <div style="margin: 2rem 0; text-align: center; color: var(--text-muted);">oppure</div>
             <form class="minimal-form" id="form-login" onsubmit="handleSignIn(event)">
                 <h3>Accedi</h3>
                 <div class="form-group"><label>Email</label><input class="form-input" id="login-email" required type="email"></div>
@@ -247,33 +251,34 @@
         </div>
         <div id="auth-logged-in" style="display: none;">
             <h2 class="section-title">Account Attivo</h2>
-            <button class="btn btn-outline" onclick="handleSignOut()">Disconnetti Account</button>
+            <div class="minimal-form">
+                <p><strong>Studente:</strong> <span id="user-display-name">-</span></p>
+                <p><strong>Corso:</strong> <span id="user-display-corso">-</span></p>
+                <button class="btn btn-outline" onclick="handleSignOut()">Disconnetti Account</button>
+            </div>
         </div>
     </section>
 </div>
 
-<!-- PAGE: ADMIN (COMPLETO GESTIONE AVVISI E TABELLA RICHIESTE) -->
 <div class="page" id="page-admin">
     <section>
         <h2 class="section-title" style="color: var(--accent-red);">Pannello di Amministrazione</h2>
         <p class="section-desc">Sezione riservata ai rappresentanti con privilegi elevati.</p>
 
-        <!-- Form Nuovo / Modifica Avviso -->
         <div style="margin-bottom: 4rem;">
             <h3 style="margin-bottom: 1rem;" id="admin-form-title">Pubblica un Nuovo Avviso</h3>
             <form class="minimal-form" id="form-avviso" onsubmit="saveAvviso(event)">
                 <input type="hidden" id="avviso-id">
-                <div class="form-group"><label>Titolo Avviso</label><input class="form-input" id="avviso-titolo" required type="text" placeholder="Es. Sospensione Lezione Analisi"></div>
-                <div class="form-group"><label>Testo / Descrizione</label><textarea class="form-input" id="avviso-descrizione" required rows="4" placeholder="Scrivi qui i dettagli..."></textarea></div>
-                <div class="form-group"><label>Categoria / Tag</label><input class="form-input" id="avviso-tag" type="text" placeholder="Es. Bacheca Interna"></div>
+                <div class="form-group"><label>Titolo Avviso</label><input class="form-input" id="avviso-titolo" required type="text"></div>
+                <div class="form-group"><label>Testo / Descrizione</label><textarea class="form-input" id="avviso-descrizione" required rows="4"></textarea></div>
+                <div class="form-group"><label>Categoria / Tag</label><input class="form-input" id="avviso-tag" type="text" placeholder="Es. Importante"></div>
                 <div style="display:flex; gap:1rem;">
                     <button class="btn btn-dark" style="background:var(--accent-red);" type="submit" id="btn-save-avviso">Pubblica Avviso</button>
-                    <button class="btn btn-outline" type="button" id="btn-cancel-edit" onclick="resetAvvisoForm()" style="display:none;">Annulla Modifica</button>
+                    <button class="btn btn-outline" type="button" id="btn-cancel-edit" onclick="resetAvvisoForm()" style="display:none;">Annulla</button>
                 </div>
             </form>
         </div>
 
-        <!-- Elenco Richieste Appunti Inviate dagli Studenti -->
         <div>
             <h3>Richieste Appunti Ricevute</h3>
             <div class="admin-table-container">
@@ -288,7 +293,7 @@
                         </tr>
                     </thead>
                     <tbody id="admin-requests-table">
-                        <!-- Caricate dinamicamente -->
+                        <!-- Caricate via JS -->
                     </tbody>
                 </table>
             </div>
@@ -297,27 +302,39 @@
 </div>
 
 <script>
-    // ⚠️ Configura qui le credenziali del tuo progetto Supabase
-    const SUPABASE_URL = "https://tuo-id.supabase.co";
-    const SUPABASE_ANON_KEY = "la-tua-chiave-anonima";
+    // CREDENZIALI DEL TUO DATABASE SUPABASE CONFIGURATE
+    const SUPABASE_URL = "https://lthelwkxseqwjyjtrykp.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_oOiDIpLxXi2qx_e8tEAjEQ_V7bZyIaL";
     
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     let currentUserProfile = null;
 
-    window.addEventListener('DOMContentLoaded', () => {
-        checkUserSession();
-        loadAvvisi(); // Carica gli avvisi pubblici subito
-    });
-
-    function navigateTo(pageId) {
+    // GESTORE NAVIGAZIONE TRAMITE LINK NATIVI (#)
+    function handleRouting() {
+        const hash = window.location.hash.replace('#', '') || 'home';
+        
+        // Nascondi tutte le pagine e deseleziona i link
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
-        const targetPage = document.getElementById(`page-${pageId}`);
+        
+        // Attiva la pagina corrente
+        const targetPage = document.getElementById(`page-${hash}`);
         if(targetPage) targetPage.classList.add('active');
-        const targetLink = document.getElementById(`nav-${pageId}`);
+        
+        // Attiva il link corrispondente nella navbar
+        const targetLink = document.getElementById(`nav-${hash}`);
         if(targetLink) targetLink.classList.add('active');
+        
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    // Ascolta i cambi di URL e imposta la pagina all'avvio
+    window.addEventListener('hashchange', handleRouting);
+    window.addEventListener('DOMContentLoaded', () => {
+        handleRouting();
+        checkUserSession();
+        loadAvvisi();
+    });
 
     async function checkUserSession() {
         const { data: { session } } = await supabase.auth.getSession();
@@ -330,18 +347,20 @@
         if (data) {
             currentUserProfile = data;
             document.getElementById('header-user-status').textContent = `${data.nome} (${data.matricola})`;
+            document.getElementById('user-display-name').textContent = `${data.nome} ${data.cognome}`;
+            document.getElementById('user-display-corso').textContent = data.corso_studi;
+            
             document.getElementById('auth-logged-out').style.display = 'none';
             document.getElementById('auth-logged-in').style.display = 'block';
             document.getElementById('appunti-personal-fields').style.display = 'none';
 
-            // Controllo Diritti Admin
             if (data.is_admin) {
                 document.getElementById('nav-admin-li').style.display = 'block';
-                loadAdminRequests(); // Carica la lista riservata delle richieste
+                loadAdminRequests();
             } else {
                 document.getElementById('nav-admin-li').style.display = 'none';
             }
-            loadAvvisi(); // Ricarica gli avvisi (per mostrare tasti edit se admin)
+            loadAvvisi(); 
         }
     }
 
@@ -354,9 +373,8 @@
         document.getElementById('nav-admin-li').style.display = 'none';
     }
 
-    // CARICA AVVISI PUBBLICI ED EVENTUALI TASTI DI GESTIONE SE SEI ADMIN
     async function loadAvvisi() {
-        const { data, error } = await supabase.from('avvisi').select('*').order('created_at', { ascending: false });
+        const { data } = await supabase.from('avvisi').select('*').order('created_at', { ascending: false });
         const container = document.getElementById('avvisi-container');
         container.innerHTML = "";
 
@@ -376,14 +394,13 @@
                             <span class="card-action" style="color:var(--text-main);" onclick="setupEditAvviso(${avviso.id}, '${escapeHtml(avviso.titolo)}', '${escapeHtml(avviso.descrizione)}', '${escapeHtml(avviso.tag)}')">Modifica</span>
                             <span class="card-action" onclick="deleteAvviso(${avviso.id})">Elimina</span>
                         </div>
-                    ` : `<span class="card-action" onclick="navigateTo('appunti')">Contatta ➔</span>`}
+                    ` : `<a class="card-action" href="#appunti">Richiedi Materiale ➔</a>`}
                 `;
                 container.appendChild(card);
             });
         }
     }
 
-    // SALVA O AGGIORNA AVVISO (ADMIN)
     async function saveAvviso(e) {
         e.preventDefault();
         const id = document.getElementById('avviso-id').value;
@@ -392,15 +409,13 @@
         const tag = document.getElementById('avviso-tag').value;
 
         if (id) {
-            // Aggiornamento
             await supabase.from('avvisi').update({ titolo, descrizione, tag }).eq('id', id);
         } else {
-            // Nuovo Inserimento
             await supabase.from('avvisi').insert([{ titolo, descrizione, tag }]);
         }
         resetAvvisoForm();
         loadAvvisi();
-        alert("Operazione completata con successo.");
+        window.location.hash = "avvisi";
     }
 
     function setupEditAvviso(id, titolo, descrizione, tag) {
@@ -411,7 +426,7 @@
         document.getElementById('admin-form-title').textContent = "Modifica Avviso Selezionato";
         document.getElementById('btn-save-avviso').textContent = "Aggiorna Avviso";
         document.getElementById('btn-cancel-edit').style.display = "inline-block";
-        navigateTo('admin');
+        window.location.hash = "admin";
     }
 
     function resetAvvisoForm() {
@@ -423,16 +438,14 @@
     }
 
     async function deleteAvviso(id) {
-        if (confirm("Sei sicuro di voler eliminare definitivamente questo avviso?")) {
+        if (confirm("Eliminare questo avviso?")) {
             await supabase.from('avvisi').delete().eq('id', id);
             loadAvvisi();
         }
     }
 
-    // VISUALIZZA LE RICHIESTE DEGLI APPUNTI (ADMIN)
     async function loadAdminRequests() {
-        // Uniamo le tabelle: prendiamo la richiesta e le informazioni anagrafiche del profilo collegato
-        const { data, error } = await supabase.from('richieste_appunti').select(`id, esame, created_at, profili (nome, cognome, matricola, telefono, corso_studi)`).order('created_at', { ascending: false });
+        const { data } = await supabase.from('richieste_appunti').select(`id, esame, created_at, profili (nome, cognome, matricola, telefono, corso_studi)`).order('created_at', { ascending: false });
         const tbody = document.getElementById('admin-requests-table');
         tbody.innerHTML = "";
 
@@ -452,22 +465,21 @@
         }
     }
 
-    // INVIO RICHIESTE
     async function submitAppuntiRequest(e) {
         e.preventDefault();
         const esame = document.getElementById('appunti-esame').value;
 
         if (currentUserProfile) {
             await supabase.from('richieste_appunti').insert([{ studente_id: currentUserProfile.id, esame }]);
-            alert("Richiesta inviata a tuo nome con successo!");
+            alert("Richiesta registrata con successo!");
             document.getElementById('appunti-esame').value = "";
             if (currentUserProfile.is_admin) loadAdminRequests();
         } else {
-            alert("Funzione di invio anonimo disabilitata o incompleta. Registrati per richiedere i materiali.");
+            alert("Accedi per inoltrare la richiesta.");
+            window.location.hash = "auth";
         }
     }
 
-    // AUTENTICAZIONE
     async function handleSignUp(e) {
         e.preventDefault();
         const email = document.getElementById('reg-email').value;
@@ -482,10 +494,11 @@
                 matricola: document.getElementById('reg-matricola').value,
                 telefono: document.getElementById('reg-telefono').value,
                 corso_studi: document.getElementById('reg-corso').value,
-                is_admin: false // Solo modificabile a mano dal database per sicurezza
+                is_admin: false 
             }]);
-            alert("Registrazione completata!");
-            checkUserSession();
+            alert("Account registrato con successo!");
+            await checkUserSession();
+            window.location.hash = "home";
         }
     }
 
@@ -496,13 +509,13 @@
             password: document.getElementById('login-password').value
         });
         if (error) alert(error.message);
-        else { checkUserSession(); navigateTo('home'); }
+        else { await checkUserSession(); window.location.hash = "home"; }
     }
 
     async function handleSignOut() {
         await supabase.auth.signOut();
         updateUIForGuest();
-        navigateTo('home');
+        window.location.hash = "home";
     }
 
     function toggleTheme() { document.body.classList.toggle('dark-theme'); }
