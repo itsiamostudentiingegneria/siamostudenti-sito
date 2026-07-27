@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Siamo Studenti Ingegneria - UniCampania</title>
     <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     
     <!-- LIBRERIA SUPABASE CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -13,26 +13,27 @@
     <style type="text/css">
         :root {
             --primary-blue: #0f172a;
-            --primary-light: #1e293b;
-            --accent-red: #991b1b;
-            --accent-red-hover: #7f1d1d;
-            --bg-pure: #f8fafc;
-            --bg-neutral: #ffffff;
-            --border-light: #e2e8f0;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --font-sans: 'Inter', sans-serif;
-            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .dark-theme {
-            --bg-pure: #0f172a;
-            --bg-neutral: #1e293b;
-            --border-light: #334155;
+            --brand-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e3a8a 100%);
+            --accent-red: #e11d48;
+            --accent-red-hover: #be123c;
+            --bg-pure: #0b0f19;
+            --bg-neutral: rgba(15, 23, 42, 0.6);
+            --border-light: rgba(255, 255, 255, 0.08);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --primary-blue: #38bdf8;
-            --primary-light: #7dd3fc;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --glass-bg: rgba(15, 23, 42, 0.45);
+            --glass-blur: blur(16px);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .light-theme {
+            --bg-pure: #f8fafc;
+            --bg-neutral: rgba(255, 255, 255, 0.7);
+            --border-light: rgba(15, 23, 42, 0.08);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --glass-bg: rgba(255, 255, 255, 0.5);
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,75 +42,99 @@
             font-family: var(--font-sans);
             background-color: var(--bg-pure);
             color: var(--text-main);
-            line-height: 1.5;
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
-            padding-top: 80px;
-            padding-bottom: 90px;
+            padding-top: 90px;
+            padding-bottom: 100px;
             min-height: 100vh;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.4s, color 0.4s;
+            background-image: radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
+                              radial-gradient(circle at 10% 70%, rgba(225, 29, 72, 0.08) 0%, transparent 40%);
+            background-attachment: fixed;
         }
 
         .site-header {
             position: fixed;
-            top: 0; left: 0; right: 0; height: 70px;
-            background: rgba(248, 250, 252, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-light); z-index: 1010;
-            display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
+            top: 15px; left: 5%; right: 5%; height: 65px;
+            background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-light); border-radius: 20px; z-index: 1010;
+            display: flex; align-items: center; justify-content: space-between; padding: 0 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-        .dark-theme .site-header { background: rgba(15, 23, 42, 0.8); }
-        .header-logo-container { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; }
-        .header-logo { height: 40px; width: auto; }
-        .header-title { font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-main); }
+        .header-logo-container { display: flex; align-items: center; gap: 12px; cursor: pointer; text-decoration: none; }
+        .header-logo { height: 35px; width: auto; filter: drop-shadow(0 2px 8px rgba(59,130,246,0.4)); }
+        .header-title { font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); background: linear-gradient(to right, var(--text-main), var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .user-badge { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
-        .theme-toggle { background: transparent; border: 1px solid var(--border-light); padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; color: var(--text-main); font-weight: 500; }
+        .user-badge { font-size: 0.85rem; color: var(--text-main); font-weight: 600; background: var(--border-light); padding: 6px 14px; border-radius: 30px; display: flex; align-items: center; gap: 6px; }
+        .user-badge::before { content: ''; display: inline-block; width: 8px; height: 8px; background: #10b981; border-radius: 50%; }
+        .theme-toggle { background: var(--brand-gradient); border: none; padding: 8px 16px; border-radius: 30px; cursor: pointer; font-size: 0.8rem; color: #fff; font-weight: 700; transition: var(--transition-smooth); box-shadow: 0 4px 12px rgba(30,58,138,0.3); }
+        .theme-toggle:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(30,58,138,0.5); }
 
-        .nav-container { position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; background: var(--bg-neutral); border-top: 1px solid var(--border-light); box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05); }
-        nav { max-width: 1000px; margin: 0 auto; display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        nav::-webkit-scrollbar { display: none; }
-        .nav-links { display: flex; width: 100%; list-style: none; }
-        .nav-links li { flex: 1; min-width: 105px; }
-        .nav-links a { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; font-size: 0.78rem; font-weight: 500; color: var(--text-muted); transition: var(--transition-smooth); padding: 0.9rem 0.5rem; text-align: center; white-space: nowrap; border-bottom: 3px solid transparent; }
-        .nav-links a:hover { color: var(--text-main); }
-        .nav-links a.active { color: var(--text-main); border-bottom: 3px solid var(--text-main); font-weight: 600; }
+        .nav-container { position: fixed; bottom: 20px; left: 5%; right: 5%; z-index: 1000; background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--border-light); border-radius: 24px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); padding: 0.25rem; max-width: 800px; margin: 0 auto; }
+        nav { display: flex; }
+        .nav-links { display: flex; width: 100%; list-style: none; justify-content: space-between; }
+        .nav-links li { flex: 1; }
+        .nav-links a { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); transition: var(--transition-smooth); padding: 0.8rem 0.5rem; text-align: center; border-radius: 18px; }
+        .nav-links a:hover { color: var(--text-main); background: rgba(255,255,255,0.04); }
+        .nav-links a.active { color: #fff; background: var(--brand-gradient); box-shadow: 0 8px 20px rgba(29,78,216,0.3); }
         
         #nav-admin-li { display: none; }
-        .nav-links a.nav-admin-link { color: var(--accent-red); font-weight: 600; }
-        .nav-links a.nav-admin-link.active { border-bottom-color: var(--accent-red); }
+        .nav-links a.nav-admin-link { color: var(--accent-red); }
+        .nav-links a.nav-admin-link.active { background: var(--accent-red); color: #fff; box-shadow: 0 8px 20px rgba(225,29,72,0.3); }
 
-        .hero { min-height: 45vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 5% 2rem; max-width: 900px; margin: 0 auto; text-align: center; }
-        .hero-title { font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800; letter-spacing: -1.5px; line-height: 1.2; margin-bottom: 1.2rem; color: var(--text-main); }
-        .hero-title span { color: var(--accent-red); }
-        .hero-subtitle { font-size: 1.05rem; color: var(--text-muted); max-width: 600px; margin-bottom: 2rem; line-height: 1.6; }
+        /* HERO STYLING */
+        .hero { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 5%; max-width: 1000px; margin: 0 auto; text-align: center; position: relative; }
+        .hero-badge { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); padding: 6px 16px; border-radius: 30px; color: #60a5fa; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5rem; }
+        .hero-title { font-size: clamp(2.5rem, 6vw, 4.2rem); font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 1.5rem; color: var(--text-main); }
+        .hero-title span { background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-subtitle { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin-bottom: 2.5rem; }
+        .hero-cta-group { display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
 
-        section { padding: 40px 5%; max-width: 1100px; margin: 0 auto; }
-        .section-title { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 0.5rem; color: var(--text-main); }
-        .section-title::after { content: ''; display: block; width: 35px; height: 3px; background: var(--text-main); margin-top: 8px; }
-        .section-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2.5rem; max-width: 650px; }
+        /* QUICK LINKS GRID (ORARI + LINK) */
+        .quick-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; width: 100%; margin-top: 3rem; }
+        .quick-card { background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%); border: 1px solid var(--border-light); border-radius: 20px; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: var(--transition-smooth); }
+        .quick-card:hover { transform: translateY(-5px); border-color: rgba(59,130,246,0.4); background: rgba(255,255,255,0.05); }
+        .quick-icon { width: 48px; height: 48px; background: rgba(59,130,246,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #3b82f6; }
+        .quick-card.official .quick-icon { background: rgba(225,29,72,0.1); color: var(--accent-red); }
+        .quick-card-text h4 { font-size: 1rem; font-weight: 700; color: var(--text-main); }
+        .quick-card-text p { font-size: 0.8rem; color: var(--text-muted); }
 
-        .clean-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .clean-card { background: var(--bg-neutral); border: 1px solid var(--border-light); padding: 2rem; border-radius: 16px; transition: var(--transition-smooth); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02); }
-        .clean-card:hover { transform: translateY(-4px); box-shadow: 0 12px 20px rgba(0, 0, 0, 0.04); }
-        .clean-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-main); }
-        .clean-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
-        .clean-card .card-action { font-size: 0.8rem; font-weight: 600; color: var(--accent-red); margin-top: 1.5rem; text-transform: uppercase; text-decoration: none; display: inline-block; cursor: pointer; }
+        section { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
+        .section-header { margin-bottom: 3rem; }
+        .section-title { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.5rem; color: var(--text-main); }
+        .section-desc { color: var(--text-muted); font-size: 1rem; max-width: 650px; }
 
-        .minimal-form { display: flex; flex-direction: column; gap: 1.5rem; max-width: 550px; background: var(--bg-neutral); padding: 2rem; border-radius: 16px; border: 1px solid var(--border-light); }
+        .clean-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .clean-card { background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--border-light); padding: 2.2rem; border-radius: 24px; transition: var(--transition-smooth); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .clean-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.15); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .clean-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.85rem; color: var(--text-main); }
+        .clean-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
+        .clean-card .card-action { font-size: 0.85rem; font-weight: 700; color: #3b82f6; margin-top: 2rem; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; display: inline-block; transition: var(--transition-smooth); }
+        .clean-card .card-action:hover { color: #60a5fa; padding-left: 5px; }
+
+        .minimal-form { display: flex; flex-direction: column; gap: 1.5rem; max-width: 550px; background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-light); padding: 2.5rem; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .minimal-form h3 { font-size: 1.4rem; font-weight: 700; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-        .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-        .form-group label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
-        .form-input { width: 100%; padding: 10px 14px; background: var(--bg-pure); border: 1px solid var(--border-light); border-radius: 8px; font-family: var(--font-sans); font-size: 0.9rem; color: var(--text-main); transition: var(--transition-smooth); }
-        .form-input:focus { outline: none; border-color: var(--text-main); background: var(--bg-neutral); }
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-input { width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-light); border-radius: 12px; font-family: var(--font-sans); font-size: 0.95rem; color: var(--text-main); transition: var(--transition-smooth); }
+        .light-theme .form-input { background: rgba(255,255,255,0.8); }
+        .form-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,0.15); }
 
-        .btn { align-self: flex-start; padding: 12px 28px; font-family: var(--font-sans); font-size: 0.88rem; font-weight: 600; border-radius: 6px; border: none; cursor: pointer; transition: var(--transition-smooth); display: inline-block; text-decoration: none; text-align: center; }
-        .btn-dark { background: var(--primary-blue); color: #fff; }
-        .btn-outline { background: transparent; border: 1px solid var(--border-light); color: var(--text-main); }
+        .btn { padding: 14px 32px; font-family: var(--font-sans); font-size: 0.9rem; font-weight: 700; border-radius: 14px; border: none; cursor: pointer; transition: var(--transition-smooth); display: inline-block; text-decoration: none; text-align: center; }
+        .btn-dark { background: var(--brand-gradient); color: #fff; box-shadow: 0 8px 24px rgba(29,78,216,0.3); }
+        .btn-dark:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(29,78,216,0.5); }
+        .btn-outline { background: rgba(255,255,255,0.05); border: 1px solid var(--border-light); color: var(--text-main); }
+        .btn-outline:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
 
-        .page { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.2s ease, transform 0.2s ease; }
+        .page { display: none; opacity: 0; transform: translateY(15px); transition: opacity 0.3s ease, transform 0.3s ease; }
         .page.active { display: block; opacity: 1; transform: translateY(0); }
 
         @media (max-width: 768px) {
-            .form-row { grid-template-columns: 1fr; gap: 1.2rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .site-header { left: 15px; right: 15px; padding: 0 1rem; }
+            .nav-container { left: 10px; right: 10px; bottom: 10px; }
+            .nav-links a { font-size: 0.72rem; padding: 0.6rem 0.2rem; }
         }
     </style>
 </head>
@@ -122,7 +147,7 @@
     </a>
     <div style="display: flex; align-items: center; gap: 15px;">
         <span id="header-user-status" class="user-badge">Ospite</span>
-        <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">Modalità Scura</button>
+        <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">Cambia Tema</button>
     </div>
 </header>
 
@@ -132,53 +157,94 @@
             <li><a class="active" id="nav-home" href="#home">Home</a></li>
             <li><a id="nav-avvisi" href="#avvisi">Avvisi</a></li>
             <li><a id="nav-gruppi" href="#gruppi">Gruppi</a></li>
-            <li><a id="nav-appunti" href="#appunti">Richiedi Appunti</a></li>
-            <li><a id="nav-auth" href="#auth">Area Utente</a></li>
-            <li id="nav-admin-li"><a class="nav-admin-link" id="nav-admin" href="#admin">Pannello Admin</a></li>
+            <li><a id="nav-appunti" href="#appunti">Appunti</a></li>
+            <li><a id="nav-auth" href="#auth">Profilo</a></li>
+            <li id="nav-admin-li"><a class="nav-admin-link" id="nav-admin" href="#admin">Admin</a></li>
         </ul>
     </nav>
 </div>
 
-<!-- LE PAGINE DEL SITO -->
+<!-- PAGINA: HOME (DESIGN ACCATTIVANTE RINOVATO) -->
 <div class="page active" id="page-home">
     <div class="hero">
+        <div class="hero-badge">Hub Studenti Indipendente</div>
         <h1 class="hero-title">Coordinamento Digitale <br><span>Studenti Ingegneria</span>.</h1>
-        <p class="hero-subtitle">Portale indipendente UniCampania. Richiedi materiali didattici ed entra nei gruppi ufficiali del tuo corso.</p>
-        <div style="display: flex; gap: 1rem;">
+        <p class="hero-subtitle font-sans">Il punto di riferimento per i corsi di ingegneria UniCampania. Scarica appunti verificati, entra nei gruppi del tuo anno e monitora le lezioni.</p>
+        
+        <div class="hero-cta-group">
             <a class="btn btn-dark" href="#appunti">Richiedi Appunti</a>
-            <a class="btn btn-outline" href="#avvisi">Consulta Avvisi</a>
+            <a class="btn btn-outline" href="#avvisi">Bacheca Avvisi</a>
+        </div>
+
+        <!-- GRIGLIA LINK RAPIDI: ORARI E SITI UFFICIALI -->
+        <div class="quick-info-grid">
+            <a href="https://ingegneria.unicampania.it" target="_blank" class="quick-card official">
+                <div class="quick-icon">🏛️</div>
+                <div class="quick-card-text">
+                    <h4>Avvisi Ufficiali Dipartimento</h4>
+                    <p>Comunicazioni formali di Ateneo ↗</p>
+                </div>
+            </a>
+            
+            <a href="https://ingegneria.unicampania.it" target="_blank" class="quick-card">
+                <div class="quick-icon">📅</div>
+                <div class="quick-card-text">
+                    <h4>Orari delle Lezioni</h4>
+                    <p>Calendari, aule e variazioni ↗</p>
+                </div>
+            </a>
+
+            <a href="https://ingegneria.unicampania.it" target="_blank" class="quick-card">
+                <div class="quick-icon">📝</div>
+                <div class="quick-card-text">
+                    <h4>Appelli e Sessioni d'Esame</h4>
+                    <p>Date e prenotazioni su Segrepass ↗</p>
+                </div>
+            </a>
         </div>
     </div>
 </div>
 
+<!-- PAGINA: AVVISI -->
 <div class="page" id="page-avvisi">
     <section>
-        <h2 class="section-title">Avvisi e Comunicazioni</h2>
-        <p class="section-desc">Bacheca interna autogestita dai rappresentanti degli studenti.</p>
+        <div class="section-header">
+            <h2 class="section-title">Avvisi e Comunicazioni</h2>
+            <p class="section-desc">Bacheca gestita direttamente dai rappresentanti degli studenti per aggiornamenti rapidi e diretti.</p>
+        </div>
         <div class="clean-grid" id="avvisi-container">
-            <div class="clean-card"><h3>Sincronizzazione in corso...</h3><p>I dati si caricheranno non appena connessi al database.</p></div>
+            <div class="clean-card">
+                <h3>Caricamento dati...</h3>
+                <p>I dati della bacheca saranno visibili non appena connessi con il database live.</p>
+            </div>
         </div>
     </section>
 </div>
 
+<!-- PAGINA: GRUPPI -->
 <div class="page" id="page-gruppi">
     <section>
-        <h2 class="section-title">Gruppi WhatsApp 1&deg; Anno</h2>
-        <p class="section-desc">Seleziona la tua area ed entra nella community.</p>
+        <div class="section-header">
+            <h2 class="section-title">Gruppi WhatsApp di Corso</h2>
+            <p class="section-desc">Entra nelle community del tuo anno per confrontarti sui corsi, scambiare pareri ed esercitazioni.</p>
+        </div>
         <div class="clean-grid">
-            <div class="clean-card"><h3>Ingegneria Informatica / Elettronica</h3><a class="card-action" href="#">Entra ↗</a></div>
-            <div class="clean-card"><h3>Ingegneria Meccanica / Aerospaziale</h3><a class="card-action" href="#">Entra ↗</a></div>
-            <div class="clean-card"><h3>Ingegneria Biomedica</h3><a class="card-action" href="#">Entra ↗</a></div>
-            <div class="clean-card"><h3>Ingegneria Gestionale</h3><a class="card-action" href="#">Entra ↗</a></div>
-            <div class="clean-card"><h3>Ingegneria Civile / Edile / Ambientale</h3><a class="card-action" href="#">Entra ↗</a></div>
+            <div class="clean-card"><h3>Ingegneria Informatica / Elettronica</h3><a class="card-action" href="#">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>Ingegneria Meccanica / Aerospaziale</h3><a class="card-action" href="#">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>Ingegneria Biomedica</h3><a class="card-action" href="#">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>Ingegneria Gestionale</h3><a class="card-action" href="#">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>Ingegneria Civile / Edile / Ambientale</h3><a class="card-action" href="#">Entra nel gruppo ↗</a></div>
         </div>
     </section>
 </div>
 
+<!-- PAGINA: APPUNTI -->
 <div class="page" id="page-appunti">
     <section style="max-width: 650px;">
-        <h2 class="section-title">Richiesta materiali e appunti</h2>
-        <p class="section-desc">Invia una richiesta direttamente al nostro database interno.</p>
+        <div class="section-header">
+            <h2 class="section-title">Richiesta Materiali Didattici</h2>
+            <p class="section-desc">Specifica l'esame di cui hai bisogno: verrai ricontattato non appena il materiale sarà disponibile.</p>
+        </div>
         <form class="minimal-form" id="form-appunti" onsubmit="submitAppuntiRequest(event)">
             <div id="appunti-personal-fields">
                 <div class="form-row">
@@ -187,16 +253,20 @@
                 </div>
                 <div class="form-group"><label>Numero di telefono</label><input class="form-input" id="appunti-telefono" type="tel" /></div>
             </div>
-            <div class="form-group"><label>Nome Insegnamento / Esame</label><input class="form-input" id="appunti-esame" required type="text" /></div>
-            <button class="btn btn-dark" type="submit">Invia richiesta</button>
+            <div class="form-group"><label>Nome Insegnamento / Esame</label><input class="form-input" id="appunti-esame" required type="text" placeholder="Es. Analisi Matematica I" /></div>
+            <button class="btn btn-dark" type="submit">Invia Richiesta</button>
         </form>
     </section>
 </div>
 
+<!-- PAGINA: AUTH (ACCESSO CON MATRICOLA) -->
 <div class="page" id="page-auth">
     <section style="max-width: 550px;">
         <div id="auth-logged-out">
-            <h2 class="section-title">Registrazione e Login</h2>
+            <div class="section-header">
+                <h2 class="section-title">Area Riservata</h2>
+                <p class="section-desc">Gestisci il tuo profilo studente senza bisogno di fornire la tua email.</p>
+            </div>
             
             <!-- FORM REGISTRAZIONE -->
             <form class="minimal-form" id="form-register" onsubmit="handleSignUp(event)">
@@ -236,11 +306,11 @@
                 <button class="btn btn-dark" type="submit">Registrati</button>
             </form>
             
-            <div style="margin: 2rem 0; text-align: center; color: var(--text-muted);">oppure</div>
+            <div style="margin: 2rem 0; text-align: center; color: var(--text-muted); font-weight: 600;">OPPURE</div>
             
-            <!-- FORM LOGIN CON MATRICOLA -->
+            <!-- FORM LOGIN -->
             <form class="minimal-form" id="form-login" onsubmit="handleSignIn(event)">
-                <h3>Accedi</h3>
+                <h3>Accedi al Portale</h3>
                 <div class="form-group"><label>Matricola</label><input class="form-input" id="login-matricola" required type="text"></div>
                 <div class="form-group"><label>Password</label><input class="form-input" id="login-password" required type="password"></div>
                 <button class="btn btn-outline" type="submit">Accedi</button>
@@ -248,23 +318,29 @@
         </div>
         
         <div id="auth-logged-in" style="display: none;">
-            <h2 class="section-title">Account Attivo</h2>
+            <div class="section-header">
+                <h2 class="section-title">Pannello Studente</h2>
+            </div>
             <div class="minimal-form">
                 <p><strong>Studente:</strong> <span id="user-display-name">-</span></p>
                 <p><strong>Corso:</strong> <span id="user-display-corso">-</span></p>
                 <p><strong>Matricola:</strong> <span id="user-display-matricola">-</span></p>
-                <button class="btn btn-outline" onclick="handleSignOut()">Disconnetti Account</button>
+                <button class="btn btn-outline" style="border-color: var(--accent-red); color: var(--accent-red);" onclick="handleSignOut()">Disconnetti Account</button>
             </div>
         </div>
     </section>
 </div>
 
+<!-- PAGINA: ADMIN -->
 <div class="page" id="page-admin">
     <section>
-        <h2 class="section-title" style="color: var(--accent-red);">Pannello di Amministrazione</h2>
+        <div class="section-header">
+            <h2 class="section-title" style="color: var(--accent-red);">Pannello di Amministrazione</h2>
+            <p class="section-desc">Pubblica nuovi avvisi visibili istantaneamente da tutti gli studenti connessi alla piattaforma.</p>
+        </div>
         <form class="minimal-form" id="form-avviso" onsubmit="saveAvviso(event)">
             <div class="form-group"><label>Titolo Avviso</label><input class="form-input" id="avviso-titolo" required type="text"></div>
-            <div class="form-group"><label>Testo</label><textarea class="form-input" id="avviso-descrizione" required rows="4"></textarea></div>
+            <div class="form-group"><label>Testo dell'Avviso</label><textarea class="form-input" id="avviso-descrizione" required rows="5"></textarea></div>
             <button class="btn btn-dark" style="background:var(--accent-red);" type="submit">Pubblica Avviso</button>
         </form>
     </section>
@@ -339,7 +415,6 @@
         } catch(e) { console.warn("Errore avvisi:", e); }
     }
 
-    // REGISTRAZIONE CON MATRICOLA E PASSWORD
     async function handleSignUp(e) {
         e.preventDefault();
         if (!db) return;
@@ -351,7 +426,6 @@
         const corso = document.getElementById('reg-corso').value;
         const password = document.getElementById('reg-password').value;
 
-        // Generazione email fittizia basata sulla matricola
         const fakeEmail = `${matricola}@studenti.unicampania.it`;
 
         try {
@@ -375,15 +449,12 @@
 
                 if (profileError) throw profileError;
 
-                alert("Registrazione completata con successo!");
+                alert("Registrazione completata!");
                 window.location.reload();
             }
-        } catch (err) {
-            alert("Errore durante la registrazione: " + err.message);
-        }
+        } catch (err) { alert("Errore di registrazione: " + err.message); }
     }
 
-    // LOGIN CON MATRICOLA E PASSWORD
     async function handleSignIn(e) {
         e.preventDefault();
         if (!db) return;
@@ -397,14 +468,10 @@
                 email: fakeEmail,
                 password: password
             });
-
             if (error) throw error;
-
-            alert("Accesso effettuato!");
+            alert("Bentornato!");
             window.location.reload();
-        } catch (err) {
-            alert("Errore di accesso: Controlla matricola e password.");
-        }
+        } catch (err) { alert("Errore: Credenziali non valide."); }
     }
 
     async function submitAppuntiRequest(e) {
@@ -414,13 +481,13 @@
         try {
             if (currentUserProfile) {
                 await db.from('richieste_appunti').insert([{ studente_id: currentUserProfile.id, esame }]);
-                alert("Richiesta inviata con successo!");
+                alert("Richiesta inviata!");
                 document.getElementById('appunti-esame').value = "";
             } else { 
-                alert("Accedi prima per poter inviare una richiesta."); 
+                alert("Accedi prima per poter inoltrare la richiesta."); 
                 window.location.hash = "auth"; 
             }
-        } catch(err) { alert("Errore nell'invio dei dati."); }
+        } catch(err) { alert("Errore durante l'invio."); }
     }
 
     async function saveAvviso(e) {
@@ -435,11 +502,11 @@
             alert("Avviso pubblicato!");
             window.location.hash = "avvisi";
             loadAvvisi();
-        } catch(err) { alert("Errore nella pubblicazione."); }
+        } catch(err) { alert("Errore di pubblicazione."); }
     }
 
     async function handleSignOut() { if(db) await db.auth.signOut(); window.location.reload(); }
-    function toggleTheme() { document.body.classList.toggle('dark-theme'); }
+    function toggleTheme() { document.body.classList.toggle('light-theme'); }
 </script>
 </body>
 </html>
