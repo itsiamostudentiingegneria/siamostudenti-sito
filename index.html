@@ -379,28 +379,54 @@
     });
 
     async function checkUserSession() {
-        try {
-            const { data: { session }, error } = await db.auth.getSession();
-            if (session && !error) { await loadUserProfile(session.user.id); } 
-        } catch(e) { console.warn("Errore sessione:", e); }
-    }
+    try {
+        // Ascolta attivamente se l'utente è loggato
+        db.auth.onAuthStateChange(async (event, session) => {
+            if (session?.user) {
+                await loadUserProfile(session.user.id);
+            } else {
+                // Se non è loggato resetta lo stato a Ospite
+                currentUserProfile = null;
+                document.getElementById('header-user-status').textContent = "Ospite";
+                document.getElementById('auth-logged-out').style.style.display = 'block';
+                document.getElementById('auth-logged-in').style.display = 'none';
+            }
+        });
+    } catch(e) { console.warn("Errore sessione:", e); }
+}
 
     async function loadUserProfile(userId) {
-        try {
-            const { data, error } = await db.from('profili').select('*').eq('id', userId).single();
-            if (data && !error) {
-                currentUserProfile = data;
-                document.getElementById('header-user-status').textContent = data.nome;
-                document.getElementById('user-display-name').textContent = `${data.nome} ${data.cognome}`;
-                document.getElementById('user-display-corso').textContent = data.corso;
-                document.getElementById('user-display-matricola').textContent = data.matricola;
-                
-                document.getElementById('auth-logged-out').style.display = 'none';
-                document.getElementById('auth-logged-in').style.display = 'block';
-                if (data.is_admin) document.getElementById('nav-admin-li').style.display = 'block';
+    try {
+        const { data, error } = await db.from('profili').select('*').eq('id', userId).single();
+        if (data && !error) {
+            currentUserProfile = data;
+            
+            // Aggiorna l'interfaccia dell'header e del profilo
+            document.getElementById('header-user-status').textContent = data.nome;
+            document.getElementById('user-display-name').textContent = `${data.nome} ${data.cognome}`;
+            document.getElementById('user-display-corso').textContent = data.corso;
+            document.getElementById('user-display-matricola').textContent = data.matricola;
+            
+            // --- AUTOCOMPILAZIONE CAMPI APPUNTI ---
+            if (document.getElementById('appunti-nome')) {
+                document.getElementById('appunti-nome').value = data.nome;
+                document.getElementById('appunti-nome').disabled = true; // Blocca il campo visto che è già verificato
             }
-        } catch(e) { console.warn("Errore profilo:", e); }
-    }
+            if (document.getElementById('appunti-cognome')) {
+                document.getElementById('appunti-cognome').value = data.cognome;
+                document.getElementById('appunti-cognome').disabled = true;
+            }
+            if (document.getElementById('appunti-telefono')) {
+                document.getElementById('appunti-telefono').value = data.telefono;
+                document.getElementById('appunti-telefono').disabled = true;
+            }
+            
+            document.getElementById('auth-logged-out').style.display = 'none';
+            document.getElementById('auth-logged-in').style.display = 'block';
+            if (data.is_admin) document.getElementById('nav-admin-li').style.display = 'block';
+        }
+    } catch(e) { console.warn("Errore caricamento profilo:", e); }
+}
 
     async function loadAvvisi() {
         try {
