@@ -126,6 +126,12 @@
         .page { display: none; opacity: 0; transform: translateY(15px); transition: opacity 0.3s ease, transform 0.3s ease; }
         .page.active { display: block; opacity: 1; transform: translateY(0); }
 
+        /* Stili per la barra interna del blocco avvisi */
+        .inner-nav-bar { display: flex; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-light); border-radius: 14px; padding: 4px; margin-top: 1.5rem; max-width: 350px; }
+        .inner-nav-btn { flex: 1; background: transparent; border: none; padding: 10px; font-family: var(--font-sans); font-size: 0.85rem; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; transition: var(--transition-smooth); text-align: center; text-decoration: none; }
+        .inner-nav-btn:hover { color: var(--text-main); }
+        .inner-nav-btn.active { background: var(--brand-gradient); color: #fff; }
+
         @media (max-width: 768px) {
             .form-row { grid-template-columns: 1fr; }
             .site-header { left: 15px; right: 15px; padding: 0 1rem; }
@@ -164,7 +170,7 @@
     <div class="hero">
         <div class="hero-badge">Gruppo di Rappresentanza Studentesca</div>
         <h1 class="hero-title">Siamo Studenti <br><span>Ingegneria</span></h1>
-        <p class="hero-subtitle">Il punto di riferimento  per i corsi di ingegneria UniCampania. Scarica appunti verificati, entra nei gruppi ed esegui l'accesso sicuro con la tua mail istituzionale.</p>
+        <p class="hero-subtitle">Il punto di riferimento per i corsi di ingegneria UniCampania. Scarica appunti verificati, entra nei gruppi ed esegui l'accesso sicuro con la tua mail istituzionale.</p>
         
         <div class="hero-cta-group">
             <a class="btn btn-dark" href="#appunti">Richiedi Appunti</a>
@@ -195,14 +201,32 @@
 <!-- PAGINA: AVVISI -->
 <div class="page" id="page-avvisi">
     <section>
-        <div class="section-header">
-            <h2 class="section-title">Avvisi e Comunicazioni</h2>
-            <p class="section-desc">Bacheca gestita direttamente dai rappresentanti degli studenti per aggiornamenti rapidi e diretti.</p>
+        <!-- Blocco visibile solo da Ospiti -->
+        <div id="avvisi-locked" style="max-width: 550px; margin: 0 auto; text-align: center;">
+            <div class="section-header">
+                <h2 class="section-title">Contenuto Protetto</h2>
+                <p class="section-desc">Devi effettuare l'accesso con la tua identità universitaria per visualizzare le comunicazioni interne.</p>
+                
+                <center>
+                    <div class="inner-nav-bar">
+                        <button class="inner-nav-btn active" onclick="switchAuthMode('login')">Accedi</button>
+                        <button class="inner-nav-btn" onclick="switchAuthMode('register')">Registrati</button>
+                    </div>
+                </center>
+            </div>
         </div>
-        <div class="clean-grid" id="avvisi-container">
-            <div class="clean-card">
-                <h3>Nessun Avviso</h3>
-                <p>Questa Sezione Verrà aggiornata il prima possibile</p>
+
+        <!-- Bacheca visibile solo da Loggati -->
+        <div id="avvisi-unlocked" style="display: none;">
+            <div class="section-header">
+                <h2 class="section-title">Avvisi e Comunicazioni</h2>
+                <p class="section-desc">Bacheca gestita direttamente dai rappresentanti degli studenti per aggiornamenti rapidi e diretti.</p>
+            </div>
+            <div class="clean-grid" id="avvisi-container">
+                <div class="clean-card">
+                    <h3>Nessun Avviso</h3>
+                    <p>Questa Sezione Verrà aggiornata il prima possibile</p>
+                </div>
             </div>
         </div>
     </section>
@@ -229,7 +253,6 @@
             <div class="clean-card"><h3>1° Anno Magistrale Ing. Elettronica</h3><a class="card-action" href="https://chat.whatsapp.com/JQt5gd2G2DI02ad7qFsgtf">Entra nel gruppo ↗</a></div>
             <div class="clean-card"><h3>1° Anno Magistrale Ing. Gestionale</h3><a class="card-action" href="https://chat.whatsapp.com/BCQsY7KOgO9KNx3MQYktml">Entra nel gruppo ↗</a></div>
             <div class="clean-card"><h3>1° Anno Magistrale Ing. Civile</h3><a class="card-action" href="https://chat.whatsapp.com/Klj1JxjeaI3B66S37E259U">Entra nel gruppo ↗</a></div>
-            
         </div>
     </section>
 </div>
@@ -244,10 +267,10 @@
         <form class="minimal-form" id="form-appunti" onsubmit="submitAppuntiRequest(event)">
             <div id="appunti-personal-fields">
                 <div class="form-row">
-                    <div class="form-group"><label>Nome</label><input class="form-input" id="appunti-nome" type="text" /></div>
-                    <div class="form-group"><label>Cognome</label><input class="form-input" id="appunti-cognome" type="text" /></div>
+                    <div class="form-group"><label>Nome</label><input class="form-input" id="appunti-nome" type="text" required /></div>
+                    <div class="form-group"><label>Cognome</label><input class="form-input" id="appunti-cognome" type="text" required /></div>
                 </div>
-                <div class="form-group"><label>Numero di telefono</label><input class="form-input" id="appunti-telefono" type="tel" /></div>
+                <div class="form-group"><label>Numero di telefono</label><input class="form-input" id="appunti-telefono" type="tel" required /></div>
             </div>
             <div class="form-group"><label>Nome Insegnamento / Esame</label><input class="form-input" id="appunti-esame" required type="text" placeholder="Es. Analisi Matematica I" /></div>
             <button class="btn btn-dark" type="submit">Invia Richiesta</button>
@@ -258,6 +281,7 @@
 <!-- PAGINA: AUTH (MAIL ISTITUZIONALE) -->
 <div class="page" id="page-auth">
     <section style="max-width: 550px;">
+        <!-- CONTENITORE DISCONNESSO -->
         <div id="auth-logged-out">
             <div class="section-header">
                 <h2 class="section-title">Area Riservata</h2>
@@ -265,7 +289,7 @@
             </div>
             
             <!-- FORM REGISTRAZIONE -->
-            <form class="minimal-form" id="form-register" onsubmit="handleSignUp(event)">
+            <form class="minimal-form" id="form-register" onsubmit="handleSignUp(event)" style="display: none;">
                 <h3>Crea Account Studente</h3>
                 <div class="form-row">
                     <div class="form-group"><label>Nome</label><input class="form-input" id="reg-nome" required type="text"></div>
@@ -282,16 +306,16 @@
                 <div class="form-group">
                     <label>Corso di Studi</label>
                     <select class="form-input" id="reg-corso" required>
-                        <option value="Ing.Elettr">Ing. Elettronica</option>
-                        <option value="Ing.Info">Ing. Informatica</option>
-                        <option value="Ing.Mec">Ing. Meccanica</option>
-                        <option value="Ing.Aer">Ing. Aerospaziale</option>
-                        <option value="Ing.Ener">Ing. Energetica</option>
-                        <option value="Ing.Biom">Ing. Biomedica</option>
-                        <option value="Ing.Gest">Ing. Gestionale</option>
-                        <option value="Ing.Civ">Ing. Civile</option>
-                        <option value="Ing.Ed">Ing. Edile</option>
-                        <option value="Ing.Amb">Ing. Ambientale</option>
+                        <option value="Ing. Elettronica">Ing. Elettronica</option>
+                        <option value="Ing. Informatica">Ing. Informatica</option>
+                        <option value="Ing. Meccanica">Ing. Meccanica</option>
+                        <option value="Ing. Aerospaziale">Ing. Aerospaziale</option>
+                        <option value="Ing. Energetica">Ing. Energetica</option>
+                        <option value="Ing. Biomedica">Ing. Biomedica</option>
+                        <option value="Ing. Gestionale">Ing. Gestionale</option>
+                        <option value="Ing. Civile">Ing. Civile</option>
+                        <option value="Ing. Edile">Ing. Edile</option>
+                        <option value="Ing. Ambientale">Ing. Ambientale</option>
                         <option value="Mag Ing. Aerospaziale">Mag Ing. Aerospaziale</option>
                         <option value="Mag Ing. Informatica">Mag Ing. Informatica</option>
                         <option value="Mag Ing. Biomedica">Mag Ing. Biomedica</option>
@@ -304,28 +328,30 @@
                 </div>
                 <div class="form-group"><label>Password</label><input class="form-input" id="reg-password" required type="password" minlength="6"></div>
                 <button class="btn btn-dark" type="submit">Registrati</button>
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">Hai già un account? <a href="javascript:void(0)" onclick="toggleAuthForms('login')" style="color:#3b82f6; text-decoration:none;">Accedi qui</a></p>
             </form>
-            
-            <div style="margin: 2rem 0; text-align: center; color: var(--text-muted); font-weight: 600;">OPPURE</div>
             
             <!-- FORM LOGIN -->
             <form class="minimal-form" id="form-login" onsubmit="handleSignIn(event)">
                 <h3>Accedi al Portale</h3>
                 <div class="form-group"><label>Email Istituzionale</label><input class="form-input" id="login-email" required type="email" placeholder="nome.cognome@studenti.unicampania.it"></div>
                 <div class="form-group"><label>Password</label><input class="form-input" id="login-password" required type="password"></div>
-                <button class="btn btn-outline" type="submit">Accedi</button>
+                <button class="btn btn-dark" type="submit">Accedi</button>
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">Nuovo studente? <a href="javascript:void(0)" onclick="toggleAuthForms('register')" style="color:#3b82f6; text-decoration:none;">Crea un account</a></p>
             </form>
         </div>
         
+        <!-- CONTENITORE LOGGATO (SOSTITUISCE INTERAMENTE L'ACCESSO) -->
         <div id="auth-logged-in" style="display: none;">
             <div class="section-header">
                 <h2 class="section-title">Pannello Studente</h2>
+                <p class="section-desc">Profilo universitario collegato con successo.</p>
             </div>
             <div class="minimal-form">
                 <p><strong>Studente:</strong> <span id="user-display-name">-</span></p>
                 <p><strong>Corso:</strong> <span id="user-display-corso">-</span></p>
                 <p><strong>Matricola:</strong> <span id="user-display-matricola">-</span></p>
-                <button class="btn btn-outline" style="border-color: var(--accent-red); color: var(--accent-red);" onclick="handleSignOut()">Disconnetti Account</button>
+                <button class="btn btn-outline" style="border-color: var(--accent-red); color: var(--accent-red); margin-top: 1rem;" onclick="handleSignOut()">Disconnetti Account</button>
             </div>
         </div>
     </section>
@@ -379,54 +405,93 @@
     });
 
     async function checkUserSession() {
-    try {
-        // Ascolta attivamente se l'utente è loggato
-        db.auth.onAuthStateChange(async (event, session) => {
-            if (session?.user) {
-                await loadUserProfile(session.user.id);
-            } else {
-                // Se non è loggato resetta lo stato a Ospite
-                currentUserProfile = null;
-                document.getElementById('header-user-status').textContent = "Ospite";
-                document.getElementById('auth-logged-out').style.style.display = 'block';
-                document.getElementById('auth-logged-in').style.display = 'none';
-            }
-        });
-    } catch(e) { console.warn("Errore sessione:", e); }
-}
+        try {
+            db.auth.onAuthStateChange(async (event, session) => {
+                if (session?.user) {
+                    await loadUserProfile(session.user.id);
+                } else {
+                    currentUserProfile = null;
+                    document.getElementById('header-user-status').textContent = "Ospite";
+                    document.getElementById('auth-logged-out').style.display = 'block';
+                    document.getElementById('auth-logged-in').style.display = 'none';
+                    
+                    // Gestione protezione Avvisi (sezione bloccata)
+                    document.getElementById('avvisi-locked').style.display = 'block';
+                    document.getElementById('avvisi-unlocked').style.display = 'none';
+
+                    // Resetta e sblocca i campi nel modulo appunti in caso di disconnessione
+                    resetAppuntiFields(false);
+                }
+            });
+        } catch(e) { console.warn("Errore sessione:", e); }
+    }
 
     async function loadUserProfile(userId) {
-    try {
-        const { data, error } = await db.from('profili').select('*').eq('id', userId).single();
-        if (data && !error) {
-            currentUserProfile = data;
-            
-            // Aggiorna l'interfaccia dell'header e del profilo
-            document.getElementById('header-user-status').textContent = data.nome;
-            document.getElementById('user-display-name').textContent = `${data.nome} ${data.cognome}`;
-            document.getElementById('user-display-corso').textContent = data.corso;
-            document.getElementById('user-display-matricola').textContent = data.matricola;
-            
-            // --- AUTOCOMPILAZIONE CAMPI APPUNTI ---
-            if (document.getElementById('appunti-nome')) {
-                document.getElementById('appunti-nome').value = data.nome;
-                document.getElementById('appunti-nome').disabled = true; // Blocca il campo visto che è già verificato
+        try {
+            const { data, error } = await db.from('profili').select('*').eq('id', userId).single();
+            if (data && !error) {
+                currentUserProfile = data;
+                
+                // Aggiorna l'interfaccia dell'header con Nome e Cognome completi
+                document.getElementById('header-user-status').textContent = `${data.nome} ${data.cognome}`;
+                document.getElementById('user-display-name').textContent = `${data.nome} ${data.cognome}`;
+                document.getElementById('user-display-corso').textContent = data.corso;
+                document.getElementById('user-display-matricola').textContent = data.matricola;
+                
+                // Mostra la bacheca avvisi ed elimina la schermata bloccata
+                document.getElementById('avvisi-locked').style.display = 'none';
+                document.getElementById('avvisi-unlocked').style.display = 'block';
+
+                // Nasconde form login/register e mostra il blocco info utente
+                document.getElementById('auth-logged-out').style.display = 'none';
+                document.getElementById('auth-logged-in').style.display = 'block';
+
+                // --- AUTOCOMPILAZIONE E BLOCCO CAMPI APPUNTI ---
+                if (document.getElementById('appunti-nome')) {
+                    document.getElementById('appunti-nome').value = data.nome;
+                    document.getElementById('appunti-nome').disabled = true; 
+                }
+                if (document.getElementById('appunti-cognome')) {
+                    document.getElementById('appunti-cognome').value = data.cognome;
+                    document.getElementById('appunti-cognome').disabled = true;
+                }
+                if (document.getElementById('appunti-telefono')) {
+                    document.getElementById('appunti-telefono').value = data.telefono;
+                    document.getElementById('appunti-telefono').disabled = true;
+                }
+                
+                if (data.is_admin) document.getElementById('nav-admin-li').style.display = 'block';
             }
-            if (document.getElementById('appunti-cognome')) {
-                document.getElementById('appunti-cognome').value = data.cognome;
-                document.getElementById('appunti-cognome').disabled = true;
+        } catch(e) { console.warn("Errore caricamento profilo:", e); }
+    }
+
+    function resetAppuntiFields(disabledStatus) {
+        const fields = ['appunti-nome', 'appunti-cognome', 'appunti-telefono'];
+        fields.forEach(fId => {
+            const el = document.getElementById(fId);
+            if (el) {
+                if(!disabledStatus) el.value = "";
+                el.disabled = disabledStatus;
             }
-            if (document.getElementById('appunti-telefono')) {
-                document.getElementById('appunti-telefono').value = data.telefono;
-                document.getElementById('appunti-telefono').disabled = true;
-            }
-            
-            document.getElementById('auth-logged-out').style.display = 'none';
-            document.getElementById('auth-logged-in').style.display = 'block';
-            if (data.is_admin) document.getElementById('nav-admin-li').style.display = 'block';
+        });
+    }
+
+    // Navigazione interna tra form login e registrazione
+    function toggleAuthForms(mode) {
+        if (mode === 'register') {
+            document.getElementById('form-login').style.display = 'none';
+            document.getElementById('form-register').style.display = 'flex';
+        } else {
+            document.getElementById('form-register').style.display = 'none';
+            document.getElementById('form-login').style.display = 'flex';
         }
-    } catch(e) { console.warn("Errore caricamento profilo:", e); }
-}
+    }
+
+    // Gestione clic dai pulsanti di reindirizzamento interna alla pagina avvisi protetta
+    function switchAuthMode(mode) {
+        toggleAuthForms(mode);
+        window.location.hash = "auth";
+    }
 
     async function loadAvvisi() {
         try {
@@ -462,20 +527,19 @@
             if (authError) throw authError;
 
             if (authData.user) {
-                // Pezzetto modificato dentro handleSignUp:
                 const { error: profileError } = await db.from('profili').insert([{
-                id: authData.user.id,
-                nome: nome,
-                cognome: cognome,
-                email: email, // <--- Salva la mail anche qui per leggerla sul frontend
-                matricola: matricola,
-                telefono: telefono,
-                corso: corso,
-                is_admin: false
+                    id: authData.user.id,
+                    nome: nome,
+                    cognome: cognome,
+                    email: email, 
+                    matricola: matricola,
+                    telefono: telefono,
+                    corso: corso,
+                    is_admin: false
                 }]);
                 if (profileError) throw profileError;
 
-                alert("Registrazione completata con successo! Se richiesto, verifica la tua casella email.");
+                alert("Registrazione completata con successo!");
                 window.location.reload();
             }
         } catch (err) { alert("Errore durante la registrazione: " + err.message); }
@@ -505,7 +569,10 @@
         const esame = document.getElementById('appunti-esame').value;
         try {
             if (currentUserProfile) {
-                await db.from('richieste_appunti').insert([{ studente_id: currentUserProfile.id, esame }]);
+                await db.from('richieste_appunti').insert([{ 
+                    studente_id: currentUserProfile.id, 
+                    esame: esame 
+                }]);
                 alert("Richiesta inviata con successo!");
                 document.getElementById('appunti-esame').value = "";
             } else { 
@@ -530,7 +597,10 @@
         } catch(err) { alert("Impossibile salvare l'avviso."); }
     }
 
-    async function handleSignOut() { if(db) await db.auth.signOut(); window.location.reload(); }
+    async function handleSignOut() { 
+        if(db) await db.auth.signOut(); 
+        window.location.reload(); 
+    }
     function toggleTheme() { document.body.classList.toggle('light-theme'); }
 </script>
 </body>
