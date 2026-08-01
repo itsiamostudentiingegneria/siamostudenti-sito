@@ -119,6 +119,9 @@
         .inner-nav-btn:hover { color: var(--text-main); }
         .inner-nav-btn.active { background: var(--brand-gradient); color: #fff; }
 
+        .admin-meta-info { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .admin-meta-info strong { color: var(--text-main); }
+
         @media (max-width: 768px) {
             .form-row { grid-template-columns: 1fr; }
             .site-header { left: 15px; right: 15px; padding: 0 1rem; }
@@ -242,7 +245,6 @@
 <!-- PAGINA: APPUNTI -->
 <div class="page" id="page-appunti">
     <section style="max-width: 650px;">
-        <!-- Blocco visibile solo da Ospiti -->
         <div id="appunti-locked" style="max-width: 550px; margin: 0 auto; text-align: center;">
             <div class="section-header">
                 <h2 class="section-title">Area Riservata Appunti</h2>
@@ -256,7 +258,6 @@
             </div>
         </div>
 
-        <!-- Form visibile solo da Loggati -->
         <div id="appunti-unlocked" style="display: none;">
             <div class="section-header">
                 <h2 class="section-title">Richiesta Materiali Didattici</h2>
@@ -357,13 +358,28 @@
     <section>
         <div class="section-header">
             <h2 class="section-title" style="color: var(--accent-red);">Pannello di Amministrazione</h2>
-            <p class="section-desc">Pubblica nuovi avvisi visibili istantaneamente da tutti gli studenti connessi alla piattaforma.</p>
+            <p class="section-desc">Pubblica nuovi avvisi ed evadi le richieste di materiali inviate dagli studenti.</p>
         </div>
-        <form class="minimal-form" id="form-avviso" onsubmit="saveAvviso(event)">
-            <div class="form-group"><label>Titolo Avviso</label><input class="form-input" id="avviso-titolo" required type="text"></div>
-            <div class="form-group"><label>Testo dell'Avviso</label><textarea class="form-input" id="avviso-descrizione" required rows="5"></textarea></div>
-            <button class="btn btn-dark" style="background:var(--accent-red);" type="submit">Pubblica Avviso</button>
-        </form>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; align-items: start;">
+            <!-- Form Avviso -->
+            <form class="minimal-form" id="form-avviso" onsubmit="saveAvviso(event)" style="max-width: 100%;">
+                <h3>Pubblica Comunicazione</h3>
+                <div class="form-group"><label>Titolo Avviso</label><input class="form-input" id="avviso-titolo" required type="text"></div>
+                <div class="form-group"><label>Testo dell'Avviso</label><textarea class="form-input" id="avviso-descrizione" required rows="5"></textarea></div>
+                <button class="btn btn-dark" style="background:var(--accent-red);" type="submit">Pubblica Avviso</button>
+            </form>
+
+            <!-- Lista Richieste Appunti -->
+            <div>
+                <h3 style="margin-bottom: 1.5rem; font-size: 1.4rem; font-weight: 700;">Richieste Appunti Ricevute</h3>
+                <div id="admin-richieste-container" class="clean-grid" style="grid-template-columns: 1fr; gap: 1.2rem;">
+                    <div class="clean-card" style="padding: 1.5rem;">
+                        <p style="color: var(--text-muted);">Nessuna richiesta in attesa.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </div>
 
@@ -410,11 +426,9 @@
                     document.getElementById('auth-logged-out').style.display = 'block';
                     document.getElementById('auth-logged-in').style.display = 'none';
                     
-                    // Protezione Avvisi
                     document.getElementById('avvisi-locked').style.display = 'block';
                     document.getElementById('avvisi-unlocked').style.display = 'none';
 
-                    // Protezione Appunti
                     document.getElementById('appunti-locked').style.display = 'block';
                     document.getElementById('appunti-unlocked').style.display = 'none';
 
@@ -435,11 +449,9 @@
                 document.getElementById('user-display-corso').textContent = data.corso;
                 document.getElementById('user-display-matricola').textContent = data.matricola;
                 
-                // Mostra avvisi
                 document.getElementById('avvisi-locked').style.display = 'none';
                 document.getElementById('avvisi-unlocked').style.display = 'block';
 
-                // Mostra appunti
                 document.getElementById('appunti-locked').style.display = 'none';
                 document.getElementById('appunti-unlocked').style.display = 'block';
 
@@ -459,7 +471,10 @@
                     document.getElementById('appunti-telefono').disabled = true;
                 }
                 
-                if (data.is_admin) document.getElementById('nav-admin-li').style.display = 'block';
+                if (data.is_admin) {
+                    document.getElementById('nav-admin-li').style.display = 'block';
+                    loadRichiesteAdmin();
+                }
             }
         } catch(e) { console.warn("Errore caricamento profilo:", e); }
     }
@@ -501,6 +516,65 @@
                 });
             }
         } catch(e) { console.warn("Errore avvisi:", e); }
+    }
+
+    // Carica solo le richieste NON ANCORA evase
+    async function loadRichiesteAdmin() {
+        if (!db || !currentUserProfile?.is_admin) return;
+        try {
+            // Filtro .eq('evasa', false) per non mostrare quelle già completate
+            const { data, error } = await db.from('richieste_appunti').select('id, esame, profili(nome, cognome, telefono)').eq('evasa', false);
+            if (error) throw error;
+            
+            const container = document.getElementById('admin-richieste-container');
+            if (data && data.length > 0) {
+                container.innerHTML = "";
+                data.forEach(req => {
+                    const studente = req.profili || { nome: 'N/D', cognome: 'Utente', telefono: '-' };
+                    container.innerHTML += `
+                        <div class="clean-card" id="req-card-${req.id}" style="padding: 1.5rem; justify-content: space-between;">
+                            <div>
+                                <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--accent-red);">${req.esame}</h3>
+                                <div class="admin-meta-info">Studente: <strong>${studente.nome} ${studente.cognome}</strong></div>
+                                <div class="admin-meta-info">Tel: <strong>${studente.telefono}</strong></div>
+                            </div>
+                            <button class="btn btn-outline" style="font-size: 0.75rem; padding: 6px 12px; margin-top: 1rem; border-color: #10b981; color: #10b981;" onclick="evadiRichiesta('${req.id}')">Segna come evasa</button>
+                        </div>
+                    `;
+                });
+            } else {
+                container.innerHTML = `
+                    <div class="clean-card" style="padding: 1.5rem;">
+                        <p style="color: var(--text-muted);">Nessuna richiesta in attesa.</p>
+                    </div>
+                `;
+            }
+        } catch(err) { console.warn("Errore caricamento richieste admin:", err); }
+    }
+
+    // Modifica lo stato su Supabase senza eliminare il record
+    async function evadiRichiesta(reqId) {
+        if (!db || !currentUserProfile?.is_admin) return;
+        if (!confirm("Segnare questa richiesta come evasa? Rimarrà salvata nel database.")) return;
+
+        try {
+            // Esegue un update cambiando il flag 'evasa' a true
+            const { error } = await db.from('richieste_appunti').update({ evasa: true }).eq('id', reqId);
+            if (error) throw error;
+            
+            // Nasconde la scheda graficamente
+            const card = document.getElementById(`req-card-${reqId}`);
+            if (card) card.remove();
+            
+            const container = document.getElementById('admin-richieste-container');
+            if (container.children.length === 0) {
+                container.innerHTML = `
+                    <div class="clean-card" style="padding: 1.5rem;">
+                        <p style="color: var(--text-muted);">Nessuna richiesta in attesa.</p>
+                    </div>
+                `;
+            }
+        } catch(err) { alert("Impossibile aggiornare lo stato della richiesta: " + err.message); }
     }
 
     async function handleSignUp(e) {
@@ -560,7 +634,8 @@
             if (currentUserProfile) {
                 await db.from('richieste_appunti').insert([{ 
                     studente_id: currentUserProfile.id, 
-                    esame: esame 
+                    esame: esame,
+                    evasa: false // Le nuove richieste nascono non evase
                 }]);
                 alert("Richiesta inviata con successo!");
                 document.getElementById('appunti-esame').value = "";
@@ -575,7 +650,7 @@
         e.preventDefault();
         if (!db || !currentUserProfile?.is_admin) return;
         const titolo = document.getElementById('avviso-titolo').value;
-        const descrizione = document.getElementById('avviso-descrizione').value;
+        const descripción = document.getElementById('avviso-descrizione').value;
 
         try {
             const { error } = await db.from('avvisi').insert([{ titolo, descrizione }]);
