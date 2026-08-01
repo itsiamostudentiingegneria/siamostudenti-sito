@@ -164,7 +164,7 @@
     <div class="hero">
         <div class="hero-badge">Hub Studenti Indipendente</div>
         <h1 class="hero-title">Coordinamento Digitale <br><span>Studenti Ingegneria</span>.</h1>
-        <p class="hero-subtitle">Il punto di riferimento indipendente per i corsi di ingegneria UniCampania. Scarica appunti verificati, entra nei gruppi ed esegui il login con la tua sola matricola.</p>
+        <p class="hero-subtitle">Il punto di riferimento indipendente per i corsi di ingegneria UniCampania. Scarica appunti verificati, entra nei gruppi ed esegui l'accesso sicuro con la tua mail istituzionale.</p>
         
         <div class="hero-cta-group">
             <a class="btn btn-dark" href="#appunti">Richiedi Appunti</a>
@@ -254,13 +254,13 @@
     </section>
 </div>
 
-<!-- PAGINA: AUTH -->
+<!-- PAGINA: AUTH (MAIL ISTITUZIONALE) -->
 <div class="page" id="page-auth">
     <section style="max-width: 550px;">
         <div id="auth-logged-out">
             <div class="section-header">
                 <h2 class="section-title">Area Riservata</h2>
-                <p class="section-desc">Effettua il login o registrati usando unicamente la tua matricola alfanumerica.</p>
+                <p class="section-desc">Effettua l'accesso o registrati al portale con le tue credenziali studenti.</p>
             </div>
             
             <!-- FORM REGISTRAZIONE -->
@@ -269,6 +269,10 @@
                 <div class="form-row">
                     <div class="form-group"><label>Nome</label><input class="form-input" id="reg-nome" required type="text"></div>
                     <div class="form-group"><label>Cognome</label><input class="form-input" id="reg-cognome" required type="text"></div>
+                </div>
+                <div class="form-group">
+                    <label>Email Istituzionale</label>
+                    <input class="form-input" id="reg-email" required type="email" placeholder="nome.cognome@studenti.unicampania.it">
                 </div>
                 <div class="form-row">
                     <div class="form-group"><label>Matricola (Alfanumerica)</label><input class="form-input" id="reg-matricola" required type="text" placeholder="Es. M63001234"></div>
@@ -306,7 +310,7 @@
             <!-- FORM LOGIN -->
             <form class="minimal-form" id="form-login" onsubmit="handleSignIn(event)">
                 <h3>Accedi al Portale</h3>
-                <div class="form-group"><label>Matricola</label><input class="form-input" id="login-matricola" required type="text"></div>
+                <div class="form-group"><label>Email Istituzionale</label><input class="form-input" id="login-email" required type="email" placeholder="nome.cognome@studenti.unicampania.it"></div>
                 <div class="form-group"><label>Password</label><input class="form-input" id="login-password" required type="password"></div>
                 <button class="btn btn-outline" type="submit">Accedi</button>
             </form>
@@ -347,11 +351,6 @@
     
     const db = window.supabase ? window.supabase.createClient(clientUrl, clientKey) : null;
     let currentUserProfile = null;
-
-    // Converte qualsiasi matricola alfanumerica in un formato email digeribile da Supabase senza alterarne l'univocità
-    function generateSystemEmail(matricola) {
-        return `${matricola.trim().toLowerCase()}@system.local`;
-    }
 
     function handleRouting() {
         const hash = window.location.hash.replace('#', '') || 'home';
@@ -421,17 +420,15 @@
 
         const nome = document.getElementById('reg-nome').value;
         const cognome = document.getElementById('reg-cognome').value;
+        const email = document.getElementById('reg-email').value.trim();
         const matricola = document.getElementById('reg-matricola').value.trim();
         const telefono = document.getElementById('reg-telefono').value;
         const corso = document.getElementById('reg-corso').value;
         const password = document.getElementById('reg-password').value;
 
-        // Trasformazione pulita e forzata della matricola alfanumerica
-        const systemEmail = generateSystemEmail(matricola);
-
         try {
             const { data: authData, error: authError } = await db.auth.signUp({
-                email: systemEmail,
+                email: email,
                 password: password
             });
 
@@ -442,7 +439,7 @@
                     id: authData.user.id,
                     nome: nome,
                     cognome: cognome,
-                    matricola: matricola, // Qui salviamo la matricola alfanumerica originale vera ed esatta
+                    matricola: matricola,
                     telefono: telefono,
                     corso: corso,
                     is_admin: false
@@ -450,31 +447,28 @@
 
                 if (profileError) throw profileError;
 
-                alert("Registrazione completata con successo!");
+                alert("Registrazione completata con successo! Se richiesto, verifica la tua casella email.");
                 window.location.reload();
             }
-        } catch (err) { 
-            alert("Errore di registrazione. Assicurati di aver disattivato l'opzione 'Confirm Email' nelle impostazioni del provider di Supabase. Dettaglio: " + err.message); 
-        }
+        } catch (err) { alert("Errore durante la registrazione: " + err.message); }
     }
 
     async function handleSignIn(e) {
         e.preventDefault();
         if (!db) return;
 
-        const matricola = document.getElementById('login-matricola').value.trim();
+        const email = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-password').value;
-        const systemEmail = generateSystemEmail(matricola);
 
         try {
             const { data, error } = await db.auth.signInWithPassword({
-                email: systemEmail,
+                email: email,
                 password: password
             });
             if (error) throw error;
-            alert("Accesso eseguito!");
+            alert("Accesso effettuato!");
             window.location.reload();
-        } catch (err) { alert("Errore di autenticazione: Matricola o password non corrette."); }
+        } catch (err) { alert("Errore di accesso: Credenziali errate o account non verificato."); }
     }
 
     async function submitAppuntiRequest(e) {
@@ -484,13 +478,13 @@
         try {
             if (currentUserProfile) {
                 await db.from('richieste_appunti').insert([{ studente_id: currentUserProfile.id, esame }]);
-                alert("Richiesta inviata!");
+                alert("Richiesta inviata con successo!");
                 document.getElementById('appunti-esame').value = "";
             } else { 
-                alert("Effettua l'accesso per poter fare una richiesta."); 
+                alert("Accedi prima per inoltrare una richiesta di materiali."); 
                 window.location.hash = "auth"; 
             }
-        } catch(err) { alert("Impossibile completare l'invio."); }
+        } catch(err) { alert("Errore di invio dei dati."); }
     }
 
     async function saveAvviso(e) {
@@ -502,10 +496,10 @@
         try {
             const { error } = await db.from('avvisi').insert([{ titolo, descrizione }]);
             if (error) throw error;
-            alert("Avviso salvato in bacheca!");
+            alert("Avviso pubblicato!");
             window.location.hash = "avvisi";
             loadAvvisi();
-        } catch(err) { alert("Errore durante il salvataggio."); }
+        } catch(err) { alert("Impossibile salvare l'avviso."); }
     }
 
     async function handleSignOut() { if(db) await db.auth.signOut(); window.location.reload(); }
