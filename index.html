@@ -16,24 +16,15 @@
             --brand-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e3a8a 100%);
             --accent-red: #e11d48;
             --accent-red-hover: #be123c;
-            --bg-pure: #0b0f19;
-            --bg-neutral: rgba(15, 23, 42, 0.6);
-            --border-light: rgba(255, 255, 255, 0.08);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --font-sans: 'Plus Jakarta Sans', sans-serif;
-            --glass-bg: rgba(15, 23, 42, 0.45);
-            --glass-blur: blur(16px);
-            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .light-theme {
             --bg-pure: #f8fafc;
             --bg-neutral: rgba(255, 255, 255, 0.7);
             --border-light: rgba(15, 23, 42, 0.08);
             --text-main: #0f172a;
             --text-muted: #64748b;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
             --glass-bg: rgba(255, 255, 255, 0.5);
+            --glass-blur: blur(16px);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -59,7 +50,7 @@
             background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--border-light); border-radius: 20px; z-index: 1010;
             display: flex; align-items: center; justify-content: space-between; padding: 0 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
         .header-logo-container { display: flex; align-items: center; gap: 12px; cursor: pointer; text-decoration: none; }
         .header-logo { height: 35px; width: auto; filter: drop-shadow(0 2px 8px rgba(59,130,246,0.4)); }
@@ -67,15 +58,13 @@
         
         .user-badge { font-size: 0.85rem; color: var(--text-main); font-weight: 600; background: var(--border-light); padding: 6px 14px; border-radius: 30px; display: flex; align-items: center; gap: 6px; }
         .user-badge::before { content: ''; display: inline-block; width: 8px; height: 8px; background: #10b981; border-radius: 50%; }
-        .theme-toggle { background: var(--brand-gradient); border: none; padding: 8px 16px; border-radius: 30px; cursor: pointer; font-size: 0.8rem; color: #fff; font-weight: 700; transition: var(--transition-smooth); box-shadow: 0 4px 12px rgba(30,58,138,0.3); }
-        .theme-toggle:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(30,58,138,0.5); }
 
-        .nav-container { position: fixed; bottom: 20px; left: 5%; right: 5%; z-index: 1000; background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--border-light); border-radius: 24px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); padding: 0.25rem; max-width: 800px; margin: 0 auto; }
+        .nav-container { position: fixed; bottom: 20px; left: 5%; right: 5%; z-index: 1000; background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--border-light); border-radius: 24px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); padding: 0.25rem; max-width: 800px; margin: 0 auto; }
         nav { display: flex; }
         .nav-links { display: flex; width: 100%; list-style: none; justify-content: space-between; }
         .nav-links li { flex: 1; }
         .nav-links a { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); transition: var(--transition-smooth); padding: 0.8rem 0.5rem; text-align: center; border-radius: 18px; }
-        .nav-links a:hover { color: var(--text-main); background: rgba(255,255,255,0.04); }
+        .nav-links a:hover { color: var(--text-main); background: rgba(0,0,0,0.04); }
         .nav-links a.active { color: #fff; background: var(--brand-gradient); box-shadow: 0 8px 20px rgba(29,78,216,0.3); }
         
         #nav-admin-li { display: none; }
@@ -83,15 +72,15 @@
         .nav-links a.nav-admin-link.active { background: var(--accent-red); color: #fff; box-shadow: 0 8px 20px rgba(225,29,72,0.3); }
 
         .hero { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 5%; max-width: 1000px; margin: 0 auto; text-align: center; position: relative; }
-        .hero-badge { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); padding: 6px 16px; border-radius: 30px; color: #60a5fa; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5rem; }
+        .hero-badge { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); padding: 6px 16px; border-radius: 30px; color: #1d4ed8; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5rem; }
         .hero-title { font-size: clamp(2.5rem, 6vw, 4.2rem); font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 1.5rem; color: var(--text-main); }
         .hero-title span { background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-subtitle { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin-bottom: 2.5rem; }
         .hero-cta-group { display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
 
         .quick-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; width: 100%; margin-top: 3rem; }
-        .quick-card { background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%); border: 1px solid var(--border-light); border-radius: 20px; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: var(--transition-smooth); }
-        .quick-card:hover { transform: translateY(-5px); border-color: rgba(59,130,246,0.4); background: rgba(255,255,255,0.05); }
+        .quick-card { background: linear-gradient(135deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.005) 100%); border: 1px solid var(--border-light); border-radius: 20px; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: var(--transition-smooth); }
+        .quick-card:hover { transform: translateY(-5px); border-color: rgba(59,130,246,0.4); background: rgba(0,0,0,0.02); }
         .quick-icon { width: 48px; height: 48px; background: rgba(59,130,246,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #3b82f6; }
         .quick-card.official .quick-icon { background: rgba(225,29,72,0.1); color: var(--accent-red); }
         .quick-card-text h4 { font-size: 1rem; font-weight: 700; color: var(--text-main); }
@@ -104,30 +93,28 @@
 
         .clean-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
         .clean-card { background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--border-light); padding: 2.2rem; border-radius: 24px; transition: var(--transition-smooth); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .clean-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.15); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .clean-card:hover { transform: translateY(-6px); border-color: rgba(0,0,0,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
         .clean-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.85rem; color: var(--text-main); }
         .clean-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
         .clean-card .card-action { font-size: 0.85rem; font-weight: 700; color: #3b82f6; margin-top: 2rem; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; display: inline-block; transition: var(--transition-smooth); }
 
-        .minimal-form { display: flex; flex-direction: column; gap: 1.5rem; max-width: 550px; background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-light); padding: 2.5rem; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .minimal-form { display: flex; flex-direction: column; gap: 1.5rem; max-width: 550px; background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-light); padding: 2.5rem; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
         .minimal-form h3 { font-size: 1.4rem; font-weight: 700; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
         .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
         .form-group label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .form-input { width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-light); border-radius: 12px; font-family: var(--font-sans); font-size: 0.95rem; color: var(--text-main); transition: var(--transition-smooth); }
-        .light-theme .form-input { background: rgba(255,255,255,0.8); }
+        .form-input { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.8); border: 1px solid var(--border-light); border-radius: 12px; font-family: var(--font-sans); font-size: 0.95rem; color: var(--text-main); transition: var(--transition-smooth); }
         .form-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,0.15); }
 
         .btn { padding: 14px 32px; font-family: var(--font-sans); font-size: 0.9rem; font-weight: 700; border-radius: 14px; border: none; cursor: pointer; transition: var(--transition-smooth); display: inline-block; text-decoration: none; text-align: center; }
         .btn-dark { background: var(--brand-gradient); color: #fff; box-shadow: 0 8px 24px rgba(29,78,216,0.3); }
         .btn-dark:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(29,78,216,0.5); }
-        .btn-outline { background: rgba(255,255,255,0.05); border: 1px solid var(--border-light); color: var(--text-main); }
+        .btn-outline { background: rgba(0,0,0,0.02); border: 1px solid var(--border-light); color: var(--text-main); }
 
         .page { display: none; opacity: 0; transform: translateY(15px); transition: opacity 0.3s ease, transform 0.3s ease; }
         .page.active { display: block; opacity: 1; transform: translateY(0); }
 
-        /* Stili per la barra interna del blocco avvisi */
-        .inner-nav-bar { display: flex; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-light); border-radius: 14px; padding: 4px; margin-top: 1.5rem; max-width: 350px; }
+        .inner-nav-bar { display: flex; background: rgba(0, 0, 0, 0.04); border: 1px solid var(--border-light); border-radius: 14px; padding: 4px; margin-top: 1.5rem; max-width: 350px; }
         .inner-nav-btn { flex: 1; background: transparent; border: none; padding: 10px; font-family: var(--font-sans); font-size: 0.85rem; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; transition: var(--transition-smooth); text-align: center; text-decoration: none; }
         .inner-nav-btn:hover { color: var(--text-main); }
         .inner-nav-btn.active { background: var(--brand-gradient); color: #fff; }
@@ -148,7 +135,6 @@
     </a>
     <div style="display: flex; align-items: center; gap: 15px;">
         <span id="header-user-status" class="user-badge">Ospite</span>
-        <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">Cambia Tema</button>
     </div>
 </header>
 
@@ -177,7 +163,6 @@
             <a class="btn btn-outline" href="#avvisi">Bacheca Avvisi</a>
         </div>
 
-        <!-- GRIGLIA LINK RAPIDI E ORARI -->
         <div class="quick-info-grid">
             <a href="https://ingegneria.unicampania.it" target="_blank" class="quick-card official">
                 <div class="quick-icon">🏛️</div>
@@ -201,12 +186,10 @@
 <!-- PAGINA: AVVISI -->
 <div class="page" id="page-avvisi">
     <section>
-        <!-- Blocco visibile solo da Ospiti -->
         <div id="avvisi-locked" style="max-width: 550px; margin: 0 auto; text-align: center;">
             <div class="section-header">
                 <h2 class="section-title">Contenuto Protetto</h2>
                 <p class="section-desc">Devi effettuare l'accesso con la tua identità universitaria per visualizzare le comunicazioni interne.</p>
-                
                 <center>
                     <div class="inner-nav-bar">
                         <button class="inner-nav-btn active" onclick="switchAuthMode('login')">Accedi</button>
@@ -216,7 +199,6 @@
             </div>
         </div>
 
-        <!-- Bacheca visibile solo da Loggati -->
         <div id="avvisi-unlocked" style="display: none;">
             <div class="section-header">
                 <h2 class="section-title">Avvisi e Comunicazioni</h2>
@@ -260,35 +242,50 @@
 <!-- PAGINA: APPUNTI -->
 <div class="page" id="page-appunti">
     <section style="max-width: 650px;">
-        <div class="section-header">
-            <h2 class="section-title">Richiesta Materiali Didattici</h2>
-            <p class="section-desc">Specifica l'esame di cui hai bisogno: verrai ricontattato non appena il materiale sarà disponibile.</p>
-        </div>
-        <form class="minimal-form" id="form-appunti" onsubmit="submitAppuntiRequest(event)">
-            <div id="appunti-personal-fields">
-                <div class="form-row">
-                    <div class="form-group"><label>Nome</label><input class="form-input" id="appunti-nome" type="text" required /></div>
-                    <div class="form-group"><label>Cognome</label><input class="form-input" id="appunti-cognome" type="text" required /></div>
-                </div>
-                <div class="form-group"><label>Numero di telefono</label><input class="form-input" id="appunti-telefono" type="tel" required /></div>
+        <!-- Blocco visibile solo da Ospiti -->
+        <div id="appunti-locked" style="max-width: 550px; margin: 0 auto; text-align: center;">
+            <div class="section-header">
+                <h2 class="section-title">Area Riservata Appunti</h2>
+                <p class="section-desc">Devi effettuare l'accesso con le tue credenziali studenti per poter richiedere i materiali didattici.</p>
+                <center>
+                    <div class="inner-nav-bar">
+                        <button class="inner-nav-btn active" onclick="switchAuthMode('login')">Accedi</button>
+                        <button class="inner-nav-btn" onclick="switchAuthMode('register')">Registrati</button>
+                    </div>
+                </center>
             </div>
-            <div class="form-group"><label>Nome Insegnamento / Esame</label><input class="form-input" id="appunti-esame" required type="text" placeholder="Es. Analisi Matematica I" /></div>
-            <button class="btn btn-dark" type="submit">Invia Richiesta</button>
-        </form>
+        </div>
+
+        <!-- Form visibile solo da Loggati -->
+        <div id="appunti-unlocked" style="display: none;">
+            <div class="section-header">
+                <h2 class="section-title">Richiesta Materiali Didattici</h2>
+                <p class="section-desc">Specifica l'esame di cui hai bisogno: verrai ricontattato non appena il materiale sarà disponibile.</p>
+            </div>
+            <form class="minimal-form" id="form-appunti" onsubmit="submitAppuntiRequest(event)">
+                <div id="appunti-personal-fields">
+                    <div class="form-row">
+                        <div class="form-group"><label>Nome</label><input class="form-input" id="appunti-nome" type="text" required /></div>
+                        <div class="form-group"><label>Cognome</label><input class="form-input" id="appunti-cognome" type="text" required /></div>
+                    </div>
+                    <div class="form-group"><label>Numero di telefono</label><input class="form-input" id="appunti-telefono" type="tel" required /></div>
+                </div>
+                <div class="form-group"><label>Nome Insegnamento / Esame</label><input class="form-input" id="appunti-esame" required type="text" placeholder="Es. Analisi Matematica I" /></div>
+                <button class="btn btn-dark" type="submit">Invia Richiesta</button>
+            </form>
+        </div>
     </section>
 </div>
 
-<!-- PAGINA: AUTH (MAIL ISTITUZIONALE) -->
+<!-- PAGINA: AUTH -->
 <div class="page" id="page-auth">
     <section style="max-width: 550px;">
-        <!-- CONTENITORE DISCONNESSO -->
         <div id="auth-logged-out">
             <div class="section-header">
                 <h2 class="section-title">Area Riservata</h2>
                 <p class="section-desc">Effettua l'accesso o registrati al portale con le tue credenziali studenti.</p>
             </div>
             
-            <!-- FORM REGISTRAZIONE -->
             <form class="minimal-form" id="form-register" onsubmit="handleSignUp(event)" style="display: none;">
                 <h3>Crea Account Studente</h3>
                 <div class="form-row">
@@ -331,7 +328,6 @@
                 <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">Hai già un account? <a href="javascript:void(0)" onclick="toggleAuthForms('login')" style="color:#3b82f6; text-decoration:none;">Accedi qui</a></p>
             </form>
             
-            <!-- FORM LOGIN -->
             <form class="minimal-form" id="form-login" onsubmit="handleSignIn(event)">
                 <h3>Accedi al Portale</h3>
                 <div class="form-group"><label>Email Istituzionale</label><input class="form-input" id="login-email" required type="email" placeholder="nome.cognome@studenti.unicampania.it"></div>
@@ -341,7 +337,6 @@
             </form>
         </div>
         
-        <!-- CONTENITORE LOGGATO (SOSTITUISCE INTERAMENTE L'ACCESSO) -->
         <div id="auth-logged-in" style="display: none;">
             <div class="section-header">
                 <h2 class="section-title">Pannello Studente</h2>
@@ -415,11 +410,14 @@
                     document.getElementById('auth-logged-out').style.display = 'block';
                     document.getElementById('auth-logged-in').style.display = 'none';
                     
-                    // Gestione protezione Avvisi (sezione bloccata)
+                    // Protezione Avvisi
                     document.getElementById('avvisi-locked').style.display = 'block';
                     document.getElementById('avvisi-unlocked').style.display = 'none';
 
-                    // Resetta e sblocca i campi nel modulo appunti in caso di disconnessione
+                    // Protezione Appunti
+                    document.getElementById('appunti-locked').style.display = 'block';
+                    document.getElementById('appunti-unlocked').style.display = 'none';
+
                     resetAppuntiFields(false);
                 }
             });
@@ -432,21 +430,22 @@
             if (data && !error) {
                 currentUserProfile = data;
                 
-                // Aggiorna l'interfaccia dell'header con Nome e Cognome completi
                 document.getElementById('header-user-status').textContent = `${data.nome} ${data.cognome}`;
                 document.getElementById('user-display-name').textContent = `${data.nome} ${data.cognome}`;
                 document.getElementById('user-display-corso').textContent = data.corso;
                 document.getElementById('user-display-matricola').textContent = data.matricola;
                 
-                // Mostra la bacheca avvisi ed elimina la schermata bloccata
+                // Mostra avvisi
                 document.getElementById('avvisi-locked').style.display = 'none';
                 document.getElementById('avvisi-unlocked').style.display = 'block';
 
-                // Nasconde form login/register e mostra il blocco info utente
+                // Mostra appunti
+                document.getElementById('appunti-locked').style.display = 'none';
+                document.getElementById('appunti-unlocked').style.display = 'block';
+
                 document.getElementById('auth-logged-out').style.display = 'none';
                 document.getElementById('auth-logged-in').style.display = 'block';
 
-                // --- AUTOCOMPILAZIONE E BLOCCO CAMPI APPUNTI ---
                 if (document.getElementById('appunti-nome')) {
                     document.getElementById('appunti-nome').value = data.nome;
                     document.getElementById('appunti-nome').disabled = true; 
@@ -476,7 +475,6 @@
         });
     }
 
-    // Navigazione interna tra form login e registrazione
     function toggleAuthForms(mode) {
         if (mode === 'register') {
             document.getElementById('form-login').style.display = 'none';
@@ -487,7 +485,6 @@
         }
     }
 
-    // Gestione clic dai pulsanti di reindirizzamento interna alla pagina avvisi protetta
     function switchAuthMode(mode) {
         toggleAuthForms(mode);
         window.location.hash = "auth";
@@ -507,42 +504,35 @@
     }
 
     async function handleSignUp(e) {
-    e.preventDefault();
-    if (!db) return;
+        e.preventDefault();
+        if (!db) return;
 
-    const nome = document.getElementById('reg-nome').value;
-    const cognome = document.getElementById('reg-cognome').value;
-    const email = document.getElementById('reg-email').value.trim();
-    const matricola = document.getElementById('reg-matricola').value.trim();
-    const telefono = document.getElementById('reg-telefono').value;
-    const corso = document.getElementById('reg-corso').value;
-    const password = document.getElementById('reg-password').value;
+        const nome = document.getElementById('reg-nome').value;
+        const cognome = document.getElementById('reg-cognome').value;
+        const email = document.getElementById('reg-email').value.trim();
+        const matricola = document.getElementById('reg-matricola').value.trim();
+        const telefono = document.getElementById('reg-telefono').value;
+        const corso = document.getElementById('reg-corso').value;
+        const password = document.getElementById('reg-password').value;
 
-    try {
-        // Passiamo i metadati direttamente dentro options.data per il trigger SQL
-        const { data: authData, error: authError } = await db.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-                data: {
-                    nome: nome,
-                    cognome: cognome,
-                    matricola: matricola,
-                    telefono: telefono,
-                    corso: corso
+        try {
+            const { data: authData, error: authError } = await db.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    data: { nome, cognome, matricola, telefono, corso }
                 }
-            }
-        });
+            });
 
-        if (authError) throw authError;
+            if (authError) throw authError;
 
-        alert("Registrazione completata con successo! Verifica la tua mail se necessario.");
-        window.location.reload();
-        
-    } catch (err) { 
-        alert("Errore durante la registrazione: " + err.message); 
+            alert("Registrazione completata con successo! Verifica la tua mail se necessario.");
+            window.location.reload();
+            
+        } catch (err) { 
+            alert("Errore durante la registrazione: " + err.message); 
+        }
     }
-}
 
     async function handleSignIn(e) {
         e.preventDefault();
@@ -600,7 +590,6 @@
         if(db) await db.auth.signOut(); 
         window.location.reload(); 
     }
-    function toggleTheme() { document.body.classList.toggle('light-theme'); }
 </script>
 </body>
 </html>
