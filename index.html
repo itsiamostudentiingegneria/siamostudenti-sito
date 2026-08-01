@@ -507,43 +507,42 @@
     }
 
     async function handleSignUp(e) {
-        e.preventDefault();
-        if (!db) return;
+    e.preventDefault();
+    if (!db) return;
 
-        const nome = document.getElementById('reg-nome').value;
-        const cognome = document.getElementById('reg-cognome').value;
-        const email = document.getElementById('reg-email').value.trim();
-        const matricola = document.getElementById('reg-matricola').value.trim();
-        const telefono = document.getElementById('reg-telefono').value;
-        const corso = document.getElementById('reg-corso').value;
-        const password = document.getElementById('reg-password').value;
+    const nome = document.getElementById('reg-nome').value;
+    const cognome = document.getElementById('reg-cognome').value;
+    const email = document.getElementById('reg-email').value.trim();
+    const matricola = document.getElementById('reg-matricola').value.trim();
+    const telefono = document.getElementById('reg-telefono').value;
+    const corso = document.getElementById('reg-corso').value;
+    const password = document.getElementById('reg-password').value;
 
-        try {
-            const { data: authData, error: authError } = await db.auth.signUp({
-                email: email,
-                password: password
-            });
-
-            if (authError) throw authError;
-
-            if (authData.user) {
-                const { error: profileError } = await db.from('profili').insert([{
-                    id: authData.user.id,
+    try {
+        // Passiamo i metadati direttamente dentro options.data per il trigger SQL
+        const { data: authData, error: authError } = await db.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
                     nome: nome,
                     cognome: cognome,
-                    email: email, 
                     matricola: matricola,
                     telefono: telefono,
-                    corso: corso,
-                    is_admin: false
-                }]);
-                if (profileError) throw profileError;
-
-                alert("Registrazione completata con successo!");
-                window.location.reload();
+                    corso: corso
+                }
             }
-        } catch (err) { alert("Errore durante la registrazione: " + err.message); }
+        });
+
+        if (authError) throw authError;
+
+        alert("Registrazione completata con successo! Verifica la tua mail se necessario.");
+        window.location.reload();
+        
+    } catch (err) { 
+        alert("Errore durante la registrazione: " + err.message); 
     }
+}
 
     async function handleSignIn(e) {
         e.preventDefault();
