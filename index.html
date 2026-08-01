@@ -435,16 +435,17 @@
             if (authError) throw authError;
 
             if (authData.user) {
+                // Pezzetto modificato dentro handleSignUp:
                 const { error: profileError } = await db.from('profili').insert([{
-                    id: authData.user.id,
-                    nome: nome,
-                    cognome: cognome,
-                    matricola: matricola,
-                    telefono: telefono,
-                    corso: corso,
-                    is_admin: false
+                id: authData.user.id,
+                nome: nome,
+                cognome: cognome,
+                email: email, // <--- Salva la mail anche qui per leggerla sul frontend
+                matricola: matricola,
+                telefono: telefono,
+                corso: corso,
+                is_admin: false
                 }]);
-
                 if (profileError) throw profileError;
 
                 alert("Registrazione completata con successo! Se richiesto, verifica la tua casella email.");
