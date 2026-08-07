@@ -2,18 +2,17 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Siamo Studenti Ingegneria - UniCampania</title>
 
-
-<!-- Forziamo il browser mobile a scaricare la nuova icona 512x512 -->
-    <link rel="icon" type="image/png" sizes="32x32" href="fav.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="fav.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="fav.png">
-    <link rel="shortcut icon" href="fav.png">
+    <!-- FAVICON E ICONE MOBILE (fav.png 512x512) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="fav.png?v=2">
+    <link rel="icon" type="image/png" sizes="192x192" href="fav.png?v=2">
+    <link rel="apple-touch-icon" sizes="180x180" href="fav.png?v=2">
+    <link rel="shortcut icon" href="fav.png?v=2">
     <meta property="og:title" content="Siamo Studenti Ingegneria">
     <meta property="og:description" content="Il punto di riferimento per i corsi di ingegneria UniCampania.">
-    <meta property="og:image" content="fav.png">
+    <meta property="og:image" content="fav.png?v=2">
 
     <!-- ONESIGNAL SDK -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
@@ -44,8 +43,8 @@
             --border-light: rgba(15, 23, 42, 0.08);
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --font-sans: 'Plus Jakarta Sans', sans-serif;
-            --glass-bg: rgba(255, 255, 255, 0.5);
+            --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            --glass-bg: rgba(255, 255, 255, 0.85);
             --glass-blur: blur(16px);
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -58,97 +57,115 @@
             color: var(--text-main);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
-            padding-top: 90px;
-            padding-bottom: 100px;
+            padding-top: 85px;
+            padding-bottom: 110px;
             min-height: 100vh;
             transition: background-color 0.4s, color 0.4s;
             background-image: radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
                               radial-gradient(circle at 10% 70%, rgba(225, 29, 72, 0.08) 0%, transparent 40%);
             background-attachment: fixed;
+            touch-action: manipulation;
         }
 
         .site-header {
             position: fixed;
-            top: 15px; left: 5%; right: 5%; height: 65px;
-            background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--border-light); border-radius: 20px; z-index: 1010;
-            display: flex; align-items: center; justify-content: space-between; padding: 0 2rem;
+            top: 12px; left: 5%; right: 5%; height: 60px;
+            background: var(--glass-bg); 
+            backdrop-filter: var(--glass-blur); 
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-light); 
+            border-radius: 20px; 
+            z-index: 1010;
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 1.2rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
-        .header-logo-container { display: flex; align-items: center; gap: 12px; cursor: pointer; text-decoration: none; }
-        .header-logo { height: 35px; width: auto; filter: drop-shadow(0 2px 8px rgba(59,130,246,0.4)); }
-        .header-title { font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); background: linear-gradient(to right, var(--text-main), var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header-logo-container { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; }
+        .header-logo { height: 32px; width: 32px; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(59,130,246,0.3)); }
+        .header-title { font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-main); background: linear-gradient(to right, var(--text-main), var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .user-badge { font-size: 0.85rem; color: var(--text-main); font-weight: 600; background: var(--border-light); padding: 6px 14px; border-radius: 30px; display: flex; align-items: center; gap: 6px; }
-        .user-badge::before { content: ''; display: inline-block; width: 8px; height: 8px; background: #10b981; border-radius: 50%; }
+        .user-badge { font-size: 0.8rem; color: var(--text-main); font-weight: 600; background: var(--border-light); padding: 5px 12px; border-radius: 30px; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+        .user-badge::before { content: ''; display: inline-block; width: 7px; height: 7px; background: #10b981; border-radius: 50%; }
 
-        .nav-container { position: fixed; bottom: 20px; left: 5%; right: 5%; z-index: 1000; background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--border-light); border-radius: 24px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); padding: 0.25rem; max-width: 800px; margin: 0 auto; }
+        .nav-container { position: fixed; bottom: 15px; left: 4%; right: 4%; z-index: 1000; background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--border-light); border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12); padding: 0.2rem; max-width: 800px; margin: 0 auto; }
         nav { display: flex; }
-        .nav-links { display: flex; width: 100%; list-style: none; justify-content: space-between; }
+        .nav-links { display: flex; width: 100%; list-style: none; justify-content: space-between; gap: 2px; }
         .nav-links li { flex: 1; }
-        .nav-links a { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); transition: var(--transition-smooth); padding: 0.8rem 0.5rem; text-align: center; border-radius: 18px; }
+        .nav-links a { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); transition: var(--transition-smooth); padding: 0.65rem 0.2rem; text-align: center; border-radius: 16px; }
         .nav-links a:hover { color: var(--text-main); background: rgba(0,0,0,0.04); }
-        .nav-links a.active { color: #fff; background: var(--brand-gradient); box-shadow: 0 8px 20px rgba(29,78,216,0.3); }
+        .nav-links a.active { color: #fff; background: var(--brand-gradient); box-shadow: 0 6px 16px rgba(29,78,216,0.3); }
         
         #nav-admin-li { display: none; }
         .nav-links a.nav-admin-link { color: var(--accent-red); }
-        .nav-links a.nav-admin-link.active { background: var(--accent-red); color: #fff; box-shadow: 0 8px 20px rgba(225,29,72,0.3); }
+        .nav-links a.nav-admin-link.active { background: var(--accent-red); color: #fff; box-shadow: 0 6px 16px rgba(225,29,72,0.3); }
 
-        .hero { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 5%; max-width: 1000px; margin: 0 auto; text-align: center; position: relative; }
-        .hero-badge { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); padding: 6px 16px; border-radius: 30px; color: #1d4ed8; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5rem; }
-        .hero-title { font-size: clamp(2.5rem, 6vw, 4.2rem); font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 1.5rem; color: var(--text-main); }
+        .hero { min-height: 50vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 5%; max-width: 1000px; margin: 0 auto; text-align: center; position: relative; }
+        .hero-badge { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); padding: 6px 14px; border-radius: 30px; color: #1d4ed8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1.2rem; }
+        .hero-title { font-size: clamp(2rem, 5vw, 4rem); font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 1.2rem; color: var(--text-main); }
         .hero-title span { background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-subtitle { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin-bottom: 2.5rem; }
-        .hero-cta-group { display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
+        .hero-subtitle { font-size: 1.05rem; color: var(--text-muted); max-width: 700px; margin-bottom: 2rem; }
+        .hero-cta-group { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; width: 100%; }
 
-        .quick-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; width: 100%; margin-top: 3rem; }
-        .quick-card { background: linear-gradient(135deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.005) 100%); border: 1px solid var(--border-light); border-radius: 20px; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: var(--transition-smooth); }
-        .quick-card:hover { transform: translateY(-5px); border-color: rgba(59,130,246,0.4); background: rgba(0,0,0,0.02); }
-        .quick-icon { width: 48px; height: 48px; background: rgba(59,130,246,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #3b82f6; }
+        .quick-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; width: 100%; margin-top: 2.5rem; }
+        .quick-card { background: rgba(255, 255, 255, 0.6); border: 1px solid var(--border-light); border-radius: 20px; padding: 1.2rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: var(--transition-smooth); }
+        .quick-card:hover { transform: translateY(-3px); border-color: rgba(59,130,246,0.4); background: rgba(255, 255, 255, 0.9); }
+        .quick-icon { width: 44px; height: 44px; background: rgba(59,130,246,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #3b82f6; flex-shrink: 0; }
         .quick-card.official .quick-icon { background: rgba(225,29,72,0.1); color: var(--accent-red); }
-        .quick-card-text h4 { font-size: 1rem; font-weight: 700; color: var(--text-main); }
+        .quick-card-text h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); }
         .quick-card-text p { font-size: 0.8rem; color: var(--text-muted); }
 
-        section { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
-        .section-header { margin-bottom: 3rem; }
-        .section-title { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.5rem; color: var(--text-main); }
-        .section-desc { color: var(--text-muted); font-size: 1rem; max-width: 650px; }
+        section { padding: 40px 5%; max-width: 1200px; margin: 0 auto; }
+        .section-header { margin-bottom: 2rem; }
+        .section-title { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.5rem; color: var(--text-main); }
+        .section-desc { color: var(--text-muted); font-size: 0.95rem; max-width: 650px; }
 
-        .clean-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .clean-card { background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--border-light); padding: 2.2rem; border-radius: 24px; transition: var(--transition-smooth); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .clean-card:hover { transform: translateY(-6px); border-color: rgba(0,0,0,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
-        .clean-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.85rem; color: var(--text-main); }
-        .clean-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
-        .clean-card .card-action { font-size: 0.85rem; font-weight: 700; color: #3b82f6; margin-top: 2rem; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; display: inline-block; transition: var(--transition-smooth); }
+        .clean-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .clean-card { background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--border-light); padding: 1.8rem; border-radius: 20px; transition: var(--transition-smooth); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(0,0,0,0.03); }
+        .clean-card:hover { transform: translateY(-4px); border-color: rgba(0,0,0,0.1); box-shadow: 0 15px 30px rgba(0,0,0,0.06); }
+        .clean-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-main); }
+        .clean-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+        .clean-card .card-action { font-size: 0.85rem; font-weight: 700; color: #3b82f6; margin-top: 1.5rem; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; display: inline-block; transition: var(--transition-smooth); }
 
-        .minimal-form { display: flex; flex-direction: column; gap: 1.5rem; max-width: 550px; background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--border-light); padding: 2.5rem; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
-        .minimal-form h3 { font-size: 1.4rem; font-weight: 700; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .minimal-form { display: flex; flex-direction: column; gap: 1.2rem; max-width: 550px; background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--border-light); padding: 1.8rem; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.04); margin: 0 auto; }
+        .minimal-form h3 { font-size: 1.3rem; font-weight: 700; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
         .form-group label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .form-input { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.8); border: 1px solid var(--border-light); border-radius: 12px; font-family: var(--font-sans); font-size: 0.95rem; color: var(--text-main); transition: var(--transition-smooth); }
-        .form-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,0.15); }
+        .form-input { width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.9); border: 1px solid var(--border-light); border-radius: 12px; font-family: var(--font-sans); font-size: 0.95rem; color: var(--text-main); transition: var(--transition-smooth); -webkit-appearance: none; }
+        .form-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
 
-        .btn { padding: 14px 32px; font-family: var(--font-sans); font-size: 0.9rem; font-weight: 700; border-radius: 14px; border: none; cursor: pointer; transition: var(--transition-smooth); display: inline-block; text-decoration: none; text-align: center; }
-        .btn-dark { background: var(--brand-gradient); color: #fff; box-shadow: 0 8px 24px rgba(29,78,216,0.3); }
-        .btn-dark:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(29,78,216,0.5); }
+        .btn { padding: 12px 24px; font-family: var(--font-sans); font-size: 0.9rem; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; transition: var(--transition-smooth); display: inline-block; text-decoration: none; text-align: center; }
+        .btn-dark { background: var(--brand-gradient); color: #fff; box-shadow: 0 6px 20px rgba(29,78,216,0.25); }
+        .btn-dark:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(29,78,216,0.4); }
         .btn-outline { background: rgba(0,0,0,0.02); border: 1px solid var(--border-light); color: var(--text-main); }
 
-        .page { display: none; opacity: 0; transform: translateY(15px); transition: opacity 0.3s ease, transform 0.3s ease; }
+        .page { display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.3s ease, transform 0.3s ease; }
         .page.active { display: block; opacity: 1; transform: translateY(0); }
 
-        .inner-nav-bar { display: flex; background: rgba(0, 0, 0, 0.04); border: 1px solid var(--border-light); border-radius: 14px; padding: 4px; margin-top: 1.5rem; max-width: 350px; }
-        .inner-nav-btn { flex: 1; background: transparent; border: none; padding: 10px; font-family: var(--font-sans); font-size: 0.85rem; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; transition: var(--transition-smooth); text-align: center; text-decoration: none; }
+        .inner-nav-bar { display: flex; background: rgba(0, 0, 0, 0.04); border: 1px solid var(--border-light); border-radius: 12px; padding: 4px; margin-top: 1.5rem; max-width: 350px; width: 100%; }
+        .inner-nav-btn { flex: 1; background: transparent; border: none; padding: 8px; font-family: var(--font-sans); font-size: 0.85rem; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: var(--transition-smooth); text-align: center; text-decoration: none; }
         .inner-nav-btn:hover { color: var(--text-main); }
         .inner-nav-btn.active { background: var(--brand-gradient); color: #fff; }
 
-        .admin-meta-info { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .admin-meta-info { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem; }
         .admin-meta-info strong { color: var(--text-main); }
 
+        /* OTTIMIZZAZIONI MOBILE SPECIFICHE */
         @media (max-width: 768px) {
+            body { padding-top: 75px; padding-bottom: 95px; }
             .form-row { grid-template-columns: 1fr; }
-            .site-header { left: 15px; right: 15px; padding: 0 1rem; }
-            .nav-container { left: 10px; right: 10px; bottom: 10px; }
+            .site-header { left: 10px; right: 10px; top: 10px; padding: 0 0.8rem; height: 55px; }
+            .header-title { font-size: 0.85rem; }
+            .user-badge { font-size: 0.75rem; padding: 4px 8px; }
+            .nav-container { left: 8px; right: 8px; bottom: 8px; border-radius: 16px; }
+            .nav-links a { font-size: 0.7rem; padding: 0.5rem 0.1rem; }
+            .hero { padding: 1.5rem 3%; }
+            .hero-cta-group .btn { width: 100%; }
+            .minimal-form { padding: 1.2rem; border-radius: 16px; }
+            .clean-card { padding: 1.2rem; border-radius: 16px; }
+            section { padding: 25px 4%; }
         }
     </style>
 </head>
@@ -156,10 +173,11 @@
 
 <header class="site-header">
     <a href="#home" class="header-logo-container">
-        <img src="fav.png" alt="Logo" class="header-logo">
+        <!-- Logo aggiornato a fav.png -->
+        <img src="fav.png?v=2" alt="Logo" class="header-logo">
         <span class="header-title">SiAmo Studenti</span>
     </a>
-    <div style="display: flex; align-items: center; gap: 15px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
         <span id="header-user-status" class="user-badge">Ospite</span>
     </div>
 </header>
@@ -180,9 +198,9 @@
 <!-- PAGINA: HOME -->
 <div class="page active" id="page-home">
     <div class="hero">
-        <div class="hero-badge">Gruppo di Rappresentanza Studentesca</div>
+        <div class="hero-badge">Rappresentanza Studentesca</div>
         <h1 class="hero-title">Siamo Studenti <br><span>Ingegneria</span></h1>
-        <p class="hero-subtitle">Il punto di riferimento per i corsi di ingegneria UniCampania. Scarica appunti verificati, entra nei gruppi ed esegui l'accesso sicuro con la tua mail istituzionale.</p>
+        <p class="hero-subtitle">Il punto di riferimento per i corsi di ingegneria UniCampania. Scarica appunti verificati, entra nei gruppi ed esegui l'accesso sicuro.</p>
         
         <div class="hero-cta-group">
             <a class="btn btn-dark" href="#appunti">Richiedi Appunti</a>
@@ -216,12 +234,12 @@
             <div class="section-header">
                 <h2 class="section-title">Contenuto Protetto</h2>
                 <p class="section-desc">Devi effettuare l'accesso con la tua identità universitaria per visualizzare le comunicazioni interne.</p>
-                <center>
+                <div style="display: flex; justify-content: center;">
                     <div class="inner-nav-bar">
                         <button class="inner-nav-btn active" onclick="switchAuthMode('login')">Accedi</button>
                         <button class="inner-nav-btn" onclick="switchAuthMode('register')">Registrati</button>
                     </div>
-                </center>
+                </div>
             </div>
         </div>
 
@@ -248,19 +266,19 @@
             <p class="section-desc">Entra nelle community del tuo anno per confrontarti sui corsi, scambiare pareri ed esercitazioni.</p>
         </div>
         <div class="clean-grid">
-            <div class="clean-card"><h3>1° Anno Ing. Info/Elettr</h3><a class="card-action" href="https://chat.whatsapp.com/C5j3NhtOcHnDKBZeYRZSaR">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Ing. Mec/Aer/Ener</h3><a class="card-action" href="https://chat.whatsapp.com/CnKEuFvpBUAKoBM2qgGgBg">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Ing. Biomedica</h3><a class="card-action" href="https://chat.whatsapp.com/CXVUdKC5wuZL8WGDkHQIxg">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Ing. Gestionale</h3><a class="card-action" href="https://chat.whatsapp.com/Cgw4YUKYupf4Qu5hf1XySA">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3> 1° Anno Ing. Civ/Ed/Amb</h3><a class="card-action" href="https://chat.whatsapp.com/KVUThfdC0R02In7mGT3tra">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Ing. Info/Elettr</h3><a class="card-action" href="https://chat.whatsapp.com/C5j3NhtOcHnDKBZeYRZSaR" target="_blank">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Ing. Mec/Aer/Ener</h3><a class="card-action" href="https://chat.whatsapp.com/CnKEuFvpBUAKoBM2qgGgBg" target="_blank">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Ing. Biomedica</h3><a class="card-action" href="https://chat.whatsapp.com/CXVUdKC5wuZL8WGDkHQIxg" target="_blank">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Ing. Gestionale</h3><a class="card-action" href="https://chat.whatsapp.com/Cgw4YUKYupf4Qu5hf1XySA" target="_blank">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Ing. Civ/Ed/Amb</h3><a class="card-action" href="https://chat.whatsapp.com/KVUThfdC0R02In7mGT3tra" target="_blank">Entra nel gruppo ↗</a></div>
             
-            <div class="clean-card"><h3>1° Anno Magistrale Ing. Aerospaziale</h3><a class="card-action" href="https://chat.whatsapp.com/JeHT1ukqOZKFgDbDYnTEH6">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Magistrale Ing. Biomedica</h3><a class="card-action" href="https://chat.whatsapp.com/DqQqgdd9boC2JMBAgKeLPs">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Magistrale Ing. Energia e Ambiente</h3><a class="card-action" href="https://chat.whatsapp.com/DyCnBznzdhfE3Dbp7Hp3Ed">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Magistrale Ing. Meccanica</h3><a class="card-action" href="https://chat.whatsapp.com/JRzPGu9IaHrHlumc4iBuG6">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Magistrale Ing. Elettronica</h3><a class="card-action" href="https://chat.whatsapp.com/JQt5gd2G2DI02ad7qFsgtf">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Magistrale Ing. Gestionale</h3><a class="card-action" href="https://chat.whatsapp.com/BCQsY7KOgO9KNx3MQYktml">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Magistrale Ing. Civile</h3><a class="card-action" href="https://chat.whatsapp.com/Klj1JxjeaI3B66S37E259U">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Aerospaziale</h3><a class="card-action" href="https://chat.whatsapp.com/JeHT1ukqOZKFgDbDYnTEH6" target="_blank">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Biomedica</h3><a class="card-action" href="https://chat.whatsapp.com/DqQqgdd9boC2JMBAgKeLPs" target="_blank">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Energia/Amb</h3><a class="card-action" href="https://chat.whatsapp.com/DyCnBznzdhfE3Dbp7Hp3Ed" target="_blank">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Meccanica</h3><a class="card-action" href="https://chat.whatsapp.com/JRzPGu9IaHrHlumc4iBuG6" target="_blank">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Elettronica</h3><a class="card-action" href="https://chat.whatsapp.com/JQt5gd2G2DI02ad7qFsgtf" target="_blank">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Gestionale</h3><a class="card-action" href="https://chat.whatsapp.com/BCQsY7KOgO9KNx3MQYktml" target="_blank">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Civile</h3><a class="card-action" href="https://chat.whatsapp.com/Klj1JxjeaI3B66S37E259U" target="_blank">Entra nel gruppo ↗</a></div>
         </div>
     </section>
 </div>
@@ -272,12 +290,12 @@
             <div class="section-header">
                 <h2 class="section-title">Area Riservata Appunti</h2>
                 <p class="section-desc">Devi effettuare l'accesso con le tue credenziali studenti per poter richiedere i materiali didattici.</p>
-                <center>
+                <div style="display: flex; justify-content: center;">
                     <div class="inner-nav-bar">
                         <button class="inner-nav-btn active" onclick="switchAuthMode('login')">Accedi</button>
                         <button class="inner-nav-btn" onclick="switchAuthMode('register')">Registrati</button>
                     </div>
-                </center>
+                </div>
             </div>
         </div>
 
@@ -321,7 +339,7 @@
                     <input class="form-input" id="reg-email" required type="email" placeholder="nome.cognome@studenti.unicampania.it">
                 </div>
                 <div class="form-row">
-                    <div class="form-group"><label>Matricola (Alfanumerica)</label><input class="form-input" id="reg-matricola" required type="text" placeholder="Es. M63001234"></div>
+                    <div class="form-group"><label>Matricola</label><input class="form-input" id="reg-matricola" required type="text" placeholder="Es. M63001234"></div>
                     <div class="form-group"><label>Telefono</label><input class="form-input" id="reg-telefono" required type="tel"></div>
                 </div>
                 <div class="form-group">
@@ -349,7 +367,7 @@
                 </div>
                 <div class="form-group"><label>Password</label><input class="form-input" id="reg-password" required type="password" minlength="6"></div>
                 <button class="btn btn-dark" type="submit">Registrati</button>
-                <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">Hai già un account? <a href="javascript:void(0)" onclick="toggleAuthForms('login')" style="color:#3b82f6; text-decoration:none;">Accedi qui</a></p>
+                <p style="text-align: center; margin-top: 0.8rem; font-size: 0.85rem; color: var(--text-muted);">Hai già un account? <a href="javascript:void(0)" onclick="toggleAuthForms('login')" style="color:#3b82f6; text-decoration:none; font-weight:700;">Accedi qui</a></p>
             </form>
             
             <form class="minimal-form" id="form-login" onsubmit="handleSignIn(event)">
@@ -357,7 +375,7 @@
                 <div class="form-group"><label>Email Istituzionale</label><input class="form-input" id="login-email" required type="email" placeholder="nome.cognome@studenti.unicampania.it"></div>
                 <div class="form-group"><label>Password</label><input class="form-input" id="login-password" required type="password"></div>
                 <button class="btn btn-dark" type="submit">Accedi</button>
-                <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">Nuovo studente? <a href="javascript:void(0)" onclick="toggleAuthForms('register')" style="color:#3b82f6; text-decoration:none;">Crea un account</a></p>
+                <p style="text-align: center; margin-top: 0.8rem; font-size: 0.85rem; color: var(--text-muted);">Nuovo studente? <a href="javascript:void(0)" onclick="toggleAuthForms('register')" style="color:#3b82f6; text-decoration:none; font-weight:700;">Crea un account</a></p>
             </form>
         </div>
         
@@ -384,20 +402,18 @@
             <p class="section-desc">Pubblica nuovi avvisi ed evadi le richieste di materiali inviate dagli studenti.</p>
         </div>
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; align-items: start;">
-            <!-- Form Avviso -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 2rem; align-items: start;">
             <form class="minimal-form" id="form-avviso" onsubmit="saveAvviso(event)" style="max-width: 100%;">
                 <h3>Pubblica Comunicazione</h3>
                 <div class="form-group"><label>Titolo Avviso</label><input class="form-input" id="avviso-titolo" required type="text"></div>
-                <div class="form-group"><label>Testo dell'Avviso</label><textarea class="form-input" id="avviso-descrizione" required rows="5"></textarea></div>
+                <div class="form-group"><label>Testo dell'Avviso</label><textarea class="form-input" id="avviso-descrizione" required rows="4"></textarea></div>
                 <button class="btn btn-dark" style="background:var(--accent-red);" type="submit">Pubblica Avviso</button>
             </form>
 
-            <!-- Lista Richieste Appunti -->
             <div>
-                <h3 style="margin-bottom: 1.5rem; font-size: 1.4rem; font-weight: 700;">Richieste Appunti Ricevute</h3>
-                <div id="admin-richieste-container" class="clean-grid" style="grid-template-columns: 1fr; gap: 1.2rem;">
-                    <div class="clean-card" style="padding: 1.5rem;">
+                <h3 style="margin-bottom: 1.2rem; font-size: 1.3rem; font-weight: 700;">Richieste Appunti Ricevute</h3>
+                <div id="admin-richieste-container" class="clean-grid" style="grid-template-columns: 1fr; gap: 1rem;">
+                    <div class="clean-card" style="padding: 1.2rem;">
                         <p style="color: var(--text-muted);">Nessuna richiesta in attesa.</p>
                     </div>
                 </div>
@@ -553,19 +569,19 @@
                 data.forEach(req => {
                     const studente = req.profili || { nome: 'N/D', cognome: 'Utente', telefono: '-' };
                     container.innerHTML += `
-                        <div class="clean-card" id="req-card-${req.id}" style="padding: 1.5rem; justify-content: space-between;">
+                        <div class="clean-card" id="req-card-${req.id}" style="padding: 1.2rem; justify-content: space-between;">
                             <div>
-                                <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--accent-red);">${req.esame}</h3>
+                                <h3 style="font-size: 1.05rem; margin-bottom: 0.4rem; color: var(--accent-red);">${req.esame}</h3>
                                 <div class="admin-meta-info">Studente: <strong>${studente.nome} ${studente.cognome}</strong></div>
                                 <div class="admin-meta-info">Tel: <strong>${studente.telefono}</strong></div>
                             </div>
-                            <button class="btn btn-outline" style="font-size: 0.75rem; padding: 6px 12px; margin-top: 1rem; border-color: #10b981; color: #10b981;" onclick="evadiRichiesta('${req.id}')">Segna come evasa</button>
+                            <button class="btn btn-outline" style="font-size: 0.75rem; padding: 6px 12px; margin-top: 0.8rem; border-color: #10b981; color: #10b981;" onclick="evadiRichiesta('${req.id}')">Segna come evasa</button>
                         </div>
                     `;
                 });
             } else {
                 container.innerHTML = `
-                    <div class="clean-card" style="padding: 1.5rem;">
+                    <div class="clean-card" style="padding: 1.2rem;">
                         <p style="color: var(--text-muted);">Nessuna richiesta in attesa.</p>
                     </div>
                 `;
@@ -587,7 +603,7 @@
             const container = document.getElementById('admin-richieste-container');
             if (container.children.length === 0) {
                 container.innerHTML = `
-                    <div class="clean-card" style="padding: 1.5rem;">
+                    <div class="clean-card" style="padding: 1.2rem;">
                         <p style="color: var(--text-muted);">Nessuna richiesta in attesa.</p>
                     </div>
                 `;
@@ -675,7 +691,7 @@
             if (error) throw error;
             alert("Avviso pubblicato!");
             window.location.hash = "avvisi";
-            loadAvvisi();
+ loadAvvisi();
         } catch(err) { alert("Impossibile salvare l'avviso."); }
     }
 
