@@ -130,7 +130,19 @@
     </style>
 </head>
 <body>
-
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "c19e8109-5786-4879-b0b8-9797785ec812",
+      safari_web_id: "web.onesignal.auto.3431b9a6-8377-4186-9b23-bf65dbb4a731",
+      notifyButton: {
+        enable: true,
+      },
+    });
+  });
+</script>
 <header class="site-header">
     <a href="#home" class="header-logo-container">
         <img src="logo.png" alt="Logo" class="header-logo">
