@@ -7,6 +7,21 @@
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     
+    <!-- ONESIGNAL SDK -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "c19e8109-5786-4879-b0b8-9797785ec812",
+          safari_web_id: "web.onesignal.auto.3431b9a6-8377-4186-9b23-bf65dbb4a731",
+          notifyButton: {
+            enable: true,
+          },
+        });
+      });
+    </script>
+
     <!-- LIBRERIA SUPABASE CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -130,19 +145,7 @@
     </style>
 </head>
 <body>
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-      appId: "c19e8109-5786-4879-b0b8-9797785ec812",
-      safari_web_id: "web.onesignal.auto.3431b9a6-8377-4186-9b23-bf65dbb4a731",
-      notifyButton: {
-        enable: true,
-      },
-    });
-  });
-</script>
+
 <header class="site-header">
     <a href="#home" class="header-logo-container">
         <img src="logo.png" alt="Logo" class="header-logo">
@@ -530,11 +533,9 @@
         } catch(e) { console.warn("Errore avvisi:", e); }
     }
 
-    // Carica solo le richieste NON ANCORA evase
     async function loadRichiesteAdmin() {
         if (!db || !currentUserProfile?.is_admin) return;
         try {
-            // Filtro .eq('evasa', false) per non mostrare quelle già completate
             const { data, error } = await db.from('richieste_appunti').select('id, esame, profili(nome, cognome, telefono)').eq('evasa', false);
             if (error) throw error;
             
@@ -564,17 +565,14 @@
         } catch(err) { console.warn("Errore caricamento richieste admin:", err); }
     }
 
-    // Modifica lo stato su Supabase senza eliminare il record
     async function evadiRichiesta(reqId) {
         if (!db || !currentUserProfile?.is_admin) return;
         if (!confirm("Segnare questa richiesta come evasa? Rimarrà salvata nel database.")) return;
 
         try {
-            // Esegue un update cambiando il flag 'evasa' a true
             const { error } = await db.from('richieste_appunti').update({ evasa: true }).eq('id', reqId);
             if (error) throw error;
             
-            // Nasconde la scheda graficamente
             const card = document.getElementById(`req-card-${reqId}`);
             if (card) card.remove();
             
@@ -647,7 +645,7 @@
                 await db.from('richieste_appunti').insert([{ 
                     studente_id: currentUserProfile.id, 
                     esame: esame,
-                    evasa: false // Le nuove richieste nascono non evase
+                    evasa: false
                 }]);
                 alert("Richiesta inviata con successo!");
                 document.getElementById('appunti-esame').value = "";
@@ -662,7 +660,7 @@
         e.preventDefault();
         if (!db || !currentUserProfile?.is_admin) return;
         const titolo = document.getElementById('avviso-titolo').value;
-        const descripción = document.getElementById('avviso-descrizione').value;
+        const descrizione = document.getElementById('avviso-descrizione').value;
 
         try {
             const { error } = await db.from('avvisi').insert([{ titolo, descrizione }]);
