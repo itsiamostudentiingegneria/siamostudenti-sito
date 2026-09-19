@@ -148,7 +148,7 @@
             border-radius: 26px; 
             box-shadow: var(--glass-shadow);
             padding: 0.3rem; 
-            max-width: 800px; 
+            max-width: 850px; 
             margin: 0 auto; 
         }
         nav { display: flex; }
@@ -343,6 +343,39 @@
         }
         .btn-outline:hover { background: rgba(255, 255, 255, 0.7); }
 
+        /* TESSERA GLASS CARD MOCKUP */
+        .student-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
+            backdrop-filter: blur(20px) saturate(200%);
+            -webkit-backdrop-filter: blur(20px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 24px;
+            padding: 1.8rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.9);
+            margin: 1.5rem auto;
+            max-width: 420px;
+            text-align: left;
+        }
+        .student-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .card-chip { width: 38px; height: 28px; background: linear-gradient(135deg, #fbbf24, #d97706); border-radius: 6px; }
+        .card-body { margin-bottom: 1.2rem; }
+        .card-name { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.3px; color: var(--text-main); }
+        .card-details { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; }
+        .card-qr { width: 48px; height: 48px; background: #000; border-radius: 8px; padding: 4px; }
+
         /* SPATIAL CONTINUITY & PAGE SWITCHING ANIMATION */
         .page { 
             display: none; 
@@ -439,6 +472,7 @@
             <li><a id="nav-avvisi" href="#avvisi">Avvisi</a></li>
             <li><a id="nav-gruppi" href="#gruppi">Gruppi</a></li>
             <li><a id="nav-appunti" href="#appunti">Appunti</a></li>
+            <li><a id="nav-tessera" href="#tessera">Tessera</a></li>
             <li><a id="nav-auth" href="#auth">Profilo</a></li>
             <li id="nav-admin-li"><a class="nav-admin-link" id="nav-admin" href="#admin">Admin</a></li>
         </ul>
@@ -450,11 +484,11 @@
     <div class="hero">
         <div class="hero-badge">Rappresentanza Studentesca</div>
         <h1 class="hero-title">Siamo Studenti <br><span>Ingegneria</span></h1>
-        <p class="hero-subtitle">Il punto di riferimento per i corsi di ingegneria UniCampania. Scarica appunti verificati, entra nei gruppi ed esegui l'accesso sicuro.</p>
+        <p class="hero-subtitle">Il punto di riferimento per i corsi di ingegneria UniCampania. Scarica appunti verificati, richiede la tua Tessera digitale ed entra nei gruppi.</p>
         
         <div class="hero-cta-group">
-            <a class="btn btn-dark" href="#appunti">Richiedi Appunti</a>
-            <a class="btn btn-outline" href="#avvisi">Bacheca Avvisi</a>
+            <a class="btn btn-dark" href="#tessera">Richiedi Tessera</a>
+            <a class="btn btn-outline" href="#appunti">Richiedi Appunti</a>
         </div>
 
         <div class="quick-info-grid">
@@ -569,6 +603,69 @@
     </section>
 </div>
 
+<!-- PAGINA: TESSERA (NUOVA) -->
+<div class="page" id="page-tessera">
+    <section style="max-width: 600px;">
+        <div id="tessera-locked" style="max-width: 550px; margin: 0 auto; text-align: center;">
+            <div class="section-header">
+                <h2 class="section-title">Tessera Studentesca</h2>
+                <p class="section-desc">Accedi per richiedere e consultare la tua Tessera digitale ed usufruire delle convenzioni universitarie.</p>
+                <div style="display: flex; justify-content: center;">
+                    <div class="inner-nav-bar">
+                        <button class="inner-nav-btn active" onclick="switchAuthMode('login')">Accedi</button>
+                        <button class="inner-nav-btn" onclick="switchAuthMode('register')">Registrati</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tessera-unlocked" style="display: none; text-align: center;">
+            <div class="section-header">
+                <h2 class="section-title">Tessera Studente Digitale</h2>
+                <p class="section-desc">Esibisci la tua tessera per accedere agli eventi ed usufruire delle sanzioni ed agevolazioni dedicate.</p>
+            </div>
+
+            <!-- STATO 1: NON RICHIESTA -->
+            <div id="tessera-state-none" class="minimal-form" style="display: none;">
+                <h3>Richiedi la tua Tessera</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">Invia la richiesta di emissione della tua tessera identificativa riconosciuta dall'associazione.</p>
+                <button class="btn btn-dark" onclick="requestStudentCard()">Richiedi Ora</button>
+            </div>
+
+            <!-- STATO 2: IN ATTESA DI APPROVAZIONE -->
+            <div id="tessera-state-pending" class="minimal-form" style="display: none;">
+                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⏳</div>
+                <h3>Richiesta in Lavorazione</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">La tua richiesta è stata presa in carico dallo staff. Riceverai la convalida a breve.</p>
+            </div>
+
+            <!-- STATO 3: TESSERA EMESSA (DIGITALE) -->
+            <div id="tessera-state-approved" style="display: none;">
+                <div class="student-card">
+                    <div class="card-header">
+                        <div class="card-chip"></div>
+                        <span class="user-badge" style="background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.3); color: #1d4ed8;">UFFICIALE</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-name" id="card-user-name">Nome Cognome</div>
+                        <div class="card-details" id="card-user-corso">Corso di Laurea</div>
+                        <div class="card-details">Matricola: <strong id="card-user-matricola" style="color:var(--text-main);">000000</strong></div>
+                    </div>
+                    <div class="card-footer">
+                        <div>
+                            <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase;">ID Tessera</div>
+                            <div style="font-size: 0.85rem; font-weight: 700; letter-spacing: 1px;" id="card-user-id">CARD-0000</div>
+                        </div>
+                        <svg class="card-qr" viewBox="0 0 24 24" fill="white">
+                            <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm11-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm13 0h2v2h-2v-2zm-2 2h2v2h-2v-2zm4 0h2v2h-2v-2zm-2 2h2v2h-2v-2zm2-4h2v2h-2v-2z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
 <!-- PAGINA: AUTH -->
 <div class="page" id="page-auth">
     <section style="max-width: 550px;">
@@ -638,7 +735,8 @@
                 <p><strong>Studente:</strong> <span id="user-display-name">-</span></p>
                 <p><strong>Corso:</strong> <span id="user-display-corso">-</span></p>
                 <p><strong>Matricola:</strong> <span id="user-display-matricola">-</span></p>
-                <button class="btn btn-outline" style="border-color: var(--accent-red); color: var(--accent-red); margin-top: 1rem;" onclick="handleSignOut()">Disconnetti Account</button>
+                <a href="#tessera" class="btn btn-dark" style="margin-top:0.5rem; text-decoration:none;">Vedi la tua Tessera</a>
+                <button class="btn btn-outline" style="border-color: var(--accent-red); color: var(--accent-red); margin-top: 0.5rem;" onclick="handleSignOut()">Disconnetti Account</button>
             </div>
         </div>
     </section>
@@ -649,7 +747,7 @@
     <section>
         <div class="section-header">
             <h2 class="section-title" style="color: var(--accent-red);">Pannello di Amministrazione</h2>
-            <p class="section-desc">Pubblica nuovi avvisi ed evadi le richieste di materiali inviate dagli studenti.</p>
+            <p class="section-desc">Pubblica avvisi ed gestisci le tessere ed i materiali inviati dagli studenti.</p>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 2rem; align-items: start;">
@@ -660,11 +758,22 @@
                 <button class="btn btn-dark" style="background:var(--accent-red);" type="submit">Pubblica Avviso</button>
             </form>
 
-            <div>
-                <h3 style="margin-bottom: 1.2rem; font-size: 1.3rem; font-weight: 700;">Richieste Appunti Ricevute</h3>
-                <div id="admin-richieste-container" class="clean-grid" style="grid-template-columns: 1fr; gap: 1rem;">
-                    <div class="clean-card" style="padding: 1.2rem;">
-                        <p style="color: var(--text-muted);">Nessuna richiesta in attesa.</p>
+            <div style="display:flex; flex-direction:column; gap:2rem;">
+                <div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.2rem; font-weight: 700;">Richieste Tessere in Attesa</h3>
+                    <div id="admin-tessere-container" class="clean-grid" style="grid-template-columns: 1fr; gap: 1rem;">
+                        <div class="clean-card" style="padding: 1rem;">
+                            <p style="color: var(--text-muted);">Nessuna richiesta tessera in attesa.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.2rem; font-weight: 700;">Richieste Appunti Ricevute</h3>
+                    <div id="admin-richieste-container" class="clean-grid" style="grid-template-columns: 1fr; gap: 1rem;">
+                        <div class="clean-card" style="padding: 1rem;">
+                            <p style="color: var(--text-muted);">Nessuna richiesta appunti in attesa.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -736,6 +845,9 @@
                     document.getElementById('appunti-locked').style.display = 'block';
                     document.getElementById('appunti-unlocked').style.display = 'none';
 
+                    document.getElementById('tessera-locked').style.display = 'block';
+                    document.getElementById('tessera-unlocked').style.display = 'none';
+
                     resetAppuntiFields(false);
                 }
             });
@@ -759,8 +871,13 @@
                 document.getElementById('appunti-locked').style.display = 'none';
                 document.getElementById('appunti-unlocked').style.display = 'block';
 
+                document.getElementById('tessera-locked').style.display = 'none';
+                document.getElementById('tessera-unlocked').style.display = 'block';
+
                 document.getElementById('auth-logged-out').style.display = 'none';
                 document.getElementById('auth-logged-in').style.display = 'block';
+
+                renderTesseraStatus(data);
 
                 if (document.getElementById('appunti-nome')) {
                     document.getElementById('appunti-nome').value = data.nome;
@@ -778,9 +895,83 @@
                 if (data.is_admin) {
                     document.getElementById('nav-admin-li').style.display = 'block';
                     loadRichiesteAdmin();
+                    loadTessereAdmin();
                 }
             }
         } catch(e) { console.warn("Errore caricamento profilo:", e); }
+    }
+
+    function renderTesseraStatus(user) {
+        document.getElementById('tessera-state-none').style.display = 'none';
+        document.getElementById('tessera-state-pending').style.display = 'none';
+        document.getElementById('tessera-state-approved').style.display = 'none';
+
+        const status = user.tessera_status || 'none';
+
+        if (status === 'none') {
+            document.getElementById('tessera-state-none').style.display = 'flex';
+        } else if (status === 'pending') {
+            document.getElementById('tessera-state-pending').style.display = 'flex';
+        } else if (status === 'approved') {
+            document.getElementById('tessera-state-approved').style.display = 'block';
+            document.getElementById('card-user-name').textContent = `${user.nome} ${user.cognome}`;
+            document.getElementById('card-user-corso').textContent = user.corso;
+            document.getElementById('card-user-matricola').textContent = user.matricola;
+            document.getElementById('card-user-id').textContent = `CARD-${user.matricola.slice(-4)}`;
+        }
+    }
+
+    async function requestStudentCard() {
+        if (!db || !currentUserProfile) return;
+        try {
+            const { error } = await db.from('profili').update({ tessera_status: 'pending' }).eq('id', currentUserProfile.id);
+            if (error) throw error;
+            
+            currentUserProfile.tessera_status = 'pending';
+            renderTesseraStatus(currentUserProfile);
+            alert("Richiesta inviata con successo!");
+        } catch(e) { alert("Impossibile inviare la richiesta: " + e.message); }
+    }
+
+    async function loadTessereAdmin() {
+        if (!db || !currentUserProfile?.is_admin) return;
+        try {
+            const { data, error } = await db.from('profili').select('id, nome, cognome, matricola, corso').eq('tessera_status', 'pending');
+            if (error) throw error;
+
+            const container = document.getElementById('admin-tessere-container');
+            if (data && data.length > 0) {
+                container.innerHTML = "";
+                data.forEach(user => {
+                    container.innerHTML += `
+                        <div class="clean-card" id="tessera-card-${user.id}" style="padding: 1.2rem; justify-content: space-between;">
+                            <div>
+                                <h3 style="font-size: 1.05rem; margin-bottom: 0.4rem;">${user.nome} ${user.cognome}</h3>
+                                <div class="admin-meta-info">Corso: <strong>${user.corso}</strong></div>
+                                <div class="admin-meta-info">Matricola: <strong>${user.matricola}</strong></div>
+                            </div>
+                            <button class="btn btn-outline" style="font-size: 0.75rem; padding: 6px 12px; margin-top: 0.8rem; border-color: #3b82f6; color: #3b82f6;" onclick="approveTessera('${user.id}')">Approva ed Emetti</button>
+                        </div>
+                    `;
+                });
+            } else {
+                container.innerHTML = `<div class="clean-card" style="padding: 1rem;"><p style="color: var(--text-muted);">Nessuna richiesta tessera in attesa.</p></div>`;
+            }
+        } catch(e) { console.warn("Errore caricamento tessere admin:", e); }
+    }
+
+    async function approveTessera(userId) {
+        if (!db || !currentUserProfile?.is_admin) return;
+        try {
+            const { error } = await db.from('profili').update({ tessera_status: 'approved' }).eq('id', userId);
+            if (error) throw error;
+            
+            const card = document.getElementById(`tessera-card-${userId}`);
+            if (card) card.remove();
+            
+            loadTessereAdmin();
+            alert("Tessera approvata ed emessa!");
+        } catch(e) { alert("Errore durante l'approvazione: " + e.message); }
     }
 
     function resetAppuntiFields(disabledStatus) {
@@ -847,7 +1038,7 @@
                 });
             } else {
                 container.innerHTML = `
-                    <div class="clean-card" style="padding: 1.2rem;">
+                    <div class="clean-card" style="padding: 1rem;">
                         <p style="color: var(--text-muted);">Nessuna richiesta in attesa.</p>
                     </div>
                 `;
@@ -866,14 +1057,7 @@
             const card = document.getElementById(`req-card-${reqId}`);
             if (card) card.remove();
             
-            const container = document.getElementById('admin-richieste-container');
-            if (container.children.length === 0) {
-                container.innerHTML = `
-                    <div class="clean-card" style="padding: 1.2rem;">
-                        <p style="color: var(--text-muted);">Nessuna richiesta in attesa.</p>
-                    </div>
-                `;
-            }
+            loadRichiesteAdmin();
         } catch(err) { alert("Impossibile aggiornare lo stato della richiesta: " + err.message); }
     }
 
@@ -900,7 +1084,7 @@
 
             if (authError) throw authError;
 
-            alert("Registrazione completata con successo! Verifica la tua mail se necessario.");
+            alert("Registrazione completata con successo!");
             window.location.reload();
             
         } catch (err) { 
