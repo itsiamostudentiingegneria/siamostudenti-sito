@@ -10,27 +10,14 @@
     <link rel="icon" type="image/png" sizes="192x192" href="fav.png?v=2">
     <link rel="apple-touch-icon" sizes="180x180" href="fav.png?v=2">
     <link rel="shortcut icon" href="fav.png?v=2">
-    <meta property="og:title" content="Siamo Studenti Ingegneria">
-    <meta property="og:description" content="Il punto di riferimento per i corsi di ingegneria UniCampania.">
-    <meta property="og:image" content="fav.png?v=2">
 
-    <!-- ONESIGNAL SDK -->
+    <!-- ONESIGNAL E SUPABASE -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
-          appId: "c19e8109-5786-4879-b0b8-9797785ec812",
-          safari_web_id: "web.onesignal.auto.3431b9a6-8377-4186-9b23-bf65dbb4a731",
-          notifyButton: {
-            enable: true,
-          },
-        });
-      });
-    </script>
-
-    <!-- LIBRERIA SUPABASE CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- LIBRERIE PER GENERAZIONE PDF IN BROWSER -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
     <style type="text/css">
         :root {
@@ -43,413 +30,128 @@
             --text-muted: #64748b;
             --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Plus Jakarta Sans', sans-serif;
             
-            /* APPLE GLASSMORPHISM MATERIAL SYSTEM */
             --glass-bg: rgba(255, 255, 255, 0.65);
             --glass-bg-hover: rgba(255, 255, 255, 0.8);
             --glass-blur: blur(24px) saturate(190%);
             --glass-border: rgba(255, 255, 255, 0.6);
             --glass-border-subtle: rgba(15, 23, 42, 0.08);
-            --glass-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.07), 
-                            0 1px 3px rgba(0, 0, 0, 0.05),
-                            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 
-            /* SPRING PHYSICS EASING */
-            --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.175);
             --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
             --transition-fast: all 0.15s var(--ease-apple);
             --transition-smooth: all 0.25s var(--ease-apple);
         }
 
-        *, *::before, *::after { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-            -webkit-tap-highlight-color: transparent; 
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
         body {
             font-family: var(--font-sans);
             background-color: var(--bg-pure);
             color: var(--text-main);
             line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             padding-top: 85px;
             padding-bottom: 110px;
             min-height: 100vh;
             background-image: 
                 radial-gradient(circle at 85% 15%, rgba(59, 130, 246, 0.18) 0%, transparent 45%),
-                radial-gradient(circle at 15% 75%, rgba(225, 29, 72, 0.1) 0%, transparent 45%),
-                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.5) 0%, transparent 100%);
+                radial-gradient(circle at 15% 75%, rgba(225, 29, 72, 0.1) 0%, transparent 45%);
             background-attachment: fixed;
-            touch-action: manipulation;
-            perspective: 1000px;
         }
 
-        /* HEADER GLASS BAR */
         .site-header {
-            position: fixed;
-            top: 12px; left: 5%; right: 5%; height: 60px;
-            background: var(--glass-bg); 
-            backdrop-filter: var(--glass-blur); 
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-bottom-color: var(--glass-border-subtle);
-            border-radius: 22px; 
-            z-index: 1010;
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            padding: 0 1.2rem;
+            position: fixed; top: 12px; left: 5%; right: 5%; height: 60px;
+            background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border); border-radius: 22px; z-index: 1010;
+            display: flex; align-items: center; justify-content: space-between; padding: 0 1.2rem;
             box-shadow: var(--glass-shadow);
-            transition: var(--transition-smooth);
         }
-        .header-logo-container { 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            cursor: pointer; 
-            text-decoration: none;
-            transition: var(--transition-fast);
-        }
-        .header-logo-container:active {
-            transform: scale(0.95);
-            opacity: 0.85;
-        }
-        .header-logo { height: 32px; width: 32px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(59,130,246,0.3)); }
-        .header-title { font-size: 0.95rem; font-weight: 700; letter-spacing: -0.3px; color: var(--text-main); }
-        
-        .user-badge { 
-            font-size: 0.8rem; 
-            color: var(--text-main); 
-            font-weight: 600; 
-            background: rgba(255, 255, 255, 0.5); 
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(8px);
-            padding: 5px 12px; 
-            border-radius: 30px; 
-            display: flex; 
-            align-items: center; 
-            gap: 6px; 
-            white-space: nowrap; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-        }
-        .user-badge::before { content: ''; display: inline-block; width: 7px; height: 7px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; }
+        .header-logo-container { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .header-logo { height: 32px; width: 32px; object-fit: contain; }
+        .header-title { font-size: 0.95rem; font-weight: 700; color: var(--text-main); }
+        .user-badge { font-size: 0.8rem; color: var(--text-main); font-weight: 600; background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.7); padding: 5px 12px; border-radius: 30px; }
 
-        /* FLOATING GLASS NAVIGATION BAR */
-        .nav-container { 
-            position: fixed; 
-            bottom: 15px; left: 4%; right: 4%; 
-            z-index: 1000; 
-            background: var(--glass-bg); 
-            backdrop-filter: var(--glass-blur); 
-            -webkit-backdrop-filter: var(--glass-blur); 
-            border: 1px solid var(--glass-border); 
-            border-radius: 26px; 
-            box-shadow: var(--glass-shadow);
-            padding: 0.3rem; 
-            max-width: 850px; 
-            margin: 0 auto; 
-        }
+        .nav-container { position: fixed; bottom: 15px; left: 4%; right: 4%; z-index: 1000; background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 26px; box-shadow: var(--glass-shadow); padding: 0.3rem; max-width: 850px; margin: 0 auto; }
         nav { display: flex; }
         .nav-links { display: flex; width: 100%; list-style: none; justify-content: space-between; gap: 4px; }
         .nav-links li { flex: 1; }
-        .nav-links a { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            text-decoration: none; 
-            font-size: 0.75rem; 
-            font-weight: 600; 
-            color: var(--text-muted); 
-            transition: var(--transition-fast); 
-            padding: 0.65rem 0.2rem; 
-            text-align: center; 
-            border-radius: 20px; 
-            will-change: transform;
-            position: relative;
-        }
-        .nav-links a:active {
-            transform: scale(0.92);
-            opacity: 0.8;
-        }
-        .nav-links a:hover { color: var(--text-main); background: rgba(255, 255, 255, 0.4); }
-        .nav-links a.active { 
-            color: #fff; 
-            background: var(--brand-gradient); 
-            box-shadow: 0 6px 20px rgba(29, 78, 216, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
-        }
-        
+        .nav-links a { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); padding: 0.65rem 0.2rem; border-radius: 20px; }
+        .nav-links a.active { color: #fff; background: var(--brand-gradient); box-shadow: 0 6px 20px rgba(29, 78, 216, 0.35); }
         #nav-admin-li { display: none; }
-        .nav-links a.nav-admin-link { color: var(--accent-red); }
-        .nav-links a.nav-admin-link.active { 
-            background: var(--accent-red); 
-            color: #fff; 
-            box-shadow: 0 6px 20px rgba(225,29,72,0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
-        }
+        .nav-links a.nav-admin-link.active { background: var(--accent-red); }
 
-        /* HERO SECTION */
-        .hero { min-height: 50vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 5%; max-width: 1000px; margin: 0 auto; text-align: center; position: relative; }
-        .hero-badge { 
-            background: rgba(59, 130, 246, 0.1); 
-            border: 1px solid rgba(59, 130, 246, 0.25); 
-            backdrop-filter: blur(10px);
-            padding: 6px 16px; 
-            border-radius: 30px; 
-            color: #1d4ed8; 
-            font-size: 0.8rem; 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            letter-spacing: 0.5px; 
-            margin-bottom: 1.2rem; 
-            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.1);
-        }
-        .hero-title { font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 800; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 1.2rem; color: var(--text-main); }
+        .hero { min-height: 50vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 5%; max-width: 1000px; margin: 0 auto; text-align: center; }
+        .hero-badge { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.25); padding: 6px 16px; border-radius: 30px; color: #1d4ed8; font-size: 0.8rem; font-weight: 700; margin-bottom: 1.2rem; }
+        .hero-title { font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 800; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 1.2rem; }
         .hero-title span { background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-subtitle { font-size: 1.05rem; color: var(--text-muted); max-width: 700px; margin-bottom: 2rem; }
         .hero-cta-group { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; width: 100%; }
 
-        /* CARDS WITH GLASS DEPTH */
         .quick-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; width: 100%; margin-top: 2.5rem; }
-        .quick-card { 
-            background: var(--glass-bg); 
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border); 
-            border-radius: 22px; 
-            padding: 1.3rem; 
-            display: flex; 
-            align-items: center; 
-            gap: 1rem; 
-            text-decoration: none; 
-            transition: var(--transition-fast);
-            box-shadow: var(--glass-shadow);
-            will-change: transform;
-        }
-        .quick-card:active {
-            transform: scale(0.96);
-        }
-        .quick-card:hover { 
-            transform: translateY(-3px); 
-            border-color: rgba(59,130,246,0.4); 
-            background: var(--glass-bg-hover); 
-            box-shadow: 0 15px 35px -10px rgba(0,0,0,0.1), inset 0 1px 0 #fff;
-        }
+        .quick-card { background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 22px; padding: 1.3rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; box-shadow: var(--glass-shadow); }
         .quick-icon { width: 46px; height: 46px; background: rgba(59,130,246,0.12); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #3b82f6; flex-shrink: 0; }
         .quick-card.official .quick-icon { background: rgba(225,29,72,0.12); color: var(--accent-red); }
-        .quick-card-text h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.2px; }
+        .quick-card-text h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); }
         .quick-card-text p { font-size: 0.8rem; color: var(--text-muted); }
 
         section { padding: 40px 5%; max-width: 1200px; margin: 0 auto; }
         .section-header { margin-bottom: 2rem; }
-        .section-title { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 0.5rem; color: var(--text-main); }
+        .section-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--text-main); }
         .section-desc { color: var(--text-muted); font-size: 0.95rem; max-width: 650px; }
 
         .clean-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .clean-card { 
-            background: var(--glass-bg); 
-            backdrop-filter: var(--glass-blur); 
-            -webkit-backdrop-filter: var(--glass-blur); 
-            border: 1px solid var(--glass-border); 
-            padding: 1.8rem; 
-            border-radius: 24px; 
-            transition: var(--transition-fast); 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between; 
-            box-shadow: var(--glass-shadow); 
-            will-change: transform;
-        }
-        .clean-card:active {
-            transform: scale(0.97);
-        }
-        .clean-card:hover { 
-            transform: translateY(-4px); 
-            border-color: rgba(255,255,255,0.9); 
-            background: var(--glass-bg-hover);
-            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08), inset 0 1px 0 #fff; 
-        }
-        .clean-card h3 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 0.75rem; color: var(--text-main); }
-        .clean-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
-        .clean-card .card-action { font-size: 0.85rem; font-weight: 700; color: #3b82f6; margin-top: 1.5rem; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; display: inline-block; transition: var(--transition-fast); }
+        .clean-card { background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); padding: 1.8rem; border-radius: 24px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--glass-shadow); }
+        .clean-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-main); }
+        .clean-card p { font-size: 0.9rem; color: var(--text-muted); }
+        .clean-card .card-action { font-size: 0.85rem; font-weight: 700; color: #3b82f6; margin-top: 1.5rem; text-decoration: none; display: inline-block; }
 
-        /* FORMS & GLASS INPUTS */
-        .minimal-form { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 1.2rem; 
-            max-width: 550px; 
-            background: var(--glass-bg); 
-            backdrop-filter: var(--glass-blur); 
-            -webkit-backdrop-filter: var(--glass-blur); 
-            border: 1px solid var(--glass-border); 
-            padding: 2.2rem; 
-            border-radius: 28px; 
-            box-shadow: var(--glass-shadow); 
-            margin: 0 auto; 
-        }
-        .minimal-form h3 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.3px; }
+        .minimal-form { display: flex; flex-direction: column; gap: 1.2rem; max-width: 550px; background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); padding: 2.2rem; border-radius: 28px; box-shadow: var(--glass-shadow); margin: 0 auto; }
+        .minimal-form h3 { font-size: 1.25rem; font-weight: 700; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-        .form-group label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .form-input { 
-            width: 100%; 
-            padding: 12px 16px; 
-            background: rgba(255, 255, 255, 0.5); 
-            border: 1px solid var(--glass-border-subtle); 
-            border-radius: 14px; 
-            font-family: var(--font-sans); 
-            font-size: 0.95rem; 
-            color: var(--text-main); 
-            transition: var(--transition-fast); 
-            -webkit-appearance: none; 
-            backdrop-filter: blur(4px);
-        }
-        .form-input:focus { outline: none; border-color: #3b82f6; background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 0 4px rgba(59,130,246,0.15); }
+        .form-group label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .form-input { width: 100%; padding: 12px 16px; background: rgba(255, 255, 255, 0.5); border: 1px solid var(--glass-border-subtle); border-radius: 14px; font-family: var(--font-sans); font-size: 0.95rem; color: var(--text-main); }
 
-        /* BUTTON SYSTEM (Glass & Depth) */
-        .btn { 
-            padding: 12px 24px; 
-            font-family: var(--font-sans); 
-            font-size: 0.9rem; 
-            font-weight: 700; 
-            border-radius: 16px; 
-            border: none; 
-            cursor: pointer; 
-            transition: var(--transition-fast); 
-            display: inline-block; 
-            text-decoration: none; 
-            text-align: center; 
-            will-change: transform;
-            position: relative;
-        }
-        .btn:active {
-            transform: scale(0.94);
-            opacity: 0.9;
-        }
-        .btn-dark { 
-            background: var(--brand-gradient); 
-            color: #fff; 
-            box-shadow: 0 8px 25px -5px rgba(29, 78, 216, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
-        }
-        .btn-dark:hover { transform: translateY(-2px); box-shadow: 0 12px 30px -5px rgba(29, 78, 216, 0.5); }
-        .btn-outline { 
-            background: rgba(255, 255, 255, 0.4); 
-            border: 1px solid var(--glass-border); 
-            color: var(--text-main); 
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-        }
-        .btn-outline:hover { background: rgba(255, 255, 255, 0.7); }
+        .btn { padding: 12px 24px; font-family: var(--font-sans); font-size: 0.9rem; font-weight: 700; border-radius: 16px; border: none; cursor: pointer; display: inline-block; text-decoration: none; text-align: center; }
+        .btn-dark { background: var(--brand-gradient); color: #fff; box-shadow: 0 8px 25px -5px rgba(29, 78, 216, 0.4); }
+        .btn-outline { background: rgba(255, 255, 255, 0.4); border: 1px solid var(--glass-border); color: var(--text-main); }
+        .btn-success { background: #10b981; color: #fff; box-shadow: 0 8px 25px -5px rgba(16, 185, 129, 0.4); }
 
-        /* TESSERA GLASS CARD MOCKUP */
+        /* TESSERA DIGITALE CARD (Senza ID) */
         .student-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.5));
             backdrop-filter: blur(20px) saturate(200%);
-            -webkit-backdrop-filter: blur(20px) saturate(200%);
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 24px;
             padding: 1.8rem;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.9);
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1);
             margin: 1.5rem auto;
             max-width: 420px;
             text-align: left;
         }
-        .student-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 60%);
-            pointer-events: none;
-        }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
         .card-chip { width: 38px; height: 28px; background: linear-gradient(135deg, #fbbf24, #d97706); border-radius: 6px; }
         .card-body { margin-bottom: 1.2rem; }
-        .card-name { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.3px; color: var(--text-main); }
+        .card-name { font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
         .card-details { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
-        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; }
+        .card-footer { display: flex; justify-content: flex-end; align-items: flex-end; }
         .card-qr { width: 48px; height: 48px; background: #000; border-radius: 8px; padding: 4px; }
 
-        /* SPATIAL CONTINUITY & PAGE SWITCHING ANIMATION */
-        .page { 
-            display: none; 
-            opacity: 0; 
-            transform: scale(0.96) translateY(12px) rotateX(-2deg); 
-            transition: opacity 0.22s var(--ease-apple), transform 0.22s var(--ease-apple); 
-            will-change: opacity, transform;
-            transform-origin: top center;
-        }
-        .page.active { 
-            display: block; 
-            opacity: 1; 
-            transform: scale(1) translateY(0) rotateX(0deg); 
-        }
+        .page { display: none; opacity: 0; transition: opacity 0.22s var(--ease-apple); }
+        .page.active { display: block; opacity: 1; }
 
-        .inner-nav-bar { 
-            display: flex; 
-            background: rgba(0, 0, 0, 0.04); 
-            border: 1px solid var(--glass-border-subtle); 
-            border-radius: 14px; 
-            padding: 4px; 
-            margin-top: 1.5rem; 
-            max-width: 350px; 
-            width: 100%; 
-        }
-        .inner-nav-btn { 
-            flex: 1; 
-            background: transparent; 
-            border: none; 
-            padding: 8px; 
-            font-family: var(--font-sans); 
-            font-size: 0.85rem; 
-            font-weight: 700; 
-            color: var(--text-muted); 
-            cursor: pointer; 
-            border-radius: 10px; 
-            transition: var(--transition-fast); 
-            text-align: center; 
-            text-decoration: none; 
-        }
-        .inner-nav-btn:active { transform: scale(0.95); }
-        .inner-nav-btn:hover { color: var(--text-main); }
-        .inner-nav-btn.active { 
-            background: #fff; 
-            color: var(--text-main); 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
-        }
+        .inner-nav-bar { display: flex; background: rgba(0, 0, 0, 0.04); border: 1px solid var(--glass-border-subtle); border-radius: 14px; padding: 4px; margin-top: 1.5rem; max-width: 350px; width: 100%; }
+        .inner-nav-btn { flex: 1; background: transparent; border: none; padding: 8px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; }
+        .inner-nav-btn.active { background: #fff; color: var(--text-main); }
 
         .admin-meta-info { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem; }
         .admin-meta-info strong { color: var(--text-main); }
 
-        /* ACCESSIBILITÀ: PREFERS REDUCED MOTION */
-        @media (prefers-reduced-motion: reduce) {
-            body, .page, .btn, .clean-card, .quick-card, .nav-links a, .site-header {
-                transition: none !important;
-                transform: none !important;
-                animation: none !important;
-            }
-        }
-
-        /* OTTIMIZZAZIONI MOBILE */
         @media (max-width: 768px) {
             body { padding-top: 75px; padding-bottom: 95px; }
             .form-row { grid-template-columns: 1fr; }
             .site-header { left: 10px; right: 10px; top: 10px; padding: 0 0.8rem; height: 55px; }
-            .header-title { font-size: 0.85rem; }
-            .user-badge { font-size: 0.75rem; padding: 4px 8px; }
-            .nav-container { left: 8px; right: 8px; bottom: 8px; border-radius: 22px; }
-            .nav-links a { font-size: 0.7rem; padding: 0.5rem 0.1rem; }
-            .hero { padding: 1.5rem 3%; }
-            .hero-cta-group .btn { width: 100%; }
-            .minimal-form { padding: 1.4rem; border-radius: 22px; }
-            .clean-card { padding: 1.4rem; border-radius: 22px; }
-            section { padding: 25px 4%; }
+            .nav-container { left: 8px; right: 8px; bottom: 8px; }
         }
     </style>
 </head>
@@ -484,7 +186,7 @@
     <div class="hero">
         <div class="hero-badge">Rappresentanza Studentesca</div>
         <h1 class="hero-title">Siamo Studenti <br><span>Ingegneria</span></h1>
-        <p class="hero-subtitle">Il punto di riferimento per i corsi di ingegneria UniCampania. Scarica appunti verificati, richiede la tua Tessera digitale ed entra nei gruppi.</p>
+        <p class="hero-subtitle">Il punto di riferimento per i corsi di ingegneria UniCampania. Scarica appunti verificati, richiedi la tua Tessera digitale ed entra nei gruppi.</p>
         
         <div class="hero-cta-group">
             <a class="btn btn-dark" href="#tessera">Richiedi Tessera</a>
@@ -535,7 +237,7 @@
             <div class="clean-grid" id="avvisi-container">
                 <div class="clean-card">
                     <h3>Nessun Avviso</h3>
-                    <p>Questa Sezione Verrà aggiornata il prima possibile</p>
+                    <p>Questa sezione verrà aggiornata il prima possibile</p>
                 </div>
             </div>
         </div>
@@ -603,13 +305,13 @@
     </section>
 </div>
 
-<!-- PAGINA: TESSERA (NUOVA) -->
+<!-- PAGINA: TESSERA (DIGITALE SENZA ID) -->
 <div class="page" id="page-tessera">
     <section style="max-width: 600px;">
         <div id="tessera-locked" style="max-width: 550px; margin: 0 auto; text-align: center;">
             <div class="section-header">
                 <h2 class="section-title">Tessera Studentesca</h2>
-                <p class="section-desc">Accedi per richiedere e consultare la tua Tessera digitale ed usufruire delle convenzioni universitarie.</p>
+                <p class="section-desc">Accedi per richiedere la tessera ed esibire la versione digitale.</p>
                 <div style="display: flex; justify-content: center;">
                     <div class="inner-nav-bar">
                         <button class="inner-nav-btn active" onclick="switchAuthMode('login')">Accedi</button>
@@ -622,13 +324,13 @@
         <div id="tessera-unlocked" style="display: none; text-align: center;">
             <div class="section-header">
                 <h2 class="section-title">Tessera Studente Digitale</h2>
-                <p class="section-desc">Esibisci la tua tessera per accedere agli eventi ed usufruire delle sanzioni ed agevolazioni dedicate.</p>
+                <p class="section-desc">Esibisci la tua tessera dal telefono per agevolazioni e convenzioni dedicate.</p>
             </div>
 
             <!-- STATO 1: NON RICHIESTA -->
             <div id="tessera-state-none" class="minimal-form" style="display: none;">
                 <h3>Richiedi la tua Tessera</h3>
-                <p style="font-size: 0.9rem; color: var(--text-muted);">Invia la richiesta di emissione della tua tessera identificativa riconosciuta dall'associazione.</p>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">Invia la richiesta per abilitare la tua tessera digitale ed essere inserito nell'elenco di ritiro della tessera fisica.</p>
                 <button class="btn btn-dark" onclick="requestStudentCard()">Richiedi Ora</button>
             </div>
 
@@ -636,7 +338,7 @@
             <div id="tessera-state-pending" class="minimal-form" style="display: none;">
                 <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⏳</div>
                 <h3>Richiesta in Lavorazione</h3>
-                <p style="font-size: 0.9rem; color: var(--text-muted);">La tua richiesta è stata presa in carico dallo staff. Riceverai la convalida a breve.</p>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">La tua richiesta è stata inviata allo staff. A breve la tua tessera digitale verrà convalidata.</p>
             </div>
 
             <!-- STATO 3: TESSERA EMESSA (DIGITALE) -->
@@ -652,10 +354,6 @@
                         <div class="card-details">Matricola: <strong id="card-user-matricola" style="color:var(--text-main);">000000</strong></div>
                     </div>
                     <div class="card-footer">
-                        <div>
-                            <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase;">ID Tessera</div>
-                            <div style="font-size: 0.85rem; font-weight: 700; letter-spacing: 1px;" id="card-user-id">CARD-0000</div>
-                        </div>
                         <svg class="card-qr" viewBox="0 0 24 24" fill="white">
                             <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm11-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm13 0h2v2h-2v-2zm-2 2h2v2h-2v-2zm4 0h2v2h-2v-2zm-2 2h2v2h-2v-2zm2-4h2v2h-2v-2z"/>
                         </svg>
@@ -702,14 +400,6 @@
                         <option value="Ing. Civile">Ing. Civile</option>
                         <option value="Ing. Edile">Ing. Edile</option>
                         <option value="Ing. Ambientale">Ing. Ambientale</option>
-                        <option value="Mag Ing. Aerospaziale">Mag Ing. Aerospaziale</option>
-                        <option value="Mag Ing. Informatica">Mag Ing. Informatica</option>
-                        <option value="Mag Ing. Biomedica">Mag Ing. Biomedica</option>
-                        <option value="Mag Ing. Energia e Ambiente">Mag Ing. Energia e Ambiente</option>
-                        <option value="Mag Ing. Meccanica">Mag Ing. Meccanica</option>
-                        <option value="Mag Ing. Elettronica">Mag Ing. Elettronica</option>
-                        <option value="Mag Ing. Gestionale">Mag Ing. Gestionale</option>
-                        <option value="Mag Ing. Civile">Mag Ing. Civile</option>
                     </select>
                 </div>
                 <div class="form-group"><label>Password</label><input class="form-input" id="reg-password" required type="password" minlength="6"></div>
@@ -747,7 +437,7 @@
     <section>
         <div class="section-header">
             <h2 class="section-title" style="color: var(--accent-red);">Pannello di Amministrazione</h2>
-            <p class="section-desc">Pubblica avvisi ed gestisci le tessere ed i materiali inviati dagli studenti.</p>
+            <p class="section-desc">Pubblica avvisi, gestisci l'approvazione delle tessere e scarica il foglio di consegna.</p>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 2rem; align-items: start;">
@@ -760,7 +450,11 @@
 
             <div style="display:flex; flex-direction:column; gap:2rem;">
                 <div>
-                    <h3 style="margin-bottom: 1rem; font-size: 1.2rem; font-weight: 700;">Richieste Tessere in Attesa</h3>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1rem; flex-wrap:wrap; gap: 10px;">
+                        <h3 style="font-size: 1.2rem; font-weight: 700;">Richieste Tessere</h3>
+                        <!-- PULSANTE PER GENERARE PDF -->
+                        <button class="btn btn-success" style="font-size: 0.8rem; padding: 8px 14px;" onclick="downloadTesserePDF()">📄 Scarica Tabella PDF</button>
+                    </div>
                     <div id="admin-tessere-container" class="clean-grid" style="grid-template-columns: 1fr; gap: 1rem;">
                         <div class="clean-card" style="padding: 1rem;">
                             <p style="color: var(--text-muted);">Nessuna richiesta tessera in attesa.</p>
@@ -788,14 +482,6 @@
     const db = window.supabase ? window.supabase.createClient(clientUrl, clientKey) : null;
     let currentUserProfile = null;
 
-    /* APPLE HAPTICS FEEDBACK SYSTEM */
-    function triggerHaptic(duration = 12) {
-        if ("vibrate" in navigator) {
-            navigator.vibrate(duration);
-        }
-    }
-
-    /* ROUTING E ROTAZIONE PAGINA ANIMATA */
     function handleRouting() {
         const hash = window.location.hash.replace('#', '') || 'home';
         const targetPage = document.getElementById(`page-${hash}`);
@@ -811,13 +497,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }
-
-    /* EVENT LISTENERS TATTILI SUI ELEMENTI INTERATTIVI */
-    document.addEventListener('pointerdown', (e) => {
-        if (e.target.closest('.btn, .nav-links a, .quick-card, .clean-card, .inner-nav-btn')) {
-            triggerHaptic(10);
-        }
-    });
 
     window.addEventListener('hashchange', handleRouting);
     window.addEventListener('DOMContentLoaded', () => {
@@ -847,8 +526,6 @@
 
                     document.getElementById('tessera-locked').style.display = 'block';
                     document.getElementById('tessera-unlocked').style.display = 'none';
-
-                    resetAppuntiFields(false);
                 }
             });
         } catch(e) { console.warn("Errore sessione:", e); }
@@ -917,7 +594,6 @@
             document.getElementById('card-user-name').textContent = `${user.nome} ${user.cognome}`;
             document.getElementById('card-user-corso').textContent = user.corso;
             document.getElementById('card-user-matricola').textContent = user.matricola;
-            document.getElementById('card-user-id').textContent = `CARD-${user.matricola.slice(-4)}`;
         }
     }
 
@@ -936,7 +612,7 @@
     async function loadTessereAdmin() {
         if (!db || !currentUserProfile?.is_admin) return;
         try {
-            const { data, error } = await db.from('profili').select('id, nome, cognome, matricola, corso').eq('tessera_status', 'pending');
+            const { data, error } = await db.from('profili').select('id, nome, cognome, matricola, corso, telefono').eq('tessera_status', 'pending');
             if (error) throw error;
 
             const container = document.getElementById('admin-tessere-container');
@@ -949,8 +625,9 @@
                                 <h3 style="font-size: 1.05rem; margin-bottom: 0.4rem;">${user.nome} ${user.cognome}</h3>
                                 <div class="admin-meta-info">Corso: <strong>${user.corso}</strong></div>
                                 <div class="admin-meta-info">Matricola: <strong>${user.matricola}</strong></div>
+                                <div class="admin-meta-info">Tel: <strong>${user.telefono || '-'}</strong></div>
                             </div>
-                            <button class="btn btn-outline" style="font-size: 0.75rem; padding: 6px 12px; margin-top: 0.8rem; border-color: #3b82f6; color: #3b82f6;" onclick="approveTessera('${user.id}')">Approva ed Emetti</button>
+                            <button class="btn btn-outline" style="font-size: 0.75rem; padding: 6px 12px; margin-top: 0.8rem; border-color: #3b82f6; color: #3b82f6;" onclick="approveTessera('${user.id}')">Approva ed Abilita Digitale</button>
                         </div>
                     `;
                 });
@@ -970,23 +647,72 @@
             if (card) card.remove();
             
             loadTessereAdmin();
-            alert("Tessera approvata ed emessa!");
+            alert("Tessera approvata ed abilitata!");
         } catch(e) { alert("Errore durante l'approvazione: " + e.message); }
     }
 
-    function resetAppuntiFields(disabledStatus) {
-        const fields = ['appunti-nome', 'appunti-cognome', 'appunti-telefono'];
-        fields.forEach(fId => {
-            const el = document.getElementById(fId);
-            if (el) {
-                if(!disabledStatus) el.value = "";
-                el.disabled = disabledStatus;
+    /* GENERAZIONE E DOWNLOAD DEL PDF TRAMITE JSPDF LATO BROWSER */
+    async function downloadTesserePDF() {
+        if (!db || !currentUserProfile?.is_admin) return;
+
+        try {
+            // Recupera sia le tessere pending che quelle approved per la consegna fisica
+            const { data, error } = await db
+                .from('profili')
+                .select('cognome, nome, telefono')
+                .in('tessera_status', ['pending', 'approved'])
+                .order('cognome', { ascending: true });
+
+            if (error) throw error;
+
+            if (!data || data.length === 0) {
+                alert("Nessuna richiesta di tessera trovata per generare il PDF.");
+                return;
             }
-        });
+
+            // Inizializza jsPDF dalla finestra globale
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Titolo
+            doc.setFontSize(16);
+            doc.text("Registro Consegna Tessere Fisiche", 14, 15);
+            doc.setFontSize(10);
+            doc.text(`Data generazione: ${new Date().toLocaleDateString('it-IT')}`, 14, 22);
+
+            // Costruzione righe tabella
+            const tableRows = data.map(utente => [
+                utente.cognome || '-',
+                utente.nome || '-',
+                utente.telefono || '-',
+                '' // Cella vuota per la spunta / firma di consegna
+            ]);
+
+            // Generazione Tabella tramite autotable
+            doc.autoTable({
+                startY: 28,
+                head: [['Cognome', 'Nome', 'Telefono', 'Firma / Spunta Consegna']],
+                body: tableRows,
+                theme: 'grid',
+                headStyles: { fillColor: [15, 23, 42], textColor: 255, fontStyle: 'bold' },
+                styles: { fontSize: 10, cellPadding: 6 },
+                columnStyles: {
+                    0: { cellWidth: 45 },
+                    1: { cellWidth: 45 },
+                    2: { cellWidth: 45 },
+                    3: { cellWidth: 55 }
+                }
+            });
+
+            // Salva il file PDF direttamente nel browser
+            doc.save(`registro_consegna_tessere_${new Date().toISOString().slice(0, 10)}.pdf`);
+
+        } catch (e) {
+            alert("Errore durante la generazione del PDF: " + e.message);
+        }
     }
 
     function toggleAuthForms(mode) {
-        triggerHaptic(12);
         if (mode === 'register') {
             document.getElementById('form-login').style.display = 'none';
             document.getElementById('form-register').style.display = 'flex';
@@ -1037,18 +763,14 @@
                     `;
                 });
             } else {
-                container.innerHTML = `
-                    <div class="clean-card" style="padding: 1rem;">
-                        <p style="color: var(--text-muted);">Nessuna richiesta in attesa.</p>
-                    </div>
-                `;
+                container.innerHTML = `<div class="clean-card" style="padding: 1rem;"><p style="color: var(--text-muted);">Nessuna richiesta in attesa.</p></div>`;
             }
         } catch(err) { console.warn("Errore caricamento richieste admin:", err); }
     }
 
     async function evadiRichiesta(reqId) {
         if (!db || !currentUserProfile?.is_admin) return;
-        if (!confirm("Segnare questa richiesta come evasa? Rimarrà salvata nel database.")) return;
+        if (!confirm("Segnare questa richiesta come evasa?")) return;
 
         try {
             const { error } = await db.from('richieste_appunti').update({ evasa: true }).eq('id', reqId);
@@ -1087,9 +809,7 @@
             alert("Registrazione completata con successo!");
             window.location.reload();
             
-        } catch (err) { 
-            alert("Errore durante la registrazione: " + err.message); 
-        }
+        } catch (err) { alert("Errore durante la registrazione: " + err.message); }
     }
 
     async function handleSignIn(e) {
@@ -1107,7 +827,7 @@
             if (error) throw error;
             alert("Accesso effettuato!");
             window.location.reload();
-        } catch (err) { alert("Errore di accesso: Credenziali errate o account non verificato."); }
+        } catch (err) { alert("Errore di accesso: Credenziali errate."); }
     }
 
     async function submitAppuntiRequest(e) {
