@@ -171,7 +171,7 @@
         .btn-outline { background: rgba(255, 255, 255, 0.4); border: 1px solid var(--glass-border); color: var(--text-main); }
         .btn-success { background: #10b981; color: #fff; box-shadow: 0 8px 25px -5px rgba(16, 185, 129, 0.4); }
 
-        /* TESSERA DIGITALE CARD (Senza ID) */
+        /* TESSERA DIGITALE CARD */
         .student-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.5));
             backdrop-filter: blur(20px) saturate(200%);
@@ -397,7 +397,7 @@
     </section>
 </div>
 
-<!-- PAGINA: TESSERA (DIGITALE SENZA ID) -->
+<!-- PAGINA: TESSERA -->
 <div class="page" id="page-tessera">
     <section style="max-width: 600px;">
         <div id="tessera-locked" style="max-width: 550px; margin: 0 auto; text-align: center;">
@@ -419,21 +419,18 @@
                 <p class="section-desc">Esibisci la tua tessera dal telefono per agevolazioni e convenzioni dedicate.</p>
             </div>
 
-            <!-- STATO 1: NON RICHIESTA -->
             <div id="tessera-state-none" class="minimal-form" style="display: none;">
                 <h3>Richiedi la tua Tessera</h3>
                 <p style="font-size: 0.9rem; color: var(--text-muted);">Invia la richiesta per abilitare la tua tessera digitale ed essere inserito nell'elenco di ritiro della tessera fisica.</p>
                 <button class="btn btn-dark" onclick="requestStudentCard()">Richiedi Ora</button>
             </div>
 
-            <!-- STATO 2: IN ATTESA DI APPROVAZIONE -->
             <div id="tessera-state-pending" class="minimal-form" style="display: none;">
                 <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⏳</div>
                 <h3>Richiesta in Lavorazione</h3>
                 <p style="font-size: 0.9rem; color: var(--text-muted);">La tua richiesta è stata inviata allo staff. A breve la tua tessera digitale verrà convalidata.</p>
             </div>
 
-            <!-- STATO 3: TESSERA EMESSA (DIGITALE) -->
             <div id="tessera-state-approved" style="display: none;">
                 <div class="student-card">
                     <div class="card-header">
@@ -495,7 +492,7 @@
                     </select>
                 </div>
                 <div class="form-group"><label>Password</label><input class="form-input" id="reg-password" required type="password" minlength="6"></div>
-                <button class="btn btn-dark" type="submit">Registrati</button>
+                <button class="btn btn-dark" type="submit">Registrati Ora</button>
                 <p style="text-align: center; margin-top: 0.8rem; font-size: 0.85rem; color: var(--text-muted);">Hai già un account? <a href="javascript:void(0)" onclick="toggleAuthForms('login')" style="color:#3b82f6; text-decoration:none; font-weight:700;">Accedi qui</a></p>
             </form>
             
@@ -544,7 +541,6 @@
                 <div>
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1rem; flex-wrap:wrap; gap: 10px;">
                         <h3 style="font-size: 1.2rem; font-weight: 700;">Richieste Tessere</h3>
-                        <!-- PULSANTE PER GENERARE PDF -->
                         <button class="btn btn-success" style="font-size: 0.8rem; padding: 8px 14px;" onclick="downloadTesserePDF()">📄 Scarica Tabella PDF</button>
                     </div>
                     <div id="admin-tessere-container" class="clean-grid" style="grid-template-columns: 1fr; gap: 1rem;">
@@ -743,12 +739,10 @@
         } catch(e) { alert("Errore durante l'approvazione: " + e.message); }
     }
 
-    /* GENERAZIONE E DOWNLOAD DEL PDF TRAMITE JSPDF LATO BROWSER */
     async function downloadTesserePDF() {
         if (!db || !currentUserProfile?.is_admin) return;
 
         try {
-            // Recupera sia le tessere pending che quelle approved per la consegna fisica
             const { data, error } = await db
                 .from('profili')
                 .select('cognome, nome, telefono')
@@ -762,25 +756,21 @@
                 return;
             }
 
-            // Inizializza jsPDF dalla finestra globale
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // Titolo
             doc.setFontSize(16);
             doc.text("Registro Consegna Tessere Fisiche", 14, 15);
             doc.setFontSize(10);
             doc.text(`Data generazione: ${new Date().toLocaleDateString('it-IT')}`, 14, 22);
 
-            // Costruzione righe tabella
             const tableRows = data.map(utente => [
                 utente.cognome || '-',
                 utente.nome || '-',
                 utente.telefono || '-',
-                '' // Cella vuota per la spunta / firma di consegna
+                ''
             ]);
 
-            // Generazione Tabella tramite autotable
             doc.autoTable({
                 startY: 28,
                 head: [['Cognome', 'Nome', 'Telefono', 'Firma / Spunta Consegna']],
@@ -796,7 +786,6 @@
                 }
             });
 
-            // Salva il file PDF direttamente nel browser
             doc.save(`registro_consegna_tessere_${new Date().toISOString().slice(0, 10)}.pdf`);
 
         } catch (e) {
@@ -875,19 +864,21 @@
         } catch(err) { alert("Impossibile aggiornare lo stato della richiesta: " + err.message); }
     }
 
+    /* REGISTRAZIONE SENZA CONFERMA VIA EMAIL (DIRETTA) */
     async function handleSignUp(e) {
         e.preventDefault();
         if (!db) return;
 
-        const nome = document.getElementById('reg-nome').value;
-        const cognome = document.getElementById('reg-cognome').value;
+        const nome = document.getElementById('reg-nome').value.trim();
+        const cognome = document.getElementById('reg-cognome').value.trim();
         const email = document.getElementById('reg-email').value.trim();
         const matricola = document.getElementById('reg-matricola').value.trim();
-        const telefono = document.getElementById('reg-telefono').value;
+        const telefono = document.getElementById('reg-telefono').value.trim();
         const corso = document.getElementById('reg-corso').value;
         const password = document.getElementById('reg-password').value;
 
         try {
+            // Registrazione diretta con salvataggio metadati
             const { data: authData, error: authError } = await db.auth.signUp({
                 email: email,
                 password: password,
@@ -898,7 +889,21 @@
 
             if (authError) throw authError;
 
-            alert("Registrazione completata con successo!");
+            // Inserimento o aggiornamento esplicito nella tabella dei profili per sicurezza
+            if (authData?.user) {
+                await db.from('profili').upsert({
+                    id: authData.user.id,
+                    nome: nome,
+                    cognome: cognome,
+                    matricola: matricola,
+                    telefono: telefono,
+                    corso: corso,
+                    tessera_status: 'none'
+                });
+            }
+
+            alert("Account creato con successo! Accesso effettuato.");
+            window.location.hash = "auth";
             window.location.reload();
             
         } catch (err) { alert("Errore durante la registrazione: " + err.message); }
