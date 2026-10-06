@@ -2,7 +2,8 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <!-- FIX INTERFACCIA 1: viewport-fit=cover per gestire la Safe Area iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Siamo Studenti Ingegneria - UniCampania</title>
 
     <!-- FAVICON E ICONE MOBILE -->
@@ -30,8 +31,8 @@
             --text-muted: #64748b;
             --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Plus Jakarta Sans', sans-serif;
             
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-bg-hover: rgba(255, 255, 255, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-bg-hover: rgba(255, 255, 255, 0.95);
             --glass-blur: blur(24px) saturate(190%);
             --glass-border: rgba(255, 255, 255, 0.7);
             --glass-border-subtle: rgba(15, 23, 42, 0.08);
@@ -42,27 +43,47 @@
             --transition-smooth: all 0.25s var(--ease-apple);
         }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: manipulation;
+        }
         
+        /* FIX INTERFACCIA 2: Gestione dinamica dell'altezza e Safe Areas iOS */
         body {
             font-family: var(--font-sans);
             background-color: var(--bg-pure);
             color: var(--text-main);
             line-height: 1.5;
-            padding-top: 85px;
-            padding-bottom: 120px;
+            padding-top: calc(80px + env(safe-area-inset-top));
+            padding-bottom: calc(110px + env(safe-area-inset-bottom));
             min-height: 100vh;
+            min-height: 100dvh;
             background-image: 
                 radial-gradient(circle at 85% 15%, rgba(59, 130, 246, 0.18) 0%, transparent 45%),
                 radial-gradient(circle at 15% 75%, rgba(225, 29, 72, 0.1) 0%, transparent 45%);
             background-attachment: fixed;
+            overscroll-behavior-y: none;
         }
 
         .site-header {
-            position: fixed; top: 12px; left: 5%; right: 5%; height: 60px;
-            background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border); border-radius: 22px; z-index: 1010;
-            display: flex; align-items: center; justify-content: space-between; padding: 0 1.2rem;
+            position: fixed; 
+            top: calc(12px + env(safe-area-inset-top)); 
+            left: 5%; 
+            right: 5%; 
+            height: 60px;
+            background: var(--glass-bg); 
+            backdrop-filter: var(--glass-blur); 
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border); 
+            border-radius: 22px; 
+            z-index: 1010;
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 1.2rem;
             box-shadow: var(--glass-shadow);
         }
         .header-logo-container { display: flex; align-items: center; gap: 10px; text-decoration: none; }
@@ -70,10 +91,10 @@
         .header-title { font-size: 0.95rem; font-weight: 700; color: var(--text-main); }
         .user-badge { font-size: 0.8rem; color: var(--text-main); font-weight: 600; background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(255, 255, 255, 0.7); padding: 5px 12px; border-radius: 30px; }
 
-        /* NAVBAR MODERNA AGGIORNATA */
+        /* NAVBAR MOBILE CON SAFE-AREA-INSET */
         .nav-container { 
             position: fixed; 
-            bottom: 18px; 
+            bottom: calc(12px + env(safe-area-inset-bottom)); 
             left: 50%; 
             transform: translateX(-50%); 
             z-index: 1000; 
@@ -116,9 +137,6 @@
             color: var(--text-main);
             background: rgba(255, 255, 255, 0.5);
         }
-        .nav-links a:hover .nav-icon {
-            transform: translateY(-2px);
-        }
         .nav-links a.active { 
             color: #fff; 
             background: var(--brand-gradient); 
@@ -134,7 +152,7 @@
             box-shadow: 0 6px 18px rgba(225, 29, 72, 0.35); 
         }
 
-        .hero { min-height: 50vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 5%; max-width: 1000px; margin: 0 auto; text-align: center; }
+        .hero { min-height: 45vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 5%; max-width: 1000px; margin: 0 auto; text-align: center; }
         .hero-badge { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.25); padding: 6px 16px; border-radius: 30px; color: #1d4ed8; font-size: 0.8rem; font-weight: 700; margin-bottom: 1.2rem; }
         .hero-title { font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 800; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 1.2rem; }
         .hero-title span { background: var(--brand-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -142,29 +160,40 @@
         .hero-cta-group { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; width: 100%; }
 
         .quick-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; width: 100%; margin-top: 2.5rem; }
-        .quick-card { background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 22px; padding: 1.3rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; box-shadow: var(--glass-shadow); }
+        .quick-card { background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); border-radius: 22px; padding: 1.3rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; box-shadow: var(--glass-shadow); }
         .quick-icon { width: 46px; height: 46px; background: rgba(59,130,246,0.12); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #3b82f6; flex-shrink: 0; }
         .quick-card.official .quick-icon { background: rgba(225,29,72,0.12); color: var(--accent-red); }
         .quick-card-text h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); }
         .quick-card-text p { font-size: 0.8rem; color: var(--text-muted); }
 
-        section { padding: 40px 5%; max-width: 1200px; margin: 0 auto; }
+        section { padding: 20px 5%; max-width: 1200px; margin: 0 auto; }
         .section-header { margin-bottom: 2rem; }
         .section-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--text-main); }
         .section-desc { color: var(--text-muted); font-size: 0.95rem; max-width: 650px; }
 
         .clean-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .clean-card { background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); padding: 1.8rem; border-radius: 24px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--glass-shadow); }
+        .clean-card { background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); padding: 1.8rem; border-radius: 24px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--glass-shadow); }
         .clean-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-main); }
         .clean-card p { font-size: 0.9rem; color: var(--text-muted); }
         .clean-card .card-action { font-size: 0.85rem; font-weight: 700; color: #3b82f6; margin-top: 1.5rem; text-decoration: none; display: inline-block; }
 
-        .minimal-form { display: flex; flex-direction: column; gap: 1.2rem; max-width: 550px; background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); padding: 2.2rem; border-radius: 28px; box-shadow: var(--glass-shadow); margin: 0 auto; }
+        .minimal-form { display: flex; flex-direction: column; gap: 1.2rem; max-width: 550px; background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); padding: 2.2rem; border-radius: 28px; box-shadow: var(--glass-shadow); margin: 0 auto; }
         .minimal-form h3 { font-size: 1.25rem; font-weight: 700; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
         .form-group label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-        .form-input { width: 100%; padding: 12px 16px; background: rgba(255, 255, 255, 0.5); border: 1px solid var(--glass-border-subtle); border-radius: 14px; font-family: var(--font-sans); font-size: 0.95rem; color: var(--text-main); }
+        
+        /* FIX INTERFACCIA 3: Previene lo zoom fastidioso di iOS su input < 16px */
+        .form-input { 
+            width: 100%; 
+            padding: 12px 16px; 
+            background: rgba(255, 255, 255, 0.7); 
+            border: 1px solid var(--glass-border-subtle); 
+            border-radius: 14px; 
+            font-family: var(--font-sans); 
+            font-size: 16px; 
+            color: var(--text-main); 
+        }
 
         .btn { padding: 12px 24px; font-family: var(--font-sans); font-size: 0.9rem; font-weight: 700; border-radius: 16px; border: none; cursor: pointer; display: inline-block; text-decoration: none; text-align: center; }
         .btn-dark { background: var(--brand-gradient); color: #fff; box-shadow: 0 8px 25px -5px rgba(29, 78, 216, 0.4); }
@@ -173,8 +202,9 @@
 
         /* TESSERA DIGITALE CARD */
         .student-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.5));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
             backdrop-filter: blur(20px) saturate(200%);
+            -webkit-backdrop-filter: blur(20px) saturate(200%);
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 24px;
             padding: 1.8rem;
@@ -203,10 +233,9 @@
         .admin-meta-info strong { color: var(--text-main); }
 
         @media (max-width: 768px) {
-            body { padding-top: 75px; padding-bottom: 100px; }
             .form-row { grid-template-columns: 1fr; }
-            .site-header { left: 10px; right: 10px; top: 10px; padding: 0 0.8rem; height: 55px; }
-            .nav-container { bottom: 10px; padding: 4px; }
+            .site-header { left: 10px; right: 10px; padding: 0 0.8rem; height: 55px; }
+            .nav-container { padding: 4px; }
             .nav-links a { font-size: 0.62rem; padding: 6px 1px; }
             .nav-links a .nav-icon { width: 18px; height: 18px; }
         }
@@ -292,7 +321,7 @@
         </div>
 
         <div class="quick-info-grid">
-            <a href="https://www.ingegneria.unicampania.it/dipartimento/avvisi" target="_blank" class="quick-card official">
+            <a href="https://www.ingegneria.unicampania.it/dipartimento/avvisi" target="_blank" rel="noopener" class="quick-card official">
                 <div class="quick-icon">🏛️</div>
                 <div class="quick-card-text">
                     <h4>Avvisi Ufficiali Dipartimento</h4>
@@ -300,7 +329,7 @@
                 </div>
             </a>
             
-            <a href="https://easyacademy.easystaff.it/agendastudenti/index.php?view=home&_lang=it" target="_blank" class="quick-card">
+            <a href="https://easyacademy.easystaff.it/agendastudenti/index.php?view=home&_lang=it" target="_blank" rel="noopener" class="quick-card">
                 <div class="quick-icon">📅</div>
                 <div class="quick-card-text">
                     <h4>Orari delle Lezioni</h4>
@@ -350,19 +379,19 @@
             <p class="section-desc">Entra nelle community del tuo anno per confrontarti sui corsi, scambiare pareri ed esercitazioni.</p>
         </div>
         <div class="clean-grid">
-            <div class="clean-card"><h3>1° Anno Ing. Info/Elettr</h3><a class="card-action" href="https://chat.whatsapp.com/C5j3NhtOcHnDKBZeYRZSaR" target="_blank">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Ing. Mec/Aer/Ener</h3><a class="card-action" href="https://chat.whatsapp.com/CnKEuFvpBUAKoBM2qgGgBg" target="_blank">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Ing. Biomedica</h3><a class="card-action" href="https://chat.whatsapp.com/CXVUdKC5wuZL8WGDkHQIxg" target="_blank">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Ing. Gestionale</h3><a class="card-action" href="https://chat.whatsapp.com/Cgw4YUKYupf4Qu5hf1XySA" target="_blank">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Ing. Civ/Ed/Amb</h3><a class="card-action" href="https://chat.whatsapp.com/KVUThfdC0R02In7mGT3tra" target="_blank">Entra nel gruppo ↗</a></div>            
-            <div class="clean-card"><h3>1° Anno Mag. Ing. Aerospaziale</h3><a class="card-action" href="https://chat.whatsapp.com/JeHT1ukqOZKFgDbDYnTEH6" target="_blank">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Mag. Ing. Informatica</h3><a class="card-action" href="https://chat.whatsapp.com/LydzYXmNkkj3fgdXyYVkjc" target="_blank">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Mag. Ing. Biomedica</h3><a class="card-action" href="https://chat.whatsapp.com/DqQqgdd9boC2JMBAgKeLPs" target="_blank">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Mag. Ing. Energia/Amb</h3><a class="card-action" href="https://chat.whatsapp.com/DyCnBznzdhfE3Dbp7Hp3Ed" target="_blank">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Mag. Ing. Meccanica</h3><a class="card-action" href="https://chat.whatsapp.com/JRzPGu9IaHrHlumc4iBuG6" target="_blank">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Mag. Ing. Elettronica</h3><a class="card-action" href="https://chat.whatsapp.com/JQt5gd2G2DI02ad7qFsgtf" target="_blank">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Mag. Ing. Gestionale</h3><a class="card-action" href="https://chat.whatsapp.com/BCQsY7KOgO9KNx3MQYktml" target="_blank">Entra nel gruppo ↗</a></div>
-            <div class="clean-card"><h3>1° Anno Mag. Ing. Civile</h3><a class="card-action" href="https://chat.whatsapp.com/Klj1JxjeaI3B66S37E259U" target="_blank">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Ing. Info/Elettr</h3><a class="card-action" href="https://chat.whatsapp.com/C5j3NhtOcHnDKBZeYRZSaR" target="_blank" rel="noopener">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Ing. Mec/Aer/Ener</h3><a class="card-action" href="https://chat.whatsapp.com/CnKEuFvpBUAKoBM2qgGgBg" target="_blank" rel="noopener">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Ing. Biomedica</h3><a class="card-action" href="https://chat.whatsapp.com/CXVUdKC5wuZL8WGDkHQIxg" target="_blank" rel="noopener">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Ing. Gestionale</h3><a class="card-action" href="https://chat.whatsapp.com/Cgw4YUKYupf4Qu5hf1XySA" target="_blank" rel="noopener">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Ing. Civ/Ed/Amb</h3><a class="card-action" href="https://chat.whatsapp.com/KVUThfdC0R02In7mGT3tra" target="_blank" rel="noopener">Entra nel gruppo ↗</a></div>            
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Aerospaziale</h3><a class="card-action" href="https://chat.whatsapp.com/JeHT1ukqOZKFgDbDYnTEH6" target="_blank" rel="noopener">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Informatica</h3><a class="card-action" href="https://chat.whatsapp.com/LydzYXmNkkj3fgdXyYVkjc" target="_blank" rel="noopener">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Biomedica</h3><a class="card-action" href="https://chat.whatsapp.com/DqQqgdd9boC2JMBAgKeLPs" target="_blank" rel="noopener">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Energia/Amb</h3><a class="card-action" href="https://chat.whatsapp.com/DyCnBznzdhfE3Dbp7Hp3Ed" target="_blank" rel="noopener">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Meccanica</h3><a class="card-action" href="https://chat.whatsapp.com/JRzPGu9IaHrHlumc4iBuG6" target="_blank" rel="noopener">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Elettronica</h3><a class="card-action" href="https://chat.whatsapp.com/JQt5gd2G2DI02ad7qFsgtf" target="_blank" rel="noopener">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Gestionale</h3><a class="card-action" href="https://chat.whatsapp.com/BCQsY7KOgO9KNx3MQYktml" target="_blank" rel="noopener">Entra nel gruppo ↗</a></div>
+            <div class="clean-card"><h3>1° Anno Mag. Ing. Civile</h3><a class="card-action" href="https://chat.whatsapp.com/Klj1JxjeaI3B66S37E259U" target="_blank" rel="noopener">Entra nel gruppo ↗</a></div>
         </div>
     </section>
 </div>
@@ -442,7 +471,7 @@
             </div>
 
             <div id="tessera-state-none" class="minimal-form" style="display: none;">
-                <h3>Richiedi la tua Tessera</h3>
+                <h3>Richiesta Tessera</h3>
                 <p style="font-size: 0.9rem; color: var(--text-muted);">Invia la richiesta per abilitare la tua tessera digitale ed essere inserito nell'elenco di ritiro della tessera fisica.</p>
                 <button class="btn btn-dark" onclick="requestStudentCard()">Richiedi Ora</button>
             </div>
@@ -708,6 +737,37 @@
         } catch(e) { console.warn("Errore caricamento profilo:", e); }
     }
 
+    /* FIX DOWNLOAD 1: Funzione universale per scaricare/condividere file su iOS Safari */
+    async function handleUniversalDownload(fileUrl, fileName) {
+        try {
+            // Se si tratta di un URL remoto o Data URL, scarichiamo il blob
+            const response = await fetch(fileUrl);
+            const blob = await response.blob();
+            const file = new File([blob], fileName, { type: blob.type || 'application/pdf' });
+
+            // Se siamo su iOS / Mobile e il browser supporta la condivisione nativa dei file
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    files: [file],
+                    title: fileName,
+                });
+            } else {
+                // Fallback standard per Desktop o Android
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(blobUrl);
+            }
+        } catch (e) {
+            // Se fallisce (es. blocco CORS o azione utente annullata), apriamo in una nuova scheda Safari
+            window.open(fileUrl, '_blank');
+        }
+    }
+
     /* CARICAMENTO E GESTIONE MODULISTICA */
     async function loadModulistica() {
         if (!db) return;
@@ -718,15 +778,18 @@
                 container.innerHTML = "";
                 data.forEach(doc => {
                     const dateStr = doc.created_at ? new Date(doc.created_at).toLocaleDateString('it-IT') : '';
+                    const safeName = (doc.titolo || 'documento').replace(/[^a-zA-Z0-9_-]/g, '_') + '.pdf';
+                    
                     container.innerHTML += `
                         <div class="clean-card">
                             <div>
                                 <h3 style="margin-bottom: 0.5rem;">📄 ${doc.titolo}</h3>
                                 <p style="font-size: 0.8rem; color: var(--text-muted);">${dateStr ? 'Caricato il: ' + dateStr : ''}</p>
                             </div>
-                            <a class="btn btn-dark" href="${doc.file_url}" download="${doc.titolo}.pdf" target="_blank" style="margin-top: 1.2rem; text-decoration: none; text-align: center; font-size: 0.85rem; padding: 10px 16px;">
+                            <!-- FIX DOWNLOAD 2: Sostituito tag <a> difettoso con gestore click JS -->
+                            <button class="btn btn-dark" onclick="handleUniversalDownload('${doc.file_url}', '${safeName}')" style="margin-top: 1.2rem; text-align: center; font-size: 0.85rem; padding: 10px 16px;">
                                 Scarica Documento 📥
-                            </a>
+                            </button>
                         </div>
                     `;
                 });
@@ -761,14 +824,12 @@
             const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
             const filePath = `pdf/${fileName}`;
 
-            // Tentativo upload Storage Supabase
             const { data: storageData, error: storageError } = await db.storage.from('modulistica').upload(filePath, file);
 
             if (!storageError && storageData) {
                 const { data: urlData } = db.storage.from('modulistica').getPublicUrl(filePath);
                 fileUrl = urlData.publicUrl;
             } else {
-                // Fallback in formato Data URL se lo storage non è configurato
                 fileUrl = await new Promise((resolve, reject) => {
                     const reader = new FileReader();
                     reader.onload = () => resolve(reader.result);
@@ -803,6 +864,7 @@
             if (data && data.length > 0) {
                 container.innerHTML = "";
                 data.forEach(doc => {
+                    const safeName = (doc.titolo || 'documento').replace(/[^a-zA-Z0-9_-]/g, '_') + '.pdf';
                     container.innerHTML += `
                         <div class="clean-card" id="modulo-card-${doc.id}" style="padding: 1.2rem; justify-content: space-between;">
                             <div>
@@ -810,7 +872,7 @@
                                 <div class="admin-meta-info">File: <strong>${doc.file_name || 'documento.pdf'}</strong></div>
                             </div>
                             <div style="display: flex; gap: 8px; margin-top: 0.8rem;">
-                                <a class="btn btn-outline" href="${doc.file_url}" target="_blank" download="${doc.titolo}.pdf" style="font-size: 0.75rem; padding: 6px 12px; text-decoration: none;">Scarica</a>
+                                <button class="btn btn-outline" onclick="handleUniversalDownload('${doc.file_url}', '${safeName}')" style="font-size: 0.75rem; padding: 6px 12px;">Scarica</button>
                                 <button class="btn btn-outline" style="font-size: 0.75rem; padding: 6px 12px; border-color: var(--accent-red); color: var(--accent-red);" onclick="deleteModulo('${doc.id}')">Elimina</button>
                             </div>
                         </div>
@@ -913,6 +975,7 @@
         } catch(e) { alert("Errore durante l'approvazione: " + e.message); }
     }
 
+    /* FIX DOWNLOAD 3: Esportazione Tabella PDF nativa compatibile con iOS Safari */
     async function downloadTesserePDF() {
         if (!db || !currentUserProfile?.is_admin) return;
 
@@ -960,7 +1023,18 @@
                 }
             });
 
-            doc.save(`registro_consegna_tessere_${new Date().toISOString().slice(0, 10)}.pdf`);
+            const pdfBlob = doc.output('blob');
+            const fileName = `registro_consegna_tessere_${new Date().toISOString().slice(0, 10)}.pdf`;
+            const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    files: [file],
+                    title: fileName
+                });
+            } else {
+                doc.save(fileName);
+            }
 
         } catch (e) {
             alert("Errore durante la generazione del PDF: " + e.message);
