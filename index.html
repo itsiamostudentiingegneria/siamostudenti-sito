@@ -85,7 +85,7 @@
             box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.5) inset; 
             padding: 6px; 
             width: calc(100% - 24px); 
-            max-width: 800px; 
+            max-width: 850px; 
         }
         nav { display: flex; width: 100%; }
         .nav-links { display: flex; width: 100%; list-style: none; justify-content: space-between; gap: 4px; }
@@ -97,10 +97,10 @@
             justify-content: center; 
             gap: 4px; 
             text-decoration: none; 
-            font-size: 0.7rem; 
+            font-size: 0.68rem; 
             font-weight: 600; 
             color: var(--text-muted); 
-            padding: 8px 4px; 
+            padding: 8px 2px; 
             border-radius: 20px; 
             transition: var(--transition-smooth); 
         }
@@ -207,7 +207,7 @@
             .form-row { grid-template-columns: 1fr; }
             .site-header { left: 10px; right: 10px; top: 10px; padding: 0 0.8rem; height: 55px; }
             .nav-container { bottom: 10px; padding: 4px; }
-            .nav-links a { font-size: 0.65rem; padding: 6px 2px; }
+            .nav-links a { font-size: 0.62rem; padding: 6px 1px; }
             .nav-links a .nav-icon { width: 18px; height: 18px; }
         }
     </style>
@@ -249,6 +249,12 @@
                 <a id="nav-appunti" href="#appunti">
                     <svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                     <span>Appunti</span>
+                </a>
+            </li>
+            <li>
+                <a id="nav-modulistica" href="#modulistica">
+                    <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Moduli</span>
                 </a>
             </li>
             <li>
@@ -397,6 +403,22 @@
     </section>
 </div>
 
+<!-- PAGINA: MODULISTICA -->
+<div class="page" id="page-modulistica">
+    <section>
+        <div class="section-header">
+            <h2 class="section-title">Modulistica Utile</h2>
+            <p class="section-desc">Consulta e scarica i moduli ufficiali e i documenti utili per il tuo percorso universitario.</p>
+        </div>
+        <div class="clean-grid" id="modulistica-container">
+            <div class="clean-card">
+                <h3>Caricamento modulistica...</h3>
+                <p>A breve verranno visualizzati i documenti disponibili.</p>
+            </div>
+        </div>
+    </section>
+</div>
+
 <!-- PAGINA: TESSERA -->
 <div class="page" id="page-tessera">
     <section style="max-width: 600px;">
@@ -526,16 +548,25 @@
     <section>
         <div class="section-header">
             <h2 class="section-title" style="color: var(--accent-red);">Pannello di Amministrazione</h2>
-            <p class="section-desc">Pubblica avvisi, gestisci l'approvazione delle tessere e scarica il foglio di consegna.</p>
+            <p class="section-desc">Pubblica avvisi, gestisci l'approvazione delle tessere, carica moduli PDF e scarica il foglio di consegna.</p>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 2rem; align-items: start;">
-            <form class="minimal-form" id="form-avviso" onsubmit="saveAvviso(event)" style="max-width: 100%;">
-                <h3>Pubblica Comunicazione</h3>
-                <div class="form-group"><label>Titolo Avviso</label><input class="form-input" id="avviso-titolo" required type="text"></div>
-                <div class="form-group"><label>Testo dell'Avviso</label><textarea class="form-input" id="avviso-descrizione" required rows="4"></textarea></div>
-                <button class="btn btn-dark" style="background:var(--accent-red);" type="submit">Pubblica Avviso</button>
-            </form>
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <form class="minimal-form" id="form-avviso" onsubmit="saveAvviso(event)" style="max-width: 100%;">
+                    <h3>Pubblica Comunicazione</h3>
+                    <div class="form-group"><label>Titolo Avviso</label><input class="form-input" id="avviso-titolo" required type="text"></div>
+                    <div class="form-group"><label>Testo dell'Avviso</label><textarea class="form-input" id="avviso-descrizione" required rows="4"></textarea></div>
+                    <button class="btn btn-dark" style="background:var(--accent-red);" type="submit">Pubblica Avviso</button>
+                </form>
+
+                <form class="minimal-form" id="form-modulistica" onsubmit="uploadModulisticaPDF(event)" style="max-width: 100%;">
+                    <h3>Carica Modulo PDF</h3>
+                    <div class="form-group"><label>Titolo Documento</label><input class="form-input" id="modulistica-titolo" required type="text" placeholder="Es. Modulo di Richiesta Tesi"></div>
+                    <div class="form-group"><label>File PDF</label><input class="form-input" id="modulistica-file" required type="file" accept="application/pdf"></div>
+                    <button class="btn btn-dark" style="background:var(--accent-red);" type="submit">Carica Documento PDF</button>
+                </form>
+            </div>
 
             <div style="display:flex; flex-direction:column; gap:2rem;">
                 <div>
@@ -546,6 +577,15 @@
                     <div id="admin-tessere-container" class="clean-grid" style="grid-template-columns: 1fr; gap: 1rem;">
                         <div class="clean-card" style="padding: 1rem;">
                             <p style="color: var(--text-muted);">Nessuna richiesta tessera in attesa.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.2rem; font-weight: 700;">Modulistica Utile Caricata</h3>
+                    <div id="admin-modulistica-container" class="clean-grid" style="grid-template-columns: 1fr; gap: 1rem;">
+                        <div class="clean-card" style="padding: 1rem;">
+                            <p style="color: var(--text-muted);">Nessun documento presente.</p>
                         </div>
                     </div>
                 </div>
@@ -592,6 +632,7 @@
         if (db) {
             checkUserSession();
             loadAvvisi();
+            loadModulistica();
         }
     });
 
@@ -661,9 +702,142 @@
                     document.getElementById('nav-admin-li').style.display = 'block';
                     loadRichiesteAdmin();
                     loadTessereAdmin();
+                    loadModulisticaAdmin();
                 }
             }
         } catch(e) { console.warn("Errore caricamento profilo:", e); }
+    }
+
+    /* CARICAMENTO E GESTIONE MODULISTICA */
+    async function loadModulistica() {
+        if (!db) return;
+        try {
+            const { data, error } = await db.from('modulistica').select('*').order('created_at', { ascending: false });
+            const container = document.getElementById('modulistica-container');
+            if (data && data.length > 0 && !error) {
+                container.innerHTML = "";
+                data.forEach(doc => {
+                    const dateStr = doc.created_at ? new Date(doc.created_at).toLocaleDateString('it-IT') : '';
+                    container.innerHTML += `
+                        <div class="clean-card">
+                            <div>
+                                <h3 style="margin-bottom: 0.5rem;">📄 ${doc.titolo}</h3>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">${dateStr ? 'Caricato il: ' + dateStr : ''}</p>
+                            </div>
+                            <a class="btn btn-dark" href="${doc.file_url}" download="${doc.titolo}.pdf" target="_blank" style="margin-top: 1.2rem; text-decoration: none; text-align: center; font-size: 0.85rem; padding: 10px 16px;">
+                                Scarica Documento 📥
+                            </a>
+                        </div>
+                    `;
+                });
+            } else {
+                container.innerHTML = `
+                    <div class="clean-card">
+                        <h3>Nessun Modulo Presente</h3>
+                        <p>Non ci sono ancora documenti o moduli disponibili per il download.</p>
+                    </div>
+                `;
+            }
+        } catch(e) { console.warn("Errore caricamento modulistica:", e); }
+    }
+
+    async function uploadModulisticaPDF(e) {
+        e.preventDefault();
+        if (!db || !currentUserProfile?.is_admin) return;
+
+        const titolo = document.getElementById('modulistica-titolo').value.trim();
+        const fileInput = document.getElementById('modulistica-file');
+        const file = fileInput.files[0];
+
+        if (!file) {
+            alert("Seleziona un file PDF.");
+            return;
+        }
+
+        try {
+            let fileUrl = "";
+
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+            const filePath = `pdf/${fileName}`;
+
+            // Tentativo upload Storage Supabase
+            const { data: storageData, error: storageError } = await db.storage.from('modulistica').upload(filePath, file);
+
+            if (!storageError && storageData) {
+                const { data: urlData } = db.storage.from('modulistica').getPublicUrl(filePath);
+                fileUrl = urlData.publicUrl;
+            } else {
+                // Fallback in formato Data URL se lo storage non è configurato
+                fileUrl = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            const { error: dbError } = await db.from('modulistica').insert([
+                { titolo: titolo, file_url: fileUrl, file_name: file.name }
+            ]);
+
+            if (dbError) throw dbError;
+
+            alert("Documento caricato con successo!");
+            document.getElementById('form-modulistica').reset();
+            loadModulistica();
+            loadModulisticaAdmin();
+
+        } catch (err) {
+            alert("Errore durante il caricamento del documento: " + err.message);
+        }
+    }
+
+    async function loadModulisticaAdmin() {
+        if (!db || !currentUserProfile?.is_admin) return;
+        try {
+            const { data, error } = await db.from('modulistica').select('*').order('created_at', { ascending: false });
+            if (error) throw error;
+
+            const container = document.getElementById('admin-modulistica-container');
+            if (data && data.length > 0) {
+                container.innerHTML = "";
+                data.forEach(doc => {
+                    container.innerHTML += `
+                        <div class="clean-card" id="modulo-card-${doc.id}" style="padding: 1.2rem; justify-content: space-between;">
+                            <div>
+                                <h3 style="font-size: 1.05rem; margin-bottom: 0.4rem;">📄 ${doc.titolo}</h3>
+                                <div class="admin-meta-info">File: <strong>${doc.file_name || 'documento.pdf'}</strong></div>
+                            </div>
+                            <div style="display: flex; gap: 8px; margin-top: 0.8rem;">
+                                <a class="btn btn-outline" href="${doc.file_url}" target="_blank" download="${doc.titolo}.pdf" style="font-size: 0.75rem; padding: 6px 12px; text-decoration: none;">Scarica</a>
+                                <button class="btn btn-outline" style="font-size: 0.75rem; padding: 6px 12px; border-color: var(--accent-red); color: var(--accent-red);" onclick="deleteModulo('${doc.id}')">Elimina</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                container.innerHTML = `<div class="clean-card" style="padding: 1rem;"><p style="color: var(--text-muted);">Nessun documento caricato.</p></div>`;
+            }
+        } catch (e) { console.warn("Errore caricamento modulistica admin:", e); }
+    }
+
+    async function deleteModulo(docId) {
+        if (!db || !currentUserProfile?.is_admin) return;
+        if (!confirm("Sei sicuro di voler eliminare questo documento?")) return;
+
+        try {
+            const { error } = await db.from('modulistica').delete().eq('id', docId);
+            if (error) throw error;
+
+            const card = document.getElementById(`modulo-card-${docId}`);
+            if (card) card.remove();
+
+            loadModulistica();
+            loadModulisticaAdmin();
+        } catch(err) {
+            alert("Errore durante l'eliminazione: " + err.message);
+        }
     }
 
     function renderTesseraStatus(user) {
@@ -864,7 +1038,6 @@
         } catch(err) { alert("Impossibile aggiornare lo stato della richiesta: " + err.message); }
     }
 
-    /* REGISTRAZIONE SENZA CONFERMA VIA EMAIL (DIRETTA) */
     async function handleSignUp(e) {
         e.preventDefault();
         if (!db) return;
@@ -878,7 +1051,6 @@
         const password = document.getElementById('reg-password').value;
 
         try {
-            // Registrazione diretta con salvataggio metadati
             const { data: authData, error: authError } = await db.auth.signUp({
                 email: email,
                 password: password,
@@ -889,7 +1061,6 @@
 
             if (authError) throw authError;
 
-            // Inserimento o aggiornamento esplicito nella tabella dei profili per sicurezza
             if (authData?.user) {
                 await db.from('profili').upsert({
                     id: authData.user.id,
